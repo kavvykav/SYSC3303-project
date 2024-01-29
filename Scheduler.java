@@ -38,9 +38,19 @@ public class Scheduler implements Runnable {
                 e.printStackTrace();
                 System.exit(1);
             }
+            message = recievePacket.getData();
+            DatagramPacket sendPacket = new DatagramPacket(message, recievePacket.getLength(),
+            recievePacket.getAddress(), recievePacket.getPort());
+
+            try {
+               sendSocket.send(sendPacket);
+            }catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
         }
         
-
-
+        sendSocket.close();
+        recieveSocket.close();
     }
 }
