@@ -3,8 +3,6 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import javax.sound.midi.SysexMessage;
-
 /**
  * Elevator
  */
