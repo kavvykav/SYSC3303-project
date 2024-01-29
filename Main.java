@@ -7,5 +7,6 @@ public class Main {
         elevator = new Thread(new Elevator(numFloors), "Elevator");
 
         scheduler.start();
+        elevator.start();
     }
 }
