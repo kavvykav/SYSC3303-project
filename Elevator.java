@@ -1,0 +1,6 @@
+/**
+ * Elevator
+ */
+public class Elevator {
+
+}

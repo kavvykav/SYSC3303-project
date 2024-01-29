@@ -1,0 +1,6 @@
+/**
+ * ElevatorButton
+ */
+public class ElevatorButton {
+
+}

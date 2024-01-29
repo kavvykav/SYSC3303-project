@@ -1,0 +1,6 @@
+/**
+ * ElevatorLamp
+ */
+public class ElevatorLamp {
+
+}

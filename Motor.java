@@ -1,0 +1,6 @@
+/**
+ * Motor
+ */
+public class Motor {
+
+}
