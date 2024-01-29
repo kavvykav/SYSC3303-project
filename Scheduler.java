@@ -28,8 +28,8 @@ public class Scheduler implements Runnable {
      * This is the thread routine for the scheduler thread.
      **/
     public void run() {
-        running = true;
-        while(running) {
+       running = true;
+       while(running) {
             DatagramPacket recievePacket = new DatagramPacket(message, message.length);
             try {
                System.out.println("Waiting for packet from the elevator...");

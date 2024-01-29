@@ -3,5 +3,7 @@ public class Main {
         Thread scheduler;
 
         scheduler = new Thread(new Scheduler(), "Scheduler");
+
+        scheduler.start();
     }
 }
