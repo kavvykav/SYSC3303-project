@@ -16,11 +16,11 @@ public class Elevator implements Runnable {
     DatagramSocket sendReceiveSocket;
     DatagramPacket sendPacket, receivePacket;
 
-    public Elevator(Motor motor, ArrayList<ElevatorLamp> lamps, ArrayList<ElevatorButton> buttons, Door door) {
-        this.motor = motor;
-        this.lamps = lamps;
-        this.buttons = buttons;
-        this.door = door;
+    public Elevator(int numFloors) {
+        this.motor = new Motor();
+        this.lamps = new ArrayList<ElevatorLamp>(numFloors);
+        this.buttons = new ArrayList<ElevatorButton>(numFloors);
+        this.door = new Door();
         try {
             sendReceiveSocket = new DatagramSocket();
         } catch (SocketException se) {
