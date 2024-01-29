@@ -2,7 +2,6 @@
  * Motor
  */
 public class Motor {
-
     private Boolean isRunning = false;
 
     public Boolean isMotorRunning() {
