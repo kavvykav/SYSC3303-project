@@ -2,14 +2,17 @@
  * ElevatorButton
  */
 public class ElevatorButton {
-    private Integer floor;
+    private Boolean isPressed = false;
 
-    public ElevatorButton(Integer floor) {
-        this.floor = floor;
+    public Boolean isButtonPressed() {
+        return isPressed;
     }
 
-    public Integer press() {
-        return floor;
+    public void press() {
+        isPressed = true;
     }
 
+    public void arrive() {
+        isPressed = false;
+    }
 }

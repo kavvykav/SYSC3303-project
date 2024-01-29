@@ -2,7 +2,7 @@
  * ElevatorLamp
  */
 public class ElevatorLamp {
-    public Boolean isOn;
+    public Boolean isOn = false;
 
     public Boolean isLampOn() {
         return isOn;

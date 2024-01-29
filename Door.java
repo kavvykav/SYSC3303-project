@@ -8,8 +8,12 @@ public class Door {
         return isOpen;
     }
 
-    public void toggleDoor() {
-        isOpen = !isOpen;
+    public void open() {
+        isOpen = true;
+    }
+
+    public void close() {
+        isOpen = false;
     }
 
 }
