@@ -4,7 +4,7 @@
 public class ElevatorLamp {
     public Boolean isOn;
 
-    public Boolean lampStatus() {
+    public Boolean isLampOn() {
         return isOn;
     }
 

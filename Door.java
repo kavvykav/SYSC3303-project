@@ -4,7 +4,7 @@
 public class Door {
     private Boolean isOpen = false;
 
-    public Boolean doorStatus() {
+    public Boolean isDoorOpen() {
         return isOpen;
     }
 
