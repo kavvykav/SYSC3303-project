@@ -8,8 +8,12 @@ public class ElevatorLamp {
         return isOn;
     }
 
-    public void toggleLamp() {
-        isOn = !isOn;
+    public void turnOn() {
+        isOn = true;
+    }
+
+    public void turnOff() {
+        isOn = false;
     }
 
 }

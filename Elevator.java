@@ -29,6 +29,17 @@ public class Elevator implements Runnable {
         }
     }
 
+    public void goTo(int floor) {
+        currentFloor = floor;
+        buttons.get(floor - 1).arrive();
+        lamps.get(floor - 1).turnOff();
+    }
+
+    public void add(int floor) {
+        buttons.get(floor - 1).press();
+        lamps.get(floor - 1).turnOn();
+    }
+
     public void run() {
 
     }
