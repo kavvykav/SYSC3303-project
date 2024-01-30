@@ -20,6 +20,10 @@ public class Elevator implements Runnable {
         this.motor = new Motor();
         this.lamps = new ArrayList<ElevatorLamp>(numFloors);
         this.buttons = new ArrayList<ElevatorButton>(numFloors);
+        for (int i = 0; i < 20; i++) {
+            this.lamps.add(new ElevatorLamp());
+            this.buttons.add(new ElevatorButton());
+        }
         this.door = new Door();
         try {
             sendReceiveSocket = new DatagramSocket();
