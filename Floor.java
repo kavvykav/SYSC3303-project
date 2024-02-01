@@ -17,7 +17,7 @@ public class Floor implements Runnable {
     // Input file for floor subsystem
     private final String filename;
 
-    // The common format for timestamps
+    // The common format used to validate the timestamps
     private static final DateTimeFormatter timePattern = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
     // For mapping FloorData object to JSON
@@ -88,10 +88,10 @@ public class Floor implements Runnable {
                 String received = new String(receivedMsg, 0 ,receivePacket.getLength());
                 FloorData receivedData = mapper.readValue(received, FloorData.class);
 
-                if (!receivedData.equals(data)) {
-                    System.err.println("Did not receive a valid response");
-                } else {
+                if (receivedData.equals(data)) {
                     System.out.println("Received a response from the scheduler");
+                } else {
+                    System.err.println("Did not receive a valid response");
                 }
             }
         } catch (IOException e) {

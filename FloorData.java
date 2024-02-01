@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class FloorData implements Serializable {
+public class FloorData {
 
     // The time at which a passenger arrives
     private String timestamp;
