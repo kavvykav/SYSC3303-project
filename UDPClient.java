@@ -41,7 +41,7 @@ public class UDPClient {
         serverPort = port;
     }
 
-    public synchronized int send(Object data) {
+    public int send(Object data) {
 
         try {
             objectOutputStream.writeObject(data);
@@ -64,7 +64,7 @@ public class UDPClient {
         return 0;
     }
 
-    public synchronized Object receive() {
+    public Object receive() {
 
         try {
             sendReceiveSocket.receive(receivePacket);
