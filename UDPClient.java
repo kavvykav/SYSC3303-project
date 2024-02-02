@@ -23,7 +23,7 @@ public class UDPClient {
             // This socket will be used to send and receive UDP Datagram packets.
             sendReceiveSocket = new DatagramSocket();
         } catch (SocketException e) {
-            //e.printStackTrace();
+            // e.printStackTrace();
             System.exit(1);
         }
         receivedMsg = new byte[BUFFER_SIZE];
@@ -32,11 +32,10 @@ public class UDPClient {
         byteArrayOutputStream = new ByteArrayOutputStream();
         try {
             objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-        } catch(IOException e) {
-            //e.printStackTrace();
+        } catch (IOException e) {
+            // e.printStackTrace();
             System.exit(1);
         }
-
 
         serverAddress = address;
         serverPort = port;
@@ -47,9 +46,9 @@ public class UDPClient {
         try {
             objectOutputStream.writeObject(data);
             objectOutputStream.flush();
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.err.println("Failed to serialize data");
-            //e.printStackTrace();
+            // e.printStackTrace();
             return -1;
         }
         byte[] msg = byteArrayOutputStream.toByteArray();
@@ -58,7 +57,7 @@ public class UDPClient {
         try {
             sendReceiveSocket.send(sendPacket);
             objectOutputStream.reset();
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.err.println("Failed to send data");
             return -1;
         }
