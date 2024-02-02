@@ -46,7 +46,13 @@ public class Elevator implements Runnable {
     }
 
     public void run() {
+        FloorData receivedData = (FloorData) client.receive();
+        System.out.println("Received floor data from scheduler");
 
+        int res = client.send(receivedData);
+        if (res != 0) {
+            System.err.println("Failed to respond to scheduler");
+        }
     }
 
 }
