@@ -1,6 +1,5 @@
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
+import java.io.*;
+import java.net.*;
 import java.util.ArrayList;
 
 /**
@@ -13,8 +12,7 @@ public class Elevator implements Runnable {
     private Motor motor;
     private Door door;
     private Integer currentFloor;
-    DatagramSocket sendReceiveSocket;
-    DatagramPacket sendPacket, receivePacket;
+    private UDPClient client;
 
     public Elevator(int numFloors) {
         this.motor = new Motor();
@@ -26,9 +24,8 @@ public class Elevator implements Runnable {
         }
         this.door = new Door();
         try {
-            sendReceiveSocket = new DatagramSocket();
-        } catch (SocketException se) {
-            se.printStackTrace();
+            client = new UDPClient(InetAddress.getLocalHost(), 5000);
+        } catch (UnknownHostException e) {
             System.exit(1);
         }
     }
@@ -42,6 +39,10 @@ public class Elevator implements Runnable {
     public void add(int floor) {
         buttons.get(floor - 1).press();
         lamps.get(floor - 1).turnOn();
+    }
+
+    public Integer getCurrentFloor() {
+        return currentFloor;
     }
 
     public void run() {
