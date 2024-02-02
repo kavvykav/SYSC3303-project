@@ -1,56 +1,27 @@
-import java.io.*;
+import java.io.Serializable;
 
-public class FloorData {
+public class FloorData implements Serializable {
+
+    // For ensuring compatibility
+    private static final long serialVersionUID = 1L;
 
     // The time at which a passenger arrives
-    private String timestamp;
+    private final String timestamp;
 
     // The floor on which the passenger arrives
-    private int floorNumber;
+    private final int floorNumber;
 
     // True: Up, False: Down
-    private Boolean direction;
+    private final boolean direction;
 
     // The floor the passenger wants to go to
-    private int carButton;
+    private final int carButton;
 
     public FloorData(String timestamp, int floorNumber,
-                     Boolean direction, int carButton) {
+                     boolean direction, int carButton) {
         this.timestamp = timestamp;
         this.floorNumber = floorNumber;
         this.direction = direction;
-        this.carButton = carButton;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getFloorNumber() {
-        return floorNumber;
-    }
-
-    public void setFloorNumber(int floorNumber) {
-        this.floorNumber = floorNumber;
-    }
-
-    public Boolean getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Boolean direction) {
-        this.direction = direction;
-    }
-
-    public int getCarButton() {
-        return carButton;
-    }
-
-    public void setCarButton(int carButton) {
         this.carButton = carButton;
     }
 
