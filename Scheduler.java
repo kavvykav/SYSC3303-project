@@ -19,5 +19,6 @@ public class Scheduler implements Runnable {
      */
     public void run() {
         server.receiveAndSend();
+        server.receiveAndSend();
     }
 }
