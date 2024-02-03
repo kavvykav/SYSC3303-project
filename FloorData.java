@@ -1,6 +1,10 @@
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * The FloorData class represents the necessary information to be shared between the three main subsystems (Floor,
+ * Scheduler, and Elevator). It represents a data structure to be sent over UDP.
+ */
 public class FloorData implements Serializable {
 
     // For ensuring compatibility
@@ -23,8 +27,17 @@ public class FloorData implements Serializable {
     // True: request fulfilled, False: request pending
     private boolean status;
 
+    /**
+     * Basic constructor for FloorData class
+     * NOTE: The status field is set to false by default
+     *
+     * @param timestamp
+     * @param floorNumber
+     * @param direction
+     * @param carButton
+     */
     public FloorData(String timestamp, int floorNumber,
-                     boolean direction, int carButton) {
+            boolean direction, int carButton) {
         this.timestamp = timestamp;
         this.floorNumber = floorNumber;
         this.direction = direction;
@@ -32,6 +45,14 @@ public class FloorData implements Serializable {
         status = false;
     }
 
+    /**
+     * The equals method for the FloorData class.
+     * NOTE: This method does not compare the status field
+     *
+     * @param o
+     *
+     * @return true if FloorData objects are equivalent, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
 
@@ -54,10 +75,18 @@ public class FloorData implements Serializable {
                 && carButton == data.carButton;
     }
 
+    /**
+     * Getter method for the status
+     * @return The status of the request
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     * Setter method for the status
+     * @param status The value we want to update the status to
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }

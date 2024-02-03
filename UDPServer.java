@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.net.*;
+import java.io.*;
 
 /**
  * This class is simply a handler for the Scheduler, which is supposed to send
@@ -8,8 +10,16 @@ import java.net.*;
 public class UDPServer {
 
     private static final int MESSAGE_SIZE = 1024;
-    DatagramPacket sendPacket, receivePacket;
-    DatagramSocket sendSocket, receiveSocket;
+    private DatagramPacket sendPacket, receivePacket;
+    private DatagramSocket sendSocket, receiveSocket;
+
+    // For serializing and de-serializing FloorData objects
+    private ByteArrayOutputStream byteStream;
+    private ObjectOutputStream stream;
+
+    // For storing addresses and port numbers
+    private ArrayList<InetAddress> clientAddresses;
+    private ArrayList<Integer> clientPorts;
 
     /**
      * The constructor for the UDPServer object.
@@ -18,11 +28,21 @@ public class UDPServer {
     public UDPServer() {
         try {
             receiveSocket = new DatagramSocket(5000);
-
+            sendSocket = new DatagramSocket();
         } catch (SocketException se) {
             se.printStackTrace();
             System.exit(1);
         }
+        byteStream = new ByteArrayOutputStream();
+        try {
+            stream = new ObjectOutputStream(byteStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        clientAddresses = new ArrayList<InetAddress>();
+        clientPorts = new ArrayList<Integer>();
     }
 
     /**
@@ -33,18 +53,21 @@ public class UDPServer {
      *
      * @return
      **/
-    public void send(String message, InetAddress clientAddress, int clientPort) {
+    public void send(Object message, InetAddress clientAddress, int clientPort) {
+        byte[] sendMessage = new byte[MESSAGE_SIZE];
         try {
-            byte[] sendData = new byte[MESSAGE_SIZE];
-            sendData = message.getBytes();
-            // Had to create the send socket locally since it's dependent on which client we
-            // want to send to
-            sendSocket = new DatagramSocket(clientPort, clientAddress);
-            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientAddress, clientPort);
+            stream.writeObject(message);
+            stream.flush();
+            sendMessage = byteStream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        sendPacket = new DatagramPacket(sendMessage, sendMessage.length, clientAddress, clientPort);
+        try {
             sendSocket.send(sendPacket);
-            System.out.println("Sent data to " + clientAddress + " on Port " + clientPort);
-
-        } catch (Exception e) {
+            System.out.println("Sent a packet to " + clientAddress + " on port " + clientPort);
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -53,27 +76,66 @@ public class UDPServer {
     /**
      * A method to recieve a packet from a client.
      * 
-     * @param address the address of the client we want to recieve from
-     * @param port    the port we want to recieve from
-     *
-     * @return the String object that was recieved from the server
+     * @return the object that was recieved from the server
      **/
-    public String receive(InetAddress address, int port) {
-        String data = null;
+    public Object receive() {
+        byte[] recievedData = new byte[MESSAGE_SIZE];
+        receivePacket = new DatagramPacket(recievedData, recievedData.length);
         try {
-            byte[] recievedMessage = new byte[MESSAGE_SIZE];
-            DatagramPacket recievePacket = new DatagramPacket(recievedMessage, recievedMessage.length, address, port);
-            receiveSocket.receive(recievePacket);
-            recievedMessage = receivePacket.getData();
-            int packetLength = receivePacket.getLength();
+            receiveSocket.receive(receivePacket);
 
-            data = new String(recievedMessage, 0, packetLength);
-            System.out.println("Recieved " + data + " from host " + address + " on port " + port);
+            // If this is the first packet from a client, store the address and port.
+            if (clientAddresses.size() < 2) {
+                clientAddresses.add(receivePacket.getAddress());
+            }
+            if (clientPorts.size() < 2) {
+                clientPorts.add(receivePacket.getPort());
+            }
+            System.out.println("Recieved a packet from host " + receivePacket.getAddress()
+                    + " on port " + receivePacket.getPort());
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
+            return null;
         }
-        return data;
+        try {
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(recievedData);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            return objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
+    /**
+     * This returns the address for the client that is specified.
+     *
+     * @param isFloor : pass in true if you want the address of the floor, false if
+     *                you want the address of the Elevator
+     *
+     * @return the address of the specified client
+     **/
+    public InetAddress getAddress(boolean isFloor) {
+        if (isFloor) {
+            return clientAddresses.get(0);
+        }
+        return clientAddresses.get(1);
+    }
+
+    /**
+     * This returns the port for the client that is specified.
+     *
+     * @param isFloor : pass in true if you want the port of the floor, false if you
+     *                want the port of the Elevator
+     *
+     * @return the port of the specified client
+     **/
+    public Integer getPort(boolean isFloor) {
+        if (isFloor) {
+            return clientPorts.get(0);
+        }
+        return clientPorts.get(1);
+    }
+
 }
