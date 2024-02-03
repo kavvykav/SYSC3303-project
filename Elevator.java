@@ -2,7 +2,7 @@ import java.net.*;
 import java.util.ArrayList;
 
 /**
- * Elevator
+ * The class of the elevator subsystem
  */
 public class Elevator implements Runnable {
 
@@ -13,6 +13,11 @@ public class Elevator implements Runnable {
     private Integer currentFloor;
     private UDPClient client;
 
+    /**
+     * Constructor for the elevator subsystem
+     *
+     * @param numFloors the number of floors the elevator goes to
+     */
     public Elevator(int numFloors) {
         this.motor = new Motor();
         this.lamps = new ArrayList<ElevatorLamp>(numFloors);
@@ -29,17 +34,32 @@ public class Elevator implements Runnable {
         }
     }
 
+    /**
+     * Elevator goes to the desired floor
+     *
+     * @param floor the floor the elevator will go to
+     */
     public void goTo(int floor) {
         currentFloor = floor;
         buttons.get(floor - 1).arrive();
         lamps.get(floor - 1).turnOff();
     }
 
+    /**
+     * Add a floor to the queue of floors the elevator will go to
+     *
+     * @param floor the floor to add to the queue
+     */
     public void add(int floor) {
         buttons.get(floor - 1).press();
         lamps.get(floor - 1).turnOn();
     }
 
+    /**
+     * Getter for the elevator's current position
+     *
+     * @return the floor the elevator is currently on
+     */
     public Integer getCurrentFloor() {
         return currentFloor;
     }
