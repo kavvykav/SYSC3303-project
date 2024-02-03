@@ -129,7 +129,7 @@ public class UDPServer {
      * @param isFloor : pass in true if you want the port of the floor, false if you
      *                want the port of the Elevator
      *
-     * @return the address of the specified client
+     * @return the port of the specified client
      **/
     public Integer getPort(boolean isFloor) {
         if (isFloor) {
