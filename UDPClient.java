@@ -1,6 +1,10 @@
 import java.io.*;
 import java.net.*;
 
+/**
+ * UDPClient represents a simple client that communicates over UDP with a specific server.
+ * The client is designed to send and receive any type of data using serialization and deserialization methods.
+ */
 public class UDPClient {
 
     // For sending and receiving data
@@ -36,11 +40,16 @@ public class UDPClient {
             // e.printStackTrace();
             System.exit(1);
         }
-
         serverAddress = address;
         serverPort = port;
     }
 
+    /**
+     * Send data to the client's server
+     *
+     * @param data The data to be sent to the server
+     * @return 0 if successful, -1 otherwise
+     */
     public int send(Object data) {
 
         try {
@@ -64,6 +73,12 @@ public class UDPClient {
         return 0;
     }
 
+    /**
+     * Receive data from the clients server
+     * NOTE: The client will block indefinitely until it receives data, there is currently no timeout
+     *
+     * @return The data that was received by the client, null on failure
+     */
     public Object receive() {
 
         try {

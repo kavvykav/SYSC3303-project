@@ -6,6 +6,13 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * The Floor class simulates the arrival of passengers, as well as button presses and lamps.
+ * In this iteration, the Floor reads from an input file and sends the data to the scheduler.
+ *
+ * @author Matthew Huybregts 101185221
+ * Date: February 3rd, 2024
+ */
 public class Floor implements Runnable {
 
     // UDP Client for Floor
@@ -17,6 +24,10 @@ public class Floor implements Runnable {
     // The common format used to validate the timestamps
     private static final DateTimeFormatter timePattern = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
+    /**
+     * Constructor for the Floor class
+     * @param file The path of the file that the floor should read from
+     */
     public Floor(String file) {
         filename = file;
         try {
@@ -26,6 +37,10 @@ public class Floor implements Runnable {
         }
     }
 
+    /**
+     * The main method for the Floor. Here, the Floor reads an input file line by line, translates the data into a
+     * custom structure, serializes the data, and sends it to the scheduler.
+     */
     public void run() {
 
         if (client.send("floor") != 0) {
@@ -62,7 +77,7 @@ public class Floor implements Runnable {
                 }
 
                 FloorData receivedData = (FloorData) client.receive();
-                if (receivedData.equals(data)) {
+                if (receivedData.equals(data) && receivedData.getStatus()) {
                     System.out.println("Received a response from the scheduler");
                 } else {
                     System.err.println("Did not receive a valid response");
