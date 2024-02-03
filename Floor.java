@@ -28,6 +28,11 @@ public class Floor implements Runnable {
 
     public void run() {
 
+        if (client.send("floor") != 0) {
+            System.err.println("Failed to send initial message");
+            System.exit(1);
+        }
+
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -51,8 +56,7 @@ public class Floor implements Runnable {
                 // Send data to Scheduler via UDP
                 FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);
 
-                int res = client.send(data);
-                if (res != 0) {
+                if (client.send(data) != 0) {
                     System.err.println("Failed to send floor data");
                     continue;
                 }

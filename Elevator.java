@@ -1,4 +1,3 @@
-import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
@@ -46,13 +45,17 @@ public class Elevator implements Runnable {
     }
 
     public void run() {
+        if (client.send("elevator") != 0) {
+            System.err.println("Failed to send initial message");
+            System.exit(1);
+        }
+
         FloorData receivedData = (FloorData) client.receive();
         System.out.println("Received floor data from scheduler");
 
-        int res = client.send(receivedData);
-        if (res != 0) {
+        receivedData.setStatus(true);
+        if (client.send(receivedData) != 0) {
             System.err.println("Failed to respond to scheduler");
         }
     }
-
 }
