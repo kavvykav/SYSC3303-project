@@ -29,12 +29,12 @@ public class Scheduler implements Runnable {
                 }
                 // Check status flag to determine where to send the packet
                 if (!recievedData.getStatus()) {
-                    elevatorAddress = server.getAddress(false);
-                    elevatorPort = server.getPort(false);
+                    elevatorAddress = server.getClientPacketData(false).getAddress();
+                    elevatorPort = server.getClientPacketData(false).getPort();
                     server.send(recievedData, elevatorAddress, elevatorPort);
                 } else {
-                    floorAddress = server.getAddress(true);
-                    floorPort = server.getPort(true);
+                    floorAddress = server.getClientPacketData(true).getAddress();
+                    floorPort = server.getClientPacketData(true).getPort();
                     server.send(recievedData, floorAddress, floorPort);
                 }
                 // This is to establish the initial connections, in this case, we'll

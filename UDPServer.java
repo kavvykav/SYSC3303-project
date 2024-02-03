@@ -18,8 +18,7 @@ public class UDPServer {
     private ObjectOutputStream stream;
 
     // For storing addresses and port numbers
-    private ArrayList<InetAddress> clientAddresses;
-    private ArrayList<Integer> clientPorts;
+    private ArrayList<ClientPacketData> clientData;
 
     /**
      * The constructor for the UDPServer object.
@@ -40,9 +39,7 @@ public class UDPServer {
             e.printStackTrace();
             System.exit(1);
         }
-
-        clientAddresses = new ArrayList<InetAddress>();
-        clientPorts = new ArrayList<Integer>();
+        clientData = new ArrayList<ClientPacketData>(0);
     }
 
     /**
@@ -81,18 +78,20 @@ public class UDPServer {
     public Object receive() {
         byte[] recievedData = new byte[MESSAGE_SIZE];
         receivePacket = new DatagramPacket(recievedData, recievedData.length);
+
         try {
             receiveSocket.receive(receivePacket);
 
             // If this is the first packet from a client, store the address and port.
-            if (clientAddresses.size() < 2) {
-                clientAddresses.add(receivePacket.getAddress());
+            if (clientData.size() == 0) {
+                clientData.add(new ClientPacketData(receivePacket, true));
+                System.out.println("Recieved a packet from " + clientData.get(0).getType() +
+                        " from address " + clientData.get(0).getAddress() + " on port " + clientData.get(0).getPort());
+            } else if (clientData.size() == 1) {
+                clientData.add(new ClientPacketData(receivePacket, false));
+                System.out.println("Recieved a packet from " + clientData.get(1).getType() +
+                        " from address " + clientData.get(1).getAddress() + " on port " + clientData.get(1).getPort());
             }
-            if (clientPorts.size() < 2) {
-                clientPorts.add(receivePacket.getPort());
-            }
-            System.out.println("Recieved a packet from host " + receivePacket.getAddress()
-                    + " on port " + receivePacket.getPort());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -109,33 +108,19 @@ public class UDPServer {
     }
 
     /**
-     * This returns the address for the client that is specified.
+     * Returns the client packet data for the specified client
      *
-     * @param isFloor : pass in true if you want the address of the floor, false if
-     *                you want the address of the Elevator
-     *
-     * @return the address of the specified client
+     * @param isFloor true if we want the data of the packet from the floor, false
+     *                if we want the data of the packet from the elevator
+     * 
+     * @return the ClientPacketData object for the specified client
      **/
-    public InetAddress getAddress(boolean isFloor) {
+    public ClientPacketData getClientPacketData(boolean isFloor) {
         if (isFloor) {
-            return clientAddresses.get(0);
+            return clientData.get(0);
+        } else {
+            return clientData.get(1);
         }
-        return clientAddresses.get(1);
-    }
-
-    /**
-     * This returns the port for the client that is specified.
-     *
-     * @param isFloor : pass in true if you want the port of the floor, false if you
-     *                want the port of the Elevator
-     *
-     * @return the port of the specified client
-     **/
-    public Integer getPort(boolean isFloor) {
-        if (isFloor) {
-            return clientPorts.get(0);
-        }
-        return clientPorts.get(1);
     }
 
 }
