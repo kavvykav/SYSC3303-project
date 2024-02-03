@@ -18,7 +18,7 @@ public class FloorData implements Serializable {
     private final int carButton;
 
     public FloorData(String timestamp, int floorNumber,
-                     boolean direction, int carButton) {
+            boolean direction, int carButton) {
         this.timestamp = timestamp;
         this.floorNumber = floorNumber;
         this.direction = direction;
