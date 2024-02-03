@@ -11,10 +11,6 @@ public class Scheduler implements Runnable {
      */
     public Scheduler() {
         server = new UDPServer();
-        floorAddress = server.getAddress(true);
-        elevatorAddress = server.getAddress(false);
-        floorPort = server.getPort(true);
-        elevatorPort = server.getPort(false);
     }
 
     /**
@@ -31,8 +27,12 @@ public class Scheduler implements Runnable {
             }
             // Check status flag to determine where to send the packet
             if (!recievedData.getStatus()) {
+                elevatorAddress = server.getAddress(false);
+                elevatorPort = server.getPort(false);
                 server.send(recievedData, elevatorAddress, elevatorPort);
             } else {
+                floorAddress = server.getAddress(true);
+                floorPort = server.getPort(true);
                 server.send(recievedData, floorAddress, floorPort);
             }
 
