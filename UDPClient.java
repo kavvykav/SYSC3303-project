@@ -2,20 +2,16 @@ import java.io.*;
 import java.net.*;
 
 /**
- * UDPClient represents a simple client that communicates over UDP with a specific server.
+ * UDPClient represents a simple client that communicates over UDP with a specified server.
  * The client is designed to send and receive any type of data using serialization and deserialization methods.
  */
 public class UDPClient {
 
     // For sending and receiving data
     private static final int BUFFER_SIZE = 1024;
-    DatagramPacket sendPacket, receivePacket;
-    DatagramSocket sendReceiveSocket;
-    byte[] receivedMsg;
-
-    // For serializing and de-serializing data
-    ByteArrayOutputStream byteArrayOutputStream;
-    ObjectOutputStream objectOutputStream;
+    private DatagramPacket sendPacket, receivePacket;
+    private DatagramSocket sendReceiveSocket;
+    private byte[] receivedMsg;
 
     // Server information
     InetAddress serverAddress;
@@ -33,13 +29,6 @@ public class UDPClient {
         receivedMsg = new byte[BUFFER_SIZE];
         receivePacket = new DatagramPacket(receivedMsg, receivedMsg.length);
 
-        byteArrayOutputStream = new ByteArrayOutputStream();
-        try {
-            objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-        } catch (IOException e) {
-            // e.printStackTrace();
-            System.exit(1);
-        }
         serverAddress = address;
         serverPort = port;
     }
@@ -53,19 +42,18 @@ public class UDPClient {
     public int send(Object data) {
 
         try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
             objectOutputStream.writeObject(data);
-            objectOutputStream.flush();
+            byte[] msg = byteArrayOutputStream.toByteArray();
+            sendPacket = new DatagramPacket(msg, msg.length, serverAddress, serverPort);
         } catch (IOException e) {
-            System.err.println("Failed to serialize data");
             // e.printStackTrace();
-            return -1;
+            System.exit(1);
         }
-        byte[] msg = byteArrayOutputStream.toByteArray();
-        sendPacket = new DatagramPacket(msg, msg.length, serverAddress, serverPort);
 
         try {
             sendReceiveSocket.send(sendPacket);
-            objectOutputStream.reset();
         } catch (IOException e) {
             System.err.println("Failed to send data");
             return -1;

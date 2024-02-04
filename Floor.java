@@ -44,7 +44,7 @@ public class Floor implements Runnable {
     public void run() {
 
         if (client.send("floor") != 0) {
-            System.err.println("Failed to send initial message");
+            System.err.println("Floor: Failed to send initial message");
             System.exit(1);
         }
 
@@ -58,12 +58,11 @@ public class Floor implements Runnable {
                 String timestamp = lineArray[0];
                 int floorNumber, carButton;
                 try {
-                    LocalTime res = LocalTime.parse(timestamp, timePattern);
-                    System.out.println("Validating time: " + res);
+                    LocalTime.parse(timestamp, timePattern);
                     floorNumber = Integer.parseInt(lineArray[1]);
                     carButton = Integer.parseInt(lineArray[3]);
                 } catch (DateTimeParseException | NumberFormatException e) {
-                    System.err.println("Invalid data, discarding line");
+                    System.err.println("Floor: Invalid data, discarding line");
                     continue;
                 }
                 boolean direction = lineArray[2].equalsIgnoreCase("up");
@@ -72,19 +71,20 @@ public class Floor implements Runnable {
                 FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);
 
                 if (client.send(data) != 0) {
-                    System.err.println("Failed to send floor data");
+                    System.err.println("Floor: Failed to send floor data");
                     continue;
                 }
 
                 FloorData receivedData = (FloorData) client.receive();
-                if (receivedData.equals(data) && receivedData.getStatus()) {
-                    System.out.println("Received a response from the scheduler");
+                if (receivedData.getStatus()) {
+                    System.out.println("Floor: Valid response from Scheduler");
                 } else {
-                    System.err.println("Did not receive a valid response");
+                    System.err.println("Floor: Invalid response from Scheduler");
                 }
             }
         } catch (IOException e) {
-            System.err.println("Invalid data, discarding line");
+            System.err.println("Floor: Invalid data, discarding line");
         }
+        System.out.println("Floor has finished reading input, exit program");
     }
 }

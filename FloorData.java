@@ -67,8 +67,6 @@ public class FloorData implements Serializable {
 
         // typecast o to FloorData so that we can compare data members
         FloorData data = (FloorData) o;
-
-        // Compare the data members and return accordingly
         return timestamp.equals(data.timestamp)
                 && floorNumber == data.floorNumber
                 && direction == data.direction
