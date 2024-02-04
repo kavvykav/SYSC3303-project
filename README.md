@@ -35,9 +35,7 @@ This project implements an elevator control system with three main subsystems: F
 ## Usage
 
 1. Compile all Java files: `javac *.java`
-2. Run the Elevator system: `java Elevator`
-3. Run the Floor system with an input file: `java Floor input.txt`
-4. Run the Scheduler: `java Scheduler`
+2. Run the program: `java Main`
 
 ## Input File Format
 
