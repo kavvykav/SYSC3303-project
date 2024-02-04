@@ -17,7 +17,7 @@ public class Scheduler implements Runnable {
     }
 
     private ClientPacketData getClient(String type) {
-        for (ClientPacketData client: clients) {
+        for (ClientPacketData client : clients) {
             if (client.getType().equalsIgnoreCase(type)) {
                 return client;
             }
@@ -56,7 +56,7 @@ public class Scheduler implements Runnable {
 
                 System.out.println("Scheduler: Successfully established a connection with the " + receivedObject);
                 if (!clients.contains(client)) {
-                    clients.addLast(client);
+                    clients.add(client);
                 }
             }
         }

@@ -7,11 +7,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * The Floor class simulates the arrival of passengers, as well as button presses and lamps.
- * In this iteration, the Floor reads from an input file and sends the data to the scheduler.
+ * The Floor class simulates the arrival of passengers, as well as button
+ * presses and lamps.
+ * In this iteration, the Floor reads from an input file and sends the data to
+ * the scheduler.
  *
  * @author Matthew Huybregts 101185221
- * Date: February 3rd, 2024
+ *         Date: February 3rd, 2024
  */
 public class Floor implements Runnable {
 
@@ -26,6 +28,7 @@ public class Floor implements Runnable {
 
     /**
      * Constructor for the Floor class
+     * 
      * @param file The path of the file that the floor should read from
      */
     public Floor(String file) {
@@ -38,7 +41,8 @@ public class Floor implements Runnable {
     }
 
     /**
-     * The main method for the Floor. Here, the Floor reads an input file line by line, translates the data into a
+     * The main method for the Floor. Here, the Floor reads an input file line by
+     * line, translates the data into a
      * custom structure, serializes the data, and sends it to the scheduler.
      */
     public void run() {
@@ -86,5 +90,6 @@ public class Floor implements Runnable {
             System.err.println("Floor: Invalid data, discarding line");
         }
         System.out.println("Floor has finished reading input, exit program");
+        System.exit(0);
     }
 }
