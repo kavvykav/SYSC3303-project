@@ -49,3 +49,11 @@ The Floor subsystem reads input from a file, and each line in the file represent
 - The code includes error handling for invalid data and communication failures.
 
 Feel free to explore and modify the code to suit your specific requirements. If you encounter any issues or have questions, please contact one of the authors.
+
+## Delegation of Responsibilities
+
+- Scheduler subsystem: Liam Kavanagh
+- Floor subsystem: Matthew Huybregts
+- Elevator subsystem: Sean Pruss
+- Test code: Joshua Robson
+- UML diagrams and README: Abed Qubbaj
