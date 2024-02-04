@@ -2,7 +2,7 @@ import java.net.*;
 import java.util.ArrayList;
 
 /**
- * The class of the elevator subsystem
+ * Elevator represents the elevator subsystem
  */
 public class Elevator implements Runnable {
 
@@ -65,17 +65,24 @@ public class Elevator implements Runnable {
     }
 
     public void run() {
+
         if (client.send("elevator") != 0) {
-            System.err.println("Failed to send initial message");
+            System.err.println("Elevator: Failed to send initial message");
             System.exit(1);
         }
-
-        FloorData receivedData = (FloorData) client.receive();
-        System.out.println("Received floor data from scheduler");
-
-        receivedData.setStatus(true);
-        if (client.send(receivedData) != 0) {
-            System.err.println("Failed to respond to scheduler");
+        while (true) {
+            FloorData receivedData = (FloorData) client.receive();
+            System.out.println("Elevator: Received FloorData from Scheduler");
+            try {
+                // Simulate arrival
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                System.exit(130);
+            }
+            receivedData.setStatus(true);
+            if (client.send(receivedData) != 0) {
+                System.err.println("Elevator: Failed to respond to Scheduler");
+            }
         }
     }
 }
