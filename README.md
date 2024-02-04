@@ -48,7 +48,3 @@ The Floor subsystem reads input from a file, and each line in the file represent
 
 - The project uses UDP for communication, and the communication flow is: Floor -> Scheduler -> Elevator -> Scheduler -> Floor.
 - The code includes error handling for invalid data and communication failures.
-
-Feel free to explore and modify the code to suit your specific requirements. If you encounter any issues or have questions, please contact one of the authors.
-
-
