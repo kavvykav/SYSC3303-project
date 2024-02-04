@@ -2,7 +2,7 @@
 
 Authors + Student ID:<br /> 
 Matthew Huybregts 101185221<br />
-Sean Pruss (Add Student #) <br />
+Sean Pruss 101189970 <br />
 William Kavanagh 101182915 <br />
 Joshua Robson 101195802<br />
 Abed Qubbaj, 101205030<br />
