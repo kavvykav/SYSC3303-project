@@ -1,18 +1,14 @@
 import java.util.ArrayList;
 
-public class Scheduler implements Runnable {
+public class Scheduler extends UDPServer implements Runnable {
 
-    // UDP Server instance for Scheduler
-    private UDPServer server;
-
-    // For the Scheduler to keep track of its clients
     private ArrayList<ClientPacketData> clients;
 
     /**
      * The constructor for the Scheduler object.
      */
     public Scheduler() {
-        server = new UDPServer();
+        super();
         clients = new ArrayList<>(2);
     }
 
@@ -30,7 +26,7 @@ public class Scheduler implements Runnable {
      */
     public void run() {
         while (true) {
-            Object receivedObject = server.receive();
+            Object receivedObject = receive();
             if (receivedObject instanceof FloorData) {
 
                 // Check status flag to determine where to send the packet
@@ -42,7 +38,7 @@ public class Scheduler implements Runnable {
                     continue;
                 }
                 System.out.println("Scheduler: Got FloorData from" + type);
-                if (server.send(receivedData, client.getAddress(), client.getPort()) != 0) {
+                if (send(receivedData, client.getAddress(), client.getPort()) != 0) {
                     System.err.println("Scheduler: Failed to send FloorData to " + type);
                 }
             } else if (receivedObject instanceof String) {
@@ -52,7 +48,7 @@ public class Scheduler implements Runnable {
                 if (!type.equalsIgnoreCase("floor") && !type.equalsIgnoreCase("elevator")) {
                     System.err.println("Scheduler: Invalid client type");
                 }
-                ClientPacketData client = new ClientPacketData(server.getReceivePacket(), type.toLowerCase());
+                ClientPacketData client = new ClientPacketData(getReceivePacket(), type.toLowerCase());
 
                 System.out.println("Scheduler: Successfully established a connection with the " + receivedObject);
                 if (!clients.contains(client)) {
