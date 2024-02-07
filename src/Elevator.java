@@ -4,34 +4,29 @@ import java.util.ArrayList;
 /**
  * Elevator represents the elevator subsystem
  */
-public class Elevator implements Runnable {
+public class Elevator extends UDPClient implements Runnable {
 
-    private ArrayList<ElevatorButton> buttons;
-    private ArrayList<ElevatorLamp> lamps;
-    private Motor motor;
-    private Door door;
+    private ArrayList<Boolean> buttons;
+    private ArrayList<Boolean> lamps;
+    private Boolean motor;
+    private Boolean door;
     private Integer currentFloor;
-    private UDPClient client;
 
     /**
      * Constructor for the elevator subsystem
      *
      * @param numFloors the number of floors the elevator goes to
      */
-    public Elevator(int numFloors) {
-        this.motor = new Motor();
-        this.lamps = new ArrayList<ElevatorLamp>(numFloors);
-        this.buttons = new ArrayList<ElevatorButton>(numFloors);
+    public Elevator(int numFloors) throws UnknownHostException {
+        super(InetAddress.getLocalHost(), 5000);
+        this.motor = false;
+        this.lamps = new ArrayList<Boolean>(numFloors);
+        this.buttons = new ArrayList<Boolean>(numFloors);
         for (int i = 0; i < 20; i++) {
-            this.lamps.add(new ElevatorLamp());
-            this.buttons.add(new ElevatorButton());
+            this.lamps.add(false);
+            this.buttons.add(false);
         }
-        this.door = new Door();
-        try {
-            client = new UDPClient(InetAddress.getLocalHost(), 5000);
-        } catch (UnknownHostException e) {
-            System.exit(1);
-        }
+        this.door = false;
     }
 
     /**
@@ -41,8 +36,8 @@ public class Elevator implements Runnable {
      */
     public void goTo(int floor) {
         currentFloor = floor;
-        buttons.get(floor - 1).arrive();
-        lamps.get(floor - 1).turnOff();
+        buttons.set(floor - 1, false);
+        lamps.set(floor - 1, false);
     }
 
     /**
@@ -51,8 +46,8 @@ public class Elevator implements Runnable {
      * @param floor the floor to add to the queue
      */
     public void add(int floor) {
-        buttons.get(floor - 1).press();
-        lamps.get(floor - 1).turnOn();
+        buttons.set(floor - 1, true);
+        lamps.set(floor - 1, true);
     }
 
     /**
@@ -64,14 +59,42 @@ public class Elevator implements Runnable {
         return currentFloor;
     }
 
+    /**
+     * Turn on the motor
+     */
+    public void startMotor() {
+        motor = true;
+    }
+
+    /**
+     * Turn off the motor
+     */
+    public void stopMotor() {
+        motor = false;
+    }
+
+    /**
+     * Open the door
+     */
+    public void openDoor() {
+        door = true;
+    }
+
+    /**
+     * Close the door
+     */
+    public void closeDoor() {
+        door = false;
+    }
+
     public void run() {
 
-        if (client.send("elevator") != 0) {
+        if (super.send("elevator") != 0) {
             System.err.println("Elevator: Failed to send initial message");
             System.exit(1);
         }
         while (true) {
-            FloorData receivedData = (FloorData) client.receive();
+            FloorData receivedData = (FloorData) super.receive();
             System.out.println("Elevator: Received FloorData from Scheduler");
             try {
                 // Simulate arrival
@@ -80,7 +103,7 @@ public class Elevator implements Runnable {
                 System.exit(130);
             }
             receivedData.setStatus(true);
-            if (client.send(receivedData) != 0) {
+            if (super.send(receivedData) != 0) {
                 System.err.println("Elevator: Failed to respond to Scheduler");
             }
         }
