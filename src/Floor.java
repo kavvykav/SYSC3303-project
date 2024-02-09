@@ -66,6 +66,11 @@ public class Floor extends UDPClient implements Runnable {
                 }
                 boolean direction = lineArray[2].equalsIgnoreCase("up");
 
+                System.out.println("Floor: Reading data\nTime: " + timestamp +
+                                    "\nCurrent Floor: " + floorNumber +
+                                    "\nDirection: " + lineArray[2] +
+                                    "\nDestination Floor: " + carButton);
+
                 // Send data to Scheduler via UDP
                 FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);
 

@@ -37,7 +37,7 @@ public class Scheduler extends UDPServer implements Runnable {
                     System.err.println("Scheduler: Message from unknown " + type);
                     continue;
                 }
-                System.out.println("Scheduler: Got FloorData from" + type);
+                System.out.println("Scheduler: Got FloorData from " + type);
                 if (send(receivedData, client.getAddress(), client.getPort()) != 0) {
                     System.err.println("Scheduler: Failed to send FloorData to " + type);
                 }
