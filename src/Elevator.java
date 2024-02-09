@@ -17,8 +17,8 @@ public class Elevator extends UDPClient implements Runnable {
      *
      * @param numFloors the number of floors the elevator goes to
      */
-    public Elevator(int numFloors) throws UnknownHostException {
-        super(InetAddress.getLocalHost(), 5000);
+    public Elevator(int numFloors, InetAddress address, int port) {
+        super(address, port);
         this.motor = false;
         this.lamps = new ArrayList<Boolean>(numFloors);
         this.buttons = new ArrayList<Boolean>(numFloors);

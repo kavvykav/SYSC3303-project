@@ -15,10 +15,7 @@ import java.time.format.DateTimeParseException;
  * @author Matthew Huybregts 101185221
  *         Date: February 3rd, 2024
  */
-public class Floor implements Runnable {
-
-    // UDP Client for Floor
-    private UDPClient client;
+public class Floor extends UDPClient implements Runnable {
 
     // Input file for floor subsystem
     private final String filename;
@@ -30,14 +27,12 @@ public class Floor implements Runnable {
      * Constructor for the Floor class
      * 
      * @param file The path of the file that the floor should read from
+     * @param address Server address to be passed to UDPClient
+     * @param port Server port to be passed to UDPClient
      */
-    public Floor(String file) {
+    public Floor(String file, InetAddress address, int port) {
+        super(address, port);
         filename = file;
-        try {
-            client = new UDPClient(InetAddress.getLocalHost(), 5000);
-        } catch (UnknownHostException e) {
-            System.exit(1);
-        }
     }
 
     /**
@@ -47,7 +42,7 @@ public class Floor implements Runnable {
      */
     public void run() {
 
-        if (client.send("floor") != 0) {
+        if (send("floor") != 0) {
             System.err.println("Floor: Failed to send initial message");
             System.exit(1);
         }
@@ -71,15 +66,20 @@ public class Floor implements Runnable {
                 }
                 boolean direction = lineArray[2].equalsIgnoreCase("up");
 
+                System.out.println("Floor: Reading data\nTime: " + timestamp +
+                                    "\nCurrent Floor: " + floorNumber +
+                                    "\nDirection: " + lineArray[2] +
+                                    "\nDestination Floor: " + carButton);
+
                 // Send data to Scheduler via UDP
                 FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);
 
-                if (client.send(data) != 0) {
+                if (send(data) != 0) {
                     System.err.println("Floor: Failed to send floor data");
                     continue;
                 }
 
-                FloorData receivedData = (FloorData) client.receive();
+                FloorData receivedData = (FloorData) receive();
                 if (receivedData.getStatus()) {
                     System.out.println("Floor: Valid response from Scheduler");
                 } else {
@@ -87,6 +87,7 @@ public class Floor implements Runnable {
                 }
             }
         } catch (IOException e) {
+            e.printStackTrace();
             System.err.println("Floor: Invalid data, discarding line");
         }
         System.out.println("Floor has finished reading input, exit program");
