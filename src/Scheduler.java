@@ -2,7 +2,17 @@ import java.util.ArrayList;
 
 public class Scheduler extends UDPServer implements Runnable {
 
+    // Elevator and Floor Ports and IP Addresses
     private ArrayList<ClientPacketData> clients;
+
+    // Scheduler Context
+    private SchedulerContext context;
+
+    // Scheduler states
+    private SchedulerIdleState idleState;
+    private SchedulerRequestReceivedState requestReceivedState;
+    private SchedulerWaitState waitState;
+    private SchedulerResponseReceivedState responseReceivedState;
 
     /**
      * The constructor for the Scheduler object.
@@ -10,6 +20,11 @@ public class Scheduler extends UDPServer implements Runnable {
     public Scheduler() {
         super();
         clients = new ArrayList<>(2);
+        context = new SchedulerContext();
+        idleState = new SchedulerIdleState();
+        requestReceivedState = new SchedulerRequestReceivedState();
+        waitState = new SchedulerWaitState();
+        responseReceivedState = new SchedulerResponseReceivedState();
     }
 
     private ClientPacketData getClient(String type) {
