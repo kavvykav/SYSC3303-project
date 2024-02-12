@@ -6,7 +6,7 @@ public class Scheduler extends UDPServer implements Runnable {
     private ArrayList<ClientPacketData> clients;
 
     // Scheduler Context
-    private SchedulerContext context;
+    private SchedulerState currentState;
 
     // Scheduler states
     private SchedulerIdleState idleState;
@@ -20,11 +20,13 @@ public class Scheduler extends UDPServer implements Runnable {
     public Scheduler() {
         super();
         clients = new ArrayList<>(2);
-        context = new SchedulerContext();
-        idleState = new SchedulerIdleState();
-        requestReceivedState = new SchedulerRequestReceivedState();
-        waitState = new SchedulerWaitState();
-        responseReceivedState = new SchedulerResponseReceivedState();
+        idleState = new SchedulerIdleState(this);
+        requestReceivedState = new SchedulerRequestReceivedState(this);
+        waitState = new SchedulerWaitState(this);
+        responseReceivedState = new SchedulerResponseReceivedState(this);
+
+        // Initialize to idleState
+        currentState = idleState;
     }
 
     private ClientPacketData getClient(String type) {
@@ -34,6 +36,14 @@ public class Scheduler extends UDPServer implements Runnable {
             }
         }
         return null;
+    }
+
+    private SchedulerState getCurrentState() {
+        return currentState;
+    }
+
+    private void setCurrentState(SchedulerState state) {
+        state = currentState;
     }
 
     /**
