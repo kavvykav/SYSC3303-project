@@ -11,6 +11,7 @@ public class Elevator extends UDPClient implements Runnable {
     private Boolean motor;
     private Boolean door;
     private Integer currentFloor;
+    private ElevatorState state = new ElevatorIdleState();
 
     /**
      * Constructor for the elevator subsystem
