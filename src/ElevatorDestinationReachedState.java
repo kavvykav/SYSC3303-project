@@ -6,7 +6,7 @@ public class ElevatorDestinationReachedState implements ElevatorState {
         elevator.setState(new ElevatorIdleState());
     }
 
-    public void PrintStatus() {
+    public void printStatus() {
         System.out.println("Elevator has reached its destination");
     }
 }
