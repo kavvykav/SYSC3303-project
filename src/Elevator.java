@@ -88,6 +88,10 @@ public class Elevator extends UDPClient implements Runnable {
         door = false;
     }
 
+    public void setState(ElevatorState state) {
+        this.state = state;
+    }
+
     public void run() {
 
         if (super.send("elevator") != 0) {
