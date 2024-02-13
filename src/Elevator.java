@@ -92,6 +92,14 @@ public class Elevator extends UDPClient implements Runnable {
         this.state = state;
     }
 
+    public void nextState() {
+        state.next(this);
+    }
+
+    public void printStatus() {
+        state.printStatus();
+    }
+
     public void run() {
 
         if (super.send("elevator") != 0) {
