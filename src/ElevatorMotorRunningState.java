@@ -6,7 +6,7 @@ public class ElevatorMotorRunningState implements ElevatorState {
         elevator.setState(new ElevatorDestinationReachedState());
     }
 
-    public void PrintStatus() {
+    public void printStatus() {
         System.out.println("Elevator's motor is running");
     }
 }

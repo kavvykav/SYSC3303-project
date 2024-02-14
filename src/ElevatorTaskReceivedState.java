@@ -6,7 +6,7 @@ public class ElevatorTaskReceivedState implements ElevatorState {
         elevator.setState(new ElevatorMotorRunningState());
     }
 
-    public void PrintStatus() {
+    public void printStatus() {
         System.out.println("Elevator has received a task from the scheduler");
     }
 }

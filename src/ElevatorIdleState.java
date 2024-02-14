@@ -6,7 +6,7 @@ public class ElevatorIdleState implements ElevatorState {
         elevator.setState(new ElevatorTaskReceivedState());
     }
 
-    public void PrintStatus() {
+    public void printStatus() {
         System.out.println("Elevator is idle");
     }
 }
