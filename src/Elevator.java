@@ -8,7 +8,6 @@ public class Elevator extends UDPClient implements Runnable {
 
     private ArrayList<Boolean> buttons;
     private ArrayList<Boolean> lamps;
-    private Boolean motor;
     private Boolean door;
     private Integer currentFloor;
     private ElevatorState state = new ElevatorIdleState();
@@ -20,7 +19,6 @@ public class Elevator extends UDPClient implements Runnable {
      */
     public Elevator(int numFloors, InetAddress address, int port) {
         super(address, port);
-        this.motor = false;
         this.lamps = new ArrayList<Boolean>(numFloors);
         this.buttons = new ArrayList<Boolean>(numFloors);
         for (int i = 0; i < 20; i++) {
@@ -58,20 +56,6 @@ public class Elevator extends UDPClient implements Runnable {
      */
     public Integer getCurrentFloor() {
         return currentFloor;
-    }
-
-    /**
-     * Turn on the motor
-     */
-    public void startMotor() {
-        motor = true;
-    }
-
-    /**
-     * Turn off the motor
-     */
-    public void stopMotor() {
-        motor = false;
     }
 
     /**
