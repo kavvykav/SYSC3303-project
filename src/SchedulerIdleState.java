@@ -9,7 +9,7 @@ public class SchedulerIdleState implements SchedulerState {
     /**
      * The constructor for the State object
      *
-     * @param Scheduler : the context of the state
+     * @param scheduler : the context of the state
      */
     public SchedulerIdleState(Scheduler scheduler) {
         this.scheduler = scheduler;
