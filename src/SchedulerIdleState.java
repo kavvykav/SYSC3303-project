@@ -3,25 +3,12 @@
  */
 public class SchedulerIdleState implements SchedulerState {
 
-    private Scheduler scheduler;
-    private Object receivedObject;
-
-    /**
-     * The constructor for the State object
-     *
-     * @param Scheduler : the context of the state
-     */
-    public SchedulerIdleState(Scheduler scheduler) {
-        this.scheduler = scheduler;
-        receivedObject = null;
-    }
-
     /**
      * The action that is performed when the Scheduler is in the Idle state.
      */
-    public void doAction() {
+    public FloorData doAction(Scheduler scheduler, FloorData data) {
 
-        receivedObject = scheduler.receive();
+        Object receivedObject = scheduler.receive();
         if (receivedObject instanceof FloorData) {
 
             FloorData receivedData = (FloorData) receivedObject;
@@ -31,22 +18,15 @@ public class SchedulerIdleState implements SchedulerState {
                 System.err.println("Scheduler: Message from unknown " + type);
             }
             System.out.println("Scheduler: Got FloorData from " + type);
+            return receivedData;
         } else {
-            System.err.println("Scheduler : Invalid type of object received.");
+            System.err.println("Scheduler: Invalid type of object received.");
+            return null;
         }
     }
 
     /**
-     * Returns the received data.
-     *
-     * @return the received data
-     */
-    public FloorData getReceivedData() {
-        return (FloorData) receivedObject;
-    }
-
-    /**
-     * Returns the string represention of the state.
+     * Returns the string representation of the state.
      *
      * @return the string representation of the state
      */

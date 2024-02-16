@@ -4,7 +4,7 @@
  */
 public interface SchedulerState {
     /* The action performed in each state */
-    public void doAction();
+    public FloorData doAction(Scheduler scheduler, FloorData floorData);
 
     /* Returns a string representation in each state */
     public String toString();
