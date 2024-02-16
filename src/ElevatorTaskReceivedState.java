@@ -2,7 +2,8 @@
  * ElevatorTaskReceivedState
  */
 public class ElevatorTaskReceivedState implements ElevatorState {
-    public void doAction(Elevator elevator, FloorData receivedData) {
+    public FloorData doAction(Elevator elevator, FloorData receivedData) {
         System.out.println("Elevator has received a task from scheduler");
+        return null;
     }
 }

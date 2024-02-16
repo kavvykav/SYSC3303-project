@@ -13,11 +13,11 @@ public class Elevator extends UDPClient implements Runnable {
     // Elevator context
     private ElevatorState currentState;
     // Elevator states
-    private ElevatorEstablishingConnectionState establishingConnectionState;
-    private ElevatorIdleState idleState;
-    private ElevatorTaskReceivedState taskReceivedState;
-    private ElevatorMotorRunningState motorRunningState;
-    private ElevatorDestinationReachedState destinationReachedState;
+    private ElevatorEstablishingConnectionState establishingConnectionState = new ElevatorEstablishingConnectionState();
+    private ElevatorIdleState idleState = new ElevatorIdleState();
+    private ElevatorTaskReceivedState taskReceivedState = new ElevatorTaskReceivedState();
+    private ElevatorMotorRunningState motorRunningState = new ElevatorMotorRunningState();
+    private ElevatorDestinationReachedState destinationReachedState = new ElevatorDestinationReachedState();
 
     /**
      * Constructor for the elevator subsystem
@@ -103,7 +103,7 @@ public class Elevator extends UDPClient implements Runnable {
         while (true) {
             FloorData receivedData = null;
             setCurrentState(idleState);
-            currentState.doAction(this, receivedData);
+            receivedData = currentState.doAction(this, receivedData);
             setCurrentState(taskReceivedState);
             currentState.doAction(this, null);
             try {
