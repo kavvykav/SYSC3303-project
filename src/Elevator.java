@@ -13,6 +13,7 @@ public class Elevator extends UDPClient implements Runnable {
     // Elevator context
     private ElevatorState currentState;
     // Elevator states
+    private ElevatorEstablishingConnectionState establishingConnectionState;
     private ElevatorIdleState idleState;
     private ElevatorTaskReceivedState taskReceivedState;
     private ElevatorMotorRunningState motorRunningState;
