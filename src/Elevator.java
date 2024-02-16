@@ -6,18 +6,14 @@ import java.util.ArrayList;
  */
 public class Elevator extends UDPClient implements Runnable {
 
+    // Elevator info
     private ArrayList<Boolean> buttons;
     private ArrayList<Boolean> lamps;
     private Boolean door;
     private Integer currentFloor;
-    // Elevator context
-    private ElevatorState currentState;
-    // Elevator states
-    private ElevatorEstablishingConnectionState establishingConnectionState = new ElevatorEstablishingConnectionState();
-    private ElevatorIdleState idleState = new ElevatorIdleState();
-    private ElevatorTaskReceivedState taskReceivedState = new ElevatorTaskReceivedState();
-    private ElevatorMotorRunningState motorRunningState = new ElevatorMotorRunningState();
-    private ElevatorDestinationReachedState destinationReachedState = new ElevatorDestinationReachedState();
+
+    // Elevator state
+    private ElevatorState currentState = new ElevatorEstablishingConnectionState();
 
     /**
      * Constructor for the elevator subsystem
@@ -98,17 +94,21 @@ public class Elevator extends UDPClient implements Runnable {
     }
 
     public void run() {
-        setCurrentState(establishingConnectionState);
+        // Establish connection
         currentState.doAction(this, null);
         while (true) {
             FloorData receivedData = null;
-            setCurrentState(idleState);
+
+            setCurrentState(new ElevatorIdleState());
             receivedData = currentState.doAction(this, receivedData);
-            setCurrentState(taskReceivedState);
+
+            setCurrentState(new ElevatorTaskReceivedState());
             currentState.doAction(this, null);
-            setCurrentState(motorRunningState);
+
+            setCurrentState(new ElevatorMotorRunningState());
             currentState.doAction(this, null);
-            setCurrentState(destinationReachedState);
+
+            setCurrentState(new ElevatorDestinationReachedState());
             currentState.doAction(this, receivedData);
         }
     }
