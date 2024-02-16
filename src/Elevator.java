@@ -15,6 +15,8 @@ public class Elevator extends UDPClient implements Runnable {
     // Elevator states
     private ElevatorIdleState idleState;
     private ElevatorTaskReceivedState taskReceivedState;
+    private ElevatorMotorRunningState motorRunningState;
+    private ElevatorDestinationReachedState destinationReachedState;
 
     /**
      * Constructor for the elevator subsystem
@@ -80,12 +82,8 @@ public class Elevator extends UDPClient implements Runnable {
         this.currentState = state;
     }
 
-    public void nextState() {
-        currentState.next(this);
-    }
-
-    public void printStatus() {
-        currentState.printStatus();
+    public ElevatorState getCurrentState() {
+        return currentState;
     }
 
     public void run() {
