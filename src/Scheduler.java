@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * This is the main component of the Scheduler Subsystem
+ */
 public class Scheduler extends UDPServer implements Runnable {
 
     // Elevator and Floor Ports and IP Addresses
@@ -9,6 +12,7 @@ public class Scheduler extends UDPServer implements Runnable {
     private SchedulerState currentState;
 
     // Scheduler states
+    private SchedulerEstablishConnectionState establishConnectionState;
     private SchedulerIdleState idleState;
     private SchedulerRequestReceivedState requestReceivedState;
     private SchedulerWaitState waitState;
@@ -20,16 +24,23 @@ public class Scheduler extends UDPServer implements Runnable {
     public Scheduler() {
         super();
         clients = new ArrayList<>(2);
+        establishConnectionState = new SchedulerEstablishConnectionState(this);
         idleState = new SchedulerIdleState(this);
         requestReceivedState = new SchedulerRequestReceivedState(this);
         waitState = new SchedulerWaitState(this);
         responseReceivedState = new SchedulerResponseReceivedState(this);
 
         // Initialize to idleState
-        currentState = idleState;
+        currentState = establishConnectionState;
     }
 
-    private ClientPacketData getClient(String type) {
+    /**
+     * Gets information about the specified client.
+     *
+     * @param type: elevator or floor
+     * @return a ClientPacketData object containing the IP address and the Port.
+     */
+    public ClientPacketData getClient(String type) {
         for (ClientPacketData client : clients) {
             if (client.getType().equalsIgnoreCase(type)) {
                 return client;
@@ -38,48 +49,52 @@ public class Scheduler extends UDPServer implements Runnable {
         return null;
     }
 
-    private SchedulerState getCurrentState() {
-        return currentState;
+    private void setCurrentState(SchedulerState state) {
+        currentState = state;
+        System.out.println("Scheduler : Moved to " + state.toString());
     }
 
-    private void setCurrentState(SchedulerState state) {
-        state = currentState;
+    /**
+     * Adds a client to the ArrayList if it's not already there
+     *
+     * @param client : the client we want to add
+     */
+    public void addClient(ClientPacketData client) {
+        if (!clients.contains(client)) {
+            clients.add(client);
+        }
     }
 
     /**
      * The thread routine for the Scheduler.
      */
     public void run() {
+        // State to establish initial connection, it only happens once so leave
+        // outside of loop
+        currentState.doAction();
         while (true) {
-            Object receivedObject = receive();
-            if (receivedObject instanceof FloorData) {
+            // Idle state : wait for request from floor
+            setCurrentState(idleState);
+            currentState.doAction();
 
-                // Check status flag to determine where to send the packet
-                FloorData receivedData = (FloorData) receivedObject;
-                String type = receivedData.getStatus() ? "Floor" : "Elevator";
-                ClientPacketData client = getClient(type.toLowerCase());
-                if (client == null) {
-                    System.err.println("Scheduler: Message from unknown " + type);
-                    continue;
-                }
-                System.out.println("Scheduler: Got FloorData from " + type);
-                if (send(receivedData, client.getAddress(), client.getPort()) != 0) {
-                    System.err.println("Scheduler: Failed to send FloorData to " + type);
-                }
-            } else if (receivedObject instanceof String) {
+            // Retreive data received in the Idle state, switch to the request
+            // received state and send data to the elevator
+            FloorData data = idleState.getReceivedData();
+            setCurrentState(requestReceivedState);
+            requestReceivedState.chooseDataToSend(data);
+            currentState.doAction();
 
-                // This is to establish the initial connections
-                String type = (String) receivedObject;
-                if (!type.equalsIgnoreCase("floor") && !type.equalsIgnoreCase("elevator")) {
-                    System.err.println("Scheduler: Invalid client type");
-                }
-                ClientPacketData client = new ClientPacketData(getReceivePacket(), type.toLowerCase());
+            // After the request is sent to the floor, receive response back
+            // from the floor
+            setCurrentState(waitState);
+            currentState.doAction();
 
-                System.out.println("Scheduler: Successfully established a connection with the " + receivedObject);
-                if (!clients.contains(client)) {
-                    clients.add(client);
-                }
-            }
+            // Retreive data received in the Wait state, and send it back to the
+            // floor.
+            data = waitState.getReceivedData(); // Yes, I know it's the same data, but it won't be in future iterations
+            setCurrentState(responseReceivedState);
+            responseReceivedState.chooseDataToSend(data);
+            currentState.doAction();
         }
     }
 }

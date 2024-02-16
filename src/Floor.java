@@ -26,9 +26,9 @@ public class Floor extends UDPClient implements Runnable {
     /**
      * Constructor for the Floor class
      * 
-     * @param file The path of the file that the floor should read from
+     * @param file    The path of the file that the floor should read from
      * @param address Server address to be passed to UDPClient
-     * @param port Server port to be passed to UDPClient
+     * @param port    Server port to be passed to UDPClient
      */
     public Floor(String file, InetAddress address, int port) {
         super(address, port);
@@ -67,9 +67,9 @@ public class Floor extends UDPClient implements Runnable {
                 boolean direction = lineArray[2].equalsIgnoreCase("up");
 
                 System.out.println("Floor: Reading data\nTime: " + timestamp +
-                                    "\nCurrent Floor: " + floorNumber +
-                                    "\nDirection: " + lineArray[2] +
-                                    "\nDestination Floor: " + carButton);
+                        "\nCurrent Floor: " + floorNumber +
+                        "\nDirection: " + lineArray[2] +
+                        "\nDestination Floor: " + carButton);
 
                 // Send data to Scheduler via UDP
                 FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);

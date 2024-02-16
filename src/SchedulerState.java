@@ -1,13 +1,11 @@
 /**
- * This is the state interface for the Scheduler, used to implement the
- * state design pattern.
+ * This is the SchedulerState interface, which includes a doAction() method and
+ * a toString() method.
  */
 public interface SchedulerState {
+    /* The action performed in each state */
+    public void doAction();
 
-    /**
-     * The method used to do perform the action for that particular state.
-     *
-     * @param context : the context (or the object that carries the current state)
-     */
-    public void doAction(SchedulerContext context);
+    /* Returns a string representation in each state */
+    public String toString();
 }
