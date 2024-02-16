@@ -2,7 +2,7 @@
  * ElevatorTaskReceivedState
  */
 public class ElevatorTaskReceivedState implements ElevatorState {
-    public void doAction() {
+    public void doAction(Elevator elevator) {
 
     }
 }

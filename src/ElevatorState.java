@@ -2,5 +2,5 @@
  * ElevatorState
  */
 public interface ElevatorState {
-    void doAction();
+    void doAction(Elevator elevator);
 }
