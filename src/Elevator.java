@@ -108,10 +108,8 @@ public class Elevator extends UDPClient implements Runnable {
             currentState.doAction(this, null);
             setCurrentState(motorRunningState);
             currentState.doAction(this, null);
-            receivedData.setStatus(true);
-            if (super.send(receivedData) != 0) {
-                System.err.println("Elevator: Failed to respond to Scheduler");
-            }
+            setCurrentState(destinationReachedState);
+            currentState.doAction(this, receivedData);
         }
     }
 }
