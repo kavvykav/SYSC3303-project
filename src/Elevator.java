@@ -79,20 +79,27 @@ public class Elevator extends UDPClient implements Runnable {
         door = false;
     }
 
+    /**
+     * Setter for elevator's current state
+     * 
+     * @param state the state that the elevator will be set to
+     */
     public void setCurrentState(ElevatorState state) {
         this.currentState = state;
     }
 
+    /**
+     * Getter for elevator's current state
+     * 
+     * @return the current state of the elevator
+     */
     public ElevatorState getCurrentState() {
         return currentState;
     }
 
     public void run() {
-
-        if (super.send("elevator") != 0) {
-            System.err.println("Elevator: Failed to send initial message");
-            System.exit(1);
-        }
+        setCurrentState(establishingConnectionState);
+        currentState.doAction(this);
         while (true) {
             FloorData receivedData = (FloorData) super.receive();
             System.out.println("Elevator: Received FloorData from Scheduler");
