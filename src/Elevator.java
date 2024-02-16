@@ -101,8 +101,11 @@ public class Elevator extends UDPClient implements Runnable {
         setCurrentState(establishingConnectionState);
         currentState.doAction(this, null);
         while (true) {
-            FloorData receivedData = (FloorData) super.receive();
-            System.out.println("Elevator: Received FloorData from Scheduler");
+            FloorData receivedData = null;
+            setCurrentState(idleState);
+            currentState.doAction(this, receivedData);
+            setCurrentState(taskReceivedState);
+            currentState.doAction(this, null);
             try {
                 // Simulate arrival
                 Thread.sleep(5000);
