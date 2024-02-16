@@ -10,7 +10,11 @@ public class Elevator extends UDPClient implements Runnable {
     private ArrayList<Boolean> lamps;
     private Boolean door;
     private Integer currentFloor;
-    private ElevatorState state = new ElevatorIdleState();
+    // Elevator context
+    private ElevatorState currentState;
+    // Elevator states
+    private ElevatorIdleState idleState;
+    private ElevatorTaskReceivedState taskReceivedState;
 
     /**
      * Constructor for the elevator subsystem
@@ -72,16 +76,16 @@ public class Elevator extends UDPClient implements Runnable {
         door = false;
     }
 
-    public void setState(ElevatorState state) {
-        this.state = state;
+    public void setCurrentState(ElevatorState state) {
+        this.currentState = state;
     }
 
     public void nextState() {
-        state.next(this);
+        currentState.next(this);
     }
 
     public void printStatus() {
-        state.printStatus();
+        currentState.printStatus();
     }
 
     public void run() {
