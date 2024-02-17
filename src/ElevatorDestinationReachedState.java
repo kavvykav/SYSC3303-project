@@ -7,7 +7,7 @@ public class ElevatorDestinationReachedState implements ElevatorState {
         if (elevator.send(receivedData) != 0) {
             System.err.println("Elevator: Failed to respond to Scheduler");
         }
-        System.out.println("Elevator has reached destination");
+        System.out.println("Elevator: Reached destination");
         return null;
     }
 }

@@ -3,7 +3,7 @@
  */
 public class ElevatorTaskReceivedState implements ElevatorState {
     public FloorData doAction(Elevator elevator, FloorData receivedData) {
-        System.out.println("Elevator has received a task from scheduler");
+        System.out.println("Elevator: Received task from Scheduler");
         return null;
     }
 }

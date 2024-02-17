@@ -3,21 +3,11 @@
  * Elevator subsystems.
  */
 public class SchedulerEstablishConnectionState implements SchedulerState {
-    private Scheduler scheduler;
-
-    /**
-     * Constructor for the State object
-     * 
-     * @param scheduler : the context of the state
-     */
-    public SchedulerEstablishConnectionState(Scheduler scheduler) {
-        this.scheduler = scheduler;
-    }
 
     /**
      * This is the action method that establishes the initial connections.
      */
-    public void doAction() {
+    public FloorData doAction(Scheduler scheduler, FloorData data) {
         // Iterate 2x to establish a connection with the other 2 subsystems
         for (int i = 0; i < 2; i++) {
             Object receivedObject = scheduler.receive();
@@ -28,12 +18,13 @@ public class SchedulerEstablishConnectionState implements SchedulerState {
                 }
                 ClientPacketData client = new ClientPacketData(scheduler.getReceivePacket(), type.toLowerCase());
 
-                System.out.println("Scheduler : Successfully established a connection with the " + receivedObject);
+                System.out.println("Scheduler: Successfully established a connection with the " + receivedObject);
                 scheduler.addClient(client);
             } else {
                 System.err.println("Invalid type of object received");
             }
         }
+        return null;
     }
 
     /**

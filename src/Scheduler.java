@@ -9,14 +9,7 @@ public class Scheduler extends UDPServer implements Runnable {
     private ArrayList<ClientPacketData> clients;
 
     // Scheduler Context
-    private SchedulerState currentState;
-
-    // Scheduler states
-    private SchedulerEstablishConnectionState establishConnectionState;
-    private SchedulerIdleState idleState;
-    private SchedulerRequestReceivedState requestReceivedState;
-    private SchedulerWaitState waitState;
-    private SchedulerResponseReceivedState responseReceivedState;
+    private SchedulerState currentState = new SchedulerEstablishConnectionState();
 
     /**
      * The constructor for the Scheduler object.
@@ -24,14 +17,6 @@ public class Scheduler extends UDPServer implements Runnable {
     public Scheduler() {
         super();
         clients = new ArrayList<>(2);
-        establishConnectionState = new SchedulerEstablishConnectionState(this);
-        idleState = new SchedulerIdleState(this);
-        requestReceivedState = new SchedulerRequestReceivedState(this);
-        waitState = new SchedulerWaitState(this);
-        responseReceivedState = new SchedulerResponseReceivedState(this);
-
-        // Initialize to idleState
-        currentState = establishConnectionState;
     }
 
     /**
@@ -51,7 +36,7 @@ public class Scheduler extends UDPServer implements Runnable {
 
     private void setCurrentState(SchedulerState state) {
         currentState = state;
-        System.out.println("Scheduler : Moved to " + state.toString());
+        System.out.println("Scheduler: Moved to " + state.toString());
     }
 
     /**
@@ -69,32 +54,26 @@ public class Scheduler extends UDPServer implements Runnable {
      * The thread routine for the Scheduler.
      */
     public void run() {
-        // State to establish initial connection, it only happens once so leave
-        // outside of loop
-        currentState.doAction();
+        // Establish initial connections
+        currentState.doAction(this, null);
+        // Repeat indefinitely
         while (true) {
+
             // Idle state : wait for request from floor
-            setCurrentState(idleState);
-            currentState.doAction();
+            setCurrentState(new SchedulerIdleState());
+            FloorData data = currentState.doAction(this, null);
 
-            // Retreive data received in the Idle state, switch to the request
-            // received state and send data to the elevator
-            FloorData data = idleState.getReceivedData();
-            setCurrentState(requestReceivedState);
-            requestReceivedState.chooseDataToSend(data);
-            currentState.doAction();
+            // Retrieve data received in the Idle state, switch to the request
+            setCurrentState(new SchedulerRequestReceivedState());
+            currentState.doAction(this, data);
 
-            // After the request is sent to the floor, receive response back
-            // from the floor
-            setCurrentState(waitState);
-            currentState.doAction();
+            // After the request is sent to the floor, wait for response
+            setCurrentState(new SchedulerWaitState());
+            data = currentState.doAction(this, null);
 
-            // Retreive data received in the Wait state, and send it back to the
-            // floor.
-            data = waitState.getReceivedData(); // Yes, I know it's the same data, but it won't be in future iterations
-            setCurrentState(responseReceivedState);
-            responseReceivedState.chooseDataToSend(data);
-            currentState.doAction();
+            // Retrieve data received in the Wait state, and send it back to the floor.
+            setCurrentState(new SchedulerResponseReceivedState());
+            currentState.doAction(this, data);
         }
     }
 }

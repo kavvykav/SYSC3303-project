@@ -46,6 +46,7 @@ public class Floor extends UDPClient implements Runnable {
             System.err.println("Floor: Failed to send initial message");
             System.exit(1);
         }
+        System.out.println("Floor: Established connection with Scheduler");
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -56,20 +57,25 @@ public class Floor extends UDPClient implements Runnable {
 
                 String timestamp = lineArray[0];
                 int floorNumber, carButton;
+                LocalTime res = null;
                 try {
-                    LocalTime.parse(timestamp, timePattern);
+                    res = LocalTime.parse(timestamp, timePattern);
                     floorNumber = Integer.parseInt(lineArray[1]);
                     carButton = Integer.parseInt(lineArray[3]);
                 } catch (DateTimeParseException | NumberFormatException e) {
+                    if (res == null) {
+                        System.err.println("Floor: Got an invalid date");
+                    }
                     System.err.println("Floor: Invalid data, discarding line");
                     continue;
                 }
                 boolean direction = lineArray[2].equalsIgnoreCase("up");
 
-                System.out.println("Floor: Reading data\nTime: " + timestamp +
-                        "\nCurrent Floor: " + floorNumber +
-                        "\nDirection: " + lineArray[2] +
-                        "\nDestination Floor: " + carButton);
+                System.out.println("Floor: Reading data" +
+                        "\n\tTime: " + timestamp +
+                        "\n\tCurrent Floor: " + floorNumber +
+                        "\n\tDirection: " + lineArray[2] +
+                        "\n\tDestination Floor: " + carButton);
 
                 // Send data to Scheduler via UDP
                 FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);
@@ -87,10 +93,10 @@ public class Floor extends UDPClient implements Runnable {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.err.println("Floor: Invalid data, discarding line");
         }
-        System.out.println("Floor has finished reading input, exit program");
+        System.out.println("Floor: Finished reading input, exiting program");
         System.exit(0);
     }
 }

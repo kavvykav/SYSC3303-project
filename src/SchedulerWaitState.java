@@ -4,25 +4,12 @@
  */
 public class SchedulerWaitState implements SchedulerState {
 
-    private Scheduler scheduler;
-    private Object receivedObject;
-
-    /**
-     * The constructor for the state object.
-     *
-     * @param scheduler : the context for the state.
-     */
-    public SchedulerWaitState(Scheduler scheduler) {
-        this.scheduler = scheduler;
-        receivedObject = null;
-    }
-
     /**
      * The action that is performed when the Scheduler is in the Wait state.
      */
-    public void doAction() {
+    public FloorData doAction(Scheduler scheduler, FloorData data) {
 
-        receivedObject = scheduler.receive();
+        Object receivedObject = scheduler.receive();
         if (receivedObject instanceof FloorData) {
 
             FloorData receivedData = (FloorData) receivedObject;
@@ -32,18 +19,11 @@ public class SchedulerWaitState implements SchedulerState {
                 System.err.println("Scheduler: Message from unknown " + type);
             }
             System.out.println("Scheduler: Got FloorData from " + type);
+            return receivedData;
         } else {
             System.err.println("Invalid type of object received.");
+            return null;
         }
-    }
-
-    /**
-     * Returns the data received while in this state.
-     *
-     * @return a FloorData object containing the data
-     */
-    public FloorData getReceivedData() {
-        return (FloorData) receivedObject;
     }
 
     /**
