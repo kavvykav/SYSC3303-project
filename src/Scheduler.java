@@ -9,7 +9,7 @@ public class Scheduler extends UDPServer implements Runnable {
     private ArrayList<ClientPacketData> clients;
 
     // Scheduler Context
-    private SchedulerState currentState = new SchedulerEstablishConnectionState();
+    private SchedulerState currentState;
 
     /**
      * The constructor for the Scheduler object.
@@ -34,11 +34,21 @@ public class Scheduler extends UDPServer implements Runnable {
         return null;
     }
 
+    /**
+     * Sets the current state of the scheduler.
+     *
+     * @param state : the state the Scheduler is being set to.
+     */
     public void setCurrentState(SchedulerState state) {
         currentState = state;
         System.out.println("Scheduler: Moved to " + state.toString());
     }
 
+    /**
+     * Returns the current state.
+     *
+     * @return the current state of the Scheduler
+     */
     public SchedulerState getCurrentState() {
         return currentState;
     }
@@ -59,6 +69,7 @@ public class Scheduler extends UDPServer implements Runnable {
      */
     public void run() {
         // Establish initial connections
+        setCurrentState(new SchedulerEstablishConnectionState());
         currentState.doAction(this, null);
         // Repeat indefinitely
         while (true) {
