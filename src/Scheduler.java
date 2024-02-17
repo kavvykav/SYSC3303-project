@@ -5,6 +5,7 @@ import java.util.ArrayList;
  */
 public class Scheduler extends UDPServer implements Runnable {
 
+    private FloorData data;
     // Elevator and Floor Ports and IP Addresses
     private ArrayList<ClientPacketData> clients;
 
@@ -49,9 +50,19 @@ public class Scheduler extends UDPServer implements Runnable {
         return null;
     }
 
-    private void setCurrentState(SchedulerState state) {
+    public void setCurrentState(SchedulerState state) {
         currentState = state;
         System.out.println("Scheduler : Moved to " + state.toString());
+    }
+
+    public SchedulerState getCurrentState() {
+        return currentState;
+    }
+    public boolean haveFloorData(){
+        if (data != null){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -79,7 +90,7 @@ public class Scheduler extends UDPServer implements Runnable {
 
             // Retreive data received in the Idle state, switch to the request
             // received state and send data to the elevator
-            FloorData data = idleState.getReceivedData();
+            data = idleState.getReceivedData();
             setCurrentState(requestReceivedState);
             requestReceivedState.chooseDataToSend(data);
             currentState.doAction();

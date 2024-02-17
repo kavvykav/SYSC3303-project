@@ -88,4 +88,8 @@ public class FloorData implements Serializable {
     public void setStatus(boolean status) {
         this.status = status;
     }
+    public String returnTimeStamp(){return timestamp;}
+    public int returnFloorNumber(){return floorNumber;}
+    public boolean returnDirection(){return direction;}
+    public int returnCarButton(){return carButton;}
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
  */
 public class Elevator extends UDPClient implements Runnable {
 
+    private FloorData receivedData = null;
     private ArrayList<Boolean> buttons;
     private ArrayList<Boolean> lamps;
     private Boolean door;
@@ -64,7 +65,36 @@ public class Elevator extends UDPClient implements Runnable {
     public Integer getCurrentFloor() {
         return currentFloor;
     }
-
+    /**
+     * for testing purposes
+    public int getNumButtons(){
+        for (int i : buttons){
+            i += 1;
+        }
+        return i;
+    }
+    public int getNumLamps(){
+        for (int i : lamps){
+            i += 1;
+        }
+        return i;
+    }
+     public boolean doorStatus(){
+     return door
+     }
+     */
+    public boolean isMotorRunning(){
+        if (currentState.equals(motorRunningState)){
+            return true;
+        }
+        return false;
+    }
+    public boolean haveFloorData(){
+        if (receivedData != null){
+            return true;
+        }
+        return false;
+    }
     /**
      * Open the door
      */
@@ -101,7 +131,7 @@ public class Elevator extends UDPClient implements Runnable {
         setCurrentState(establishingConnectionState);
         currentState.doAction(this, null);
         while (true) {
-            FloorData receivedData = null;
+            //FloorData receivedData = null;
             setCurrentState(idleState);
             receivedData = currentState.doAction(this, receivedData);
             setCurrentState(taskReceivedState);

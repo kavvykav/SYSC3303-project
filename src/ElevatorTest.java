@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorTest {
     Elevator elevator;
-    Scheduler scheduler;
-    Floor floor;
     @BeforeEach
     void setUp() {
         InetAddress address;
@@ -20,17 +18,52 @@ class ElevatorTest {
         }
         elevator = new Elevator(20, address, 5007);
     }
-
     @Test
-    void testNumButtons () {
+    void motorRunningState(){
+        ElevatorState ElevatorMotorRunningState = new ElevatorMotorRunningState();
+        elevator.setCurrentState(ElevatorMotorRunningState);
+        assertEquals(elevator.getCurrentState(), ElevatorMotorRunningState);
     }
     @Test
+    void DestinationReachedState(){
+        ElevatorState ElevatorDestinationReachedState = new ElevatorDestinationReachedState();
+        elevator.setCurrentState(ElevatorDestinationReachedState);
+        assertEquals(elevator.getCurrentState(), ElevatorDestinationReachedState);
+    }
+    @Test
+    void EstablishConnectionState(){
+        ElevatorState ElevatorEstablishingConnectionState = new ElevatorEstablishingConnectionState();
+        elevator.setCurrentState(ElevatorEstablishingConnectionState);
+        assertEquals(elevator.getCurrentState(), ElevatorEstablishingConnectionState);
+    }
+    @Test
+    void IdleState(){
+        ElevatorState ElevatorIdleState = new ElevatorIdleState();
+        elevator.setCurrentState(ElevatorIdleState);
+        assertEquals(elevator.getCurrentState(), ElevatorIdleState);
+    }
+    @Test
+    void TaskReceivedState(){
+        ElevatorState ElevatorTaskReceivedState = new ElevatorTaskReceivedState();
+        elevator.setCurrentState(ElevatorTaskReceivedState);
+        assertEquals(elevator.getCurrentState(), ElevatorTaskReceivedState);
+    }
+
+    //None of the following methods have been implemented thus these can not be tested
+    @Test
+    void testNumButtons () {
+            //assertEquals(elevator.getNumButtons(), 20);
+        }
+    @Test
     void testNumLamps () {
+        //assertEquals(elevator.getNumButtons(), 20);
     }
     @Test
     void doorClosed () {
+        //assertTrue(elevator.getCurrentState().equals("ElevatorMotorRunningState"));
     }
     @Test
     void doorOpen () {
+        //assertTrue(elevator.getCurrentState() != ElevatorMotorRunningState);
     }
 }

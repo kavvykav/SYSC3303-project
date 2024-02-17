@@ -1,33 +1,43 @@
-import org.junit.Before;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SchedulerTest {
-    Elevator elevator;
-    Floor floor;
-    Scheduler scheduler = new Scheduler();
-
+    Scheduler scheduler;
     @BeforeEach
-    void setUp(){
-        InetAddress address;
-        try {
-            address = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        elevator = new Elevator(20, address, 5007);
-        floor = new Floor("src/test_input.txt", address, 5007);
+    void setUp() {
+        scheduler = new Scheduler();
     }
     @Test
-    void sendData() {
+    void ResponseReceivedState(){
+        SchedulerState SchedulerResponseReceivedState = new SchedulerResponseReceivedState(scheduler);
+        scheduler.setCurrentState(SchedulerResponseReceivedState);
+        assertEquals(scheduler.getCurrentState(), SchedulerResponseReceivedState);
     }
-
     @Test
-    void recieveData() {
+    void EstablishConnectionState(){
+        SchedulerState SchedulerEstablishConnectionState = new SchedulerEstablishConnectionState(scheduler);
+        scheduler.setCurrentState(SchedulerEstablishConnectionState);
+        assertEquals(scheduler.getCurrentState(), SchedulerEstablishConnectionState);
+    }
+    @Test
+    void IdleState(){
+        SchedulerState SchedulerIdleState = new SchedulerIdleState(scheduler);
+        scheduler.setCurrentState(SchedulerIdleState);
+        assertEquals(scheduler.getCurrentState(), SchedulerIdleState);
+    }
+    @Test
+    void RequestReceivedState(){
+        SchedulerState SchedulerRequestReceivedState = new SchedulerRequestReceivedState(scheduler);
+        scheduler.setCurrentState(SchedulerRequestReceivedState);
+        assertEquals(scheduler.getCurrentState(), SchedulerRequestReceivedState);
+    }
+    @Test
+    void WaitState(){
+        SchedulerState SchedulerWaitState = new SchedulerWaitState(scheduler);
+        scheduler.setCurrentState(SchedulerWaitState);
+        assertEquals(scheduler.getCurrentState(), SchedulerWaitState);
     }
 }
