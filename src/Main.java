@@ -1,10 +1,12 @@
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class Main {
+public class
+
+Main {
 
     private static final int SERVER_PORT = 5000;
-    private static final String INPUT_FILE = "test_input.txt";
+    private static final String INPUT_FILE = "src/test_input.txt";
 
     public static void main(String[] args) {
 

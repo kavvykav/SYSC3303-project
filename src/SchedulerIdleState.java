@@ -3,6 +3,20 @@
  */
 public class SchedulerIdleState implements SchedulerState {
 
+
+    private Scheduler scheduler;
+    private Object receivedObject;
+
+    /**
+     * The constructor for the State object
+     *
+     * @param scheduler : the context of the state
+     */
+    public SchedulerIdleState(Scheduler scheduler) {
+        this.scheduler = scheduler;
+        receivedObject = null;
+    }
+
     /**
      * The action that is performed when the Scheduler is in the Idle state.
      */
