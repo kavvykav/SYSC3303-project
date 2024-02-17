@@ -34,9 +34,13 @@ public class Scheduler extends UDPServer implements Runnable {
         return null;
     }
 
-    private void setCurrentState(SchedulerState state) {
+    public void setCurrentState(SchedulerState state) {
         currentState = state;
         System.out.println("Scheduler: Moved to " + state.toString());
+    }
+
+    public SchedulerState getCurrentState() {
+        return currentState;
     }
 
     /**
