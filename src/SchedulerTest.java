@@ -1,14 +1,12 @@
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SchedulerTest {
-    Scheduler scheduler;
-
-    @BeforeEach
-    void setUp() {
+    static Scheduler scheduler;
+    @BeforeAll
+    static void setUp() {
         scheduler = new Scheduler();
     }
 
@@ -20,28 +18,25 @@ class SchedulerTest {
     }
 
     @Test
-    void EstablishConnectionState() {
+    void EstablishConnectionState(){
         SchedulerState SchedulerEstablishConnectionState = new SchedulerEstablishConnectionState();
         scheduler.setCurrentState(SchedulerEstablishConnectionState);
         assertInstanceOf(SchedulerEstablishConnectionState.class, scheduler.getCurrentState());
     }
-
     @Test
-    void IdleState() {
+    void IdleState(){
         SchedulerState SchedulerIdleState = new SchedulerIdleState();
         scheduler.setCurrentState(SchedulerIdleState);
         assertInstanceOf(SchedulerIdleState.class, scheduler.getCurrentState());
     }
-
     @Test
-    void RequestReceivedState() {
+    void RequestReceivedState(){
         SchedulerState SchedulerRequestReceivedState = new SchedulerRequestReceivedState();
         scheduler.setCurrentState(SchedulerRequestReceivedState);
         assertInstanceOf(SchedulerRequestReceivedState.class, scheduler.getCurrentState());
     }
-
     @Test
-    void WaitState() {
+    void WaitState(){
         SchedulerState SchedulerWaitState = new SchedulerWaitState();
         scheduler.setCurrentState(SchedulerWaitState);
         assertInstanceOf(SchedulerWaitState.class, scheduler.getCurrentState());

@@ -1,5 +1,4 @@
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -7,9 +6,9 @@ import java.net.UnknownHostException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorTest {
-    Elevator elevator;
-    @BeforeEach
-    void setUp() {
+    static Elevator elevator;
+    @BeforeAll
+    static void setUp() {
         InetAddress address;
         try {
             address = InetAddress.getLocalHost();
@@ -18,6 +17,7 @@ class ElevatorTest {
         }
         elevator = new Elevator(20, address, 5007);
     }
+
     @Test
     void motorRunningState(){
         ElevatorState ElevatorMotorRunningState = new ElevatorMotorRunningState();
