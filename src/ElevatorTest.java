@@ -1,5 +1,4 @@
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -7,9 +6,9 @@ import java.net.UnknownHostException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorTest {
-    Elevator elevator;
-    @BeforeEach
-    void setUp() {
+    static Elevator elevator;
+    @BeforeAll
+    static void setUp() {
         InetAddress address;
         try {
             address = InetAddress.getLocalHost();
@@ -18,35 +17,36 @@ class ElevatorTest {
         }
         elevator = new Elevator(20, address, 5007);
     }
+
     @Test
     void motorRunningState(){
         ElevatorState ElevatorMotorRunningState = new ElevatorMotorRunningState();
         elevator.setCurrentState(ElevatorMotorRunningState);
-        assertEquals(elevator.getCurrentState(), ElevatorMotorRunningState);
+        assertInstanceOf(ElevatorMotorRunningState.class, elevator.getCurrentState());
     }
     @Test
     void DestinationReachedState(){
         ElevatorState ElevatorDestinationReachedState = new ElevatorDestinationReachedState();
         elevator.setCurrentState(ElevatorDestinationReachedState);
-        assertEquals(elevator.getCurrentState(), ElevatorDestinationReachedState);
+        assertInstanceOf(ElevatorDestinationReachedState.class, elevator.getCurrentState());
     }
     @Test
     void EstablishConnectionState(){
         ElevatorState ElevatorEstablishingConnectionState = new ElevatorEstablishingConnectionState();
         elevator.setCurrentState(ElevatorEstablishingConnectionState);
-        assertEquals(elevator.getCurrentState(), ElevatorEstablishingConnectionState);
+        assertInstanceOf(ElevatorEstablishingConnectionState.class, elevator.getCurrentState());
     }
     @Test
     void IdleState(){
         ElevatorState ElevatorIdleState = new ElevatorIdleState();
         elevator.setCurrentState(ElevatorIdleState);
-        assertEquals(elevator.getCurrentState(), ElevatorIdleState);
+        assertInstanceOf(ElevatorIdleState.class, elevator.getCurrentState());
     }
     @Test
     void TaskReceivedState(){
         ElevatorState ElevatorTaskReceivedState = new ElevatorTaskReceivedState();
         elevator.setCurrentState(ElevatorTaskReceivedState);
-        assertEquals(elevator.getCurrentState(), ElevatorTaskReceivedState);
+        assertInstanceOf(ElevatorTaskReceivedState.class, elevator.getCurrentState());
     }
 
     //None of the following methods have been implemented thus these can not be tested
