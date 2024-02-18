@@ -1,5 +1,5 @@
-# Elevator Control System
-Iteration 2
+# Elevator Control System - Iteration 2
+
 
 Authors + Student ID:  
 Matthew Huybregts 101185221  
