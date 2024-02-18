@@ -18,20 +18,31 @@ This project implements an elevator control system with three main subsystems: F
 
 ### Elevator
 
-- **Motor:** Controls the movement of the elevator.
-- **Door:** Manages the opening and closing of the elevator door.
-- **ElevatorButton:** Represents the buttons inside the elevator for selecting floors.
-- **ElevatorLamp:** Represents the lamps inside the elevator indicating the selected floors.
-
+- **Elevator.java:** Represents the Elevator Subsystem.
+- **ElevatorState.java:** Interface which represents the state of the Elevator. This is used to follow the State Pattern.
+- **ElevatorEstablishingConnectionState.java:** Represents the initial connection state.
+- **ElevatorIdleState.java:** Represents the Idle State of the Elevator.
+- **ElevatorTaskReceivedState.java:** Represents the state when the Elevator receives a task.
+- **ElevatorMotorRunningState.java:** Represents the state where the elevator motor is running.
+- **ElevatorDestinationReachedState.java** Represents the state where the destination is reached.
+- **UDPClient.java:** Handles communication with the Scheduler using UDP.
+  
 ### Floor
 
-- **FloorData:** Represents the information to be shared between subsystems, including timestamp, floor number, direction, and requested floor.
-- **UDPClient:** Handles communication with the Scheduler using UDP.
+- **Floor.java:** Represents the Floor subsystem
+- **FloorData.java:** Represents the information to be shared between subsystems, including timestamp, floor number, direction, and requested floor.
+- **UDPClient.java:** Handles communication with the Scheduler using UDP.
 
 ### Scheduler
 
-- **Scheduler:** Manages the coordination between the Floor and Elevator subsystems.
-- **UDPServer:** Handles communication with both the Floor and Elevator subsystems using UDP.
+- **Scheduler.java:** Manages the coordination between the Floor and Elevator subsystems.
+- **UDPServer.java:** Handles communication with both the Floor and Elevator subsystems using UDP.
+- **SchedulerState.java:** The interface used for the Scheduler state to implement the State Pattern.
+- **SchedulerEstablishConnectionState.java:** The state that represents the initial connection state.
+- **SchedulerIdleState.java:** The state that represents the Scheduler's Idle state.
+- **SchedulerRequestReceivedState.java:** The state that represents the Scheduler receiving a request from the Floor.
+- **SchedulerWaitState.java:** The state that represents the Scheduler waiting for a reply from the Elevator.
+- **SchedulerResponseReceivedState.java:** The state that represents the Scheduler receiving a response from the Elevator.
 
 ## Test Files
 There are three (3) test files that are included to ensure the system states and data is correct.
@@ -47,8 +58,8 @@ The tests included in this file are used to ensure that the data in a FloorData 
 
 ## Usage
 
-1. Compile all Java files: `javac *.java`
-2. Run the program: `java Main`
+1. Compile all Java files: `javac src/*.java`
+2. Run the program: `java src/Main`
 
 ## Input File Format
 
@@ -65,8 +76,8 @@ Feel free to explore and modify the code to suit your specific requirements. If 
 
 ## Delegation of Responsibilities
 
-- Liam Kavanagh -> Scheduler State Diagram and Coding
+- Liam Kavanagh -> Scheduler State Diagram and Scheduler Coding
 - Matthew Huybregts -> Floor refactor and Scheduler Coding
-- Sean Pruss -> Elevator State Diagram and Coding
+- Sean Pruss -> Elevator State Diagram and Elevator Coding
 - Joshua Robson -> JUnit tests
-- Abed Qubbaj -> UML diagrams and README
+- Abed Qubbaj -> Class diagram, sequence diagram and README.md
