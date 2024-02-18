@@ -33,6 +33,18 @@ This project implements an elevator control system with three main subsystems: F
 - **Scheduler:** Manages the coordination between the Floor and Elevator subsystems.
 - **UDPServer:** Handles communication with both the Floor and Elevator subsystems using UDP.
 
+## Test Files
+There are three (3) test files that are included to ensure the system states and data is correct.
+
+The test files are FloorDataTest.java, SchedulerTest.java, and Elevator.java
+
+### ElevatorTest.java
+The tests included in this file are used to ensure that each state that is called is the correct state that is required in the elevator subsystem. States tested include: DestinationReached, EstablishingConnection, Idle, MotorRunning, and TaskReceived
+### SchedulerTest.java
+The tests included in this file are used to ensure that each state that is called is the correct state that is required in the scheduler subsystem. States tested include: ResponseReceived, EstablishingConnection, Idle, RequestReceived, and Wait
+### FloorDataTest.java
+The tests included in this file are used to ensure that the data in a FloorData object is correct. Floor Number, TimeStamp, Car Button, and Direction are tested in this file.
+
 ## Usage
 
 1. Compile all Java files: `javac *.java`
