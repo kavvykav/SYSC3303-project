@@ -1,13 +1,14 @@
 # Elevator Control System
+Iteration 2
 
 Authors + Student ID:  
 Matthew Huybregts 101185221  
 Sean Pruss 101189970  
 William Kavanagh 101182915  
 Joshua Robson 101195802  
-Abed Qubbaj, 101205030
+Abed Qubbaj  101205030
 
-Date: February 3rd, 2024
+Date: February 17th, 2024
 
 ## Overview
 
@@ -52,8 +53,8 @@ Feel free to explore and modify the code to suit your specific requirements. If 
 
 ## Delegation of Responsibilities
 
-- Scheduler subsystem: Liam Kavanagh
-- Floor subsystem: Matthew Huybregts
-- Elevator subsystem: Sean Pruss
-- Test code: Joshua Robson
-- UML diagrams and README: Abed Qubbaj
+- Liam Kavanagh -> Scheduler State Diagram and Coding
+- Matthew Huybregts -> Floor refactor and Scheduler Coding
+- Sean Pruss -> Elevator State Diagram and Coding
+- Joshua Robson -> JUnit tests
+- Abed Qubbaj -> UML diagrams and README
