@@ -1,18 +1,23 @@
+package scheduler;
+
+import common.FloorData;
+import common.UDPServer;
+
 import java.util.ArrayList;
 
 /**
- * This is the main component of the Scheduler Subsystem
+ * This is the main component of the scheduler.Scheduler Subsystem
  */
 public class Scheduler extends UDPServer implements Runnable {
 
-    // Elevator and Floor Ports and IP Addresses
-    private ArrayList<ClientPacketData> clients;
+    // elevator.Elevator and floor.Floor Ports and IP Addresses
+    private ArrayList<SchedulerClient> clients;
 
-    // Scheduler Context
+    // scheduler.Scheduler Context
     private SchedulerState currentState;
 
     /**
-     * The constructor for the Scheduler object.
+     * The constructor for the scheduler.Scheduler object.
      */
     public Scheduler() {
         super();
@@ -23,10 +28,10 @@ public class Scheduler extends UDPServer implements Runnable {
      * Gets information about the specified client.
      *
      * @param type: elevator or floor
-     * @return a ClientPacketData object containing the IP address and the Port.
+     * @return a scheduler.ClientPacketData object containing the IP address and the Port.
      */
-    public ClientPacketData getClient(String type) {
-        for (ClientPacketData client : clients) {
+    public SchedulerClient getClient(String type) {
+        for (SchedulerClient client : clients) {
             if (client.getType().equalsIgnoreCase(type)) {
                 return client;
             }
@@ -37,7 +42,7 @@ public class Scheduler extends UDPServer implements Runnable {
     /**
      * Sets the current state of the scheduler.
      *
-     * @param state : the state the Scheduler is being set to.
+     * @param state : the state the scheduler.Scheduler is being set to.
      */
     public void setCurrentState(SchedulerState state) {
         this.currentState = state;
@@ -47,7 +52,7 @@ public class Scheduler extends UDPServer implements Runnable {
     /**
      * Returns the current state.
      *
-     * @return the current state of the Scheduler
+     * @return the current state of the scheduler.Scheduler
      */
     public SchedulerState getCurrentState() {
         return currentState;
@@ -58,14 +63,14 @@ public class Scheduler extends UDPServer implements Runnable {
      *
      * @param client : the client we want to add
      */
-    public void addClient(ClientPacketData client) {
+    public void addClient(SchedulerClient client) {
         if (!clients.contains(client)) {
             clients.add(client);
         }
     }
 
     /**
-     * The thread routine for the Scheduler.
+     * The thread routine for the scheduler
      */
     public void run() {
         // Establish initial connections

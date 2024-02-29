@@ -1,3 +1,7 @@
+import elevator.Elevator;
+import floor.Floor;
+import scheduler.Scheduler;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -18,9 +22,9 @@ public class Main {
             return;
         }
 
-        scheduler = new Thread(new Scheduler(), "Scheduler");
-        elevator = new Thread(new Elevator(numFloors, localHost, SERVER_PORT), "Elevator");
-        floor = new Thread(new Floor(INPUT_FILE, localHost, SERVER_PORT), "Floor");
+        scheduler = new Thread(new Scheduler(), "scheduler.Scheduler");
+        elevator = new Thread(new Elevator(numFloors, localHost, SERVER_PORT), "elevator.Elevator");
+        floor = new Thread(new Floor(INPUT_FILE, localHost, SERVER_PORT), "floor.Floor");
 
         scheduler.start();
         elevator.start();

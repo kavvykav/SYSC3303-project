@@ -1,3 +1,7 @@
+package scheduler;
+
+import common.FloorData;
+
 /**
  * This state is when the scheduler is waiting to receive a response back from
  * the floor.
@@ -5,7 +9,7 @@
 public class SchedulerWaitState implements SchedulerState {
 
     /**
-     * The action that is performed when the Scheduler is in the Wait state.
+     * The action that is performed when the scheduler.Scheduler is in the Wait state.
      */
     public FloorData doAction(Scheduler scheduler, FloorData data) {
 
@@ -13,15 +17,15 @@ public class SchedulerWaitState implements SchedulerState {
         if (receivedObject instanceof FloorData) {
 
             FloorData receivedData = (FloorData) receivedObject;
-            String type = receivedData.getStatus() ? "Floor" : "Elevator";
-            ClientPacketData client = scheduler.getClient(type.toLowerCase());
+            String type = receivedData.getStatus() ? "floor" : "elevator";
+            SchedulerClient client = scheduler.getClient(type.toLowerCase());
             if (client == null) {
                 System.err.println("Scheduler: Message from unknown " + type);
             }
             System.out.println("Scheduler: Got FloorData from " + type);
             return receivedData;
         } else {
-            System.err.println("Invalid type of object received.");
+            System.err.println("Scheduler: Invalid object received.");
             return null;
         }
     }

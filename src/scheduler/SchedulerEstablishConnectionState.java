@@ -1,6 +1,10 @@
+package scheduler;
+
+import common.FloorData;
+
 /**
- * This is the state that establishes the initial connection with the Floor and
- * Elevator subsystems.
+ * This is the state that establishes the initial connection with the floor.Floor and
+ * elevator.Elevator subsystems.
  */
 public class SchedulerEstablishConnectionState implements SchedulerState {
 
@@ -16,7 +20,7 @@ public class SchedulerEstablishConnectionState implements SchedulerState {
                 if (!type.equalsIgnoreCase("floor") && !type.equalsIgnoreCase("elevator")) {
                     System.err.println("Scheduler: Invalid Client type");
                 }
-                ClientPacketData client = new ClientPacketData(scheduler.getReceivePacket(), type.toLowerCase());
+                SchedulerClient client = new SchedulerClient(scheduler.getReceivePacket(), type.toLowerCase());
 
                 System.out.println("Scheduler: Successfully established a connection with the " + receivedObject);
                 scheduler.addClient(client);
@@ -30,7 +34,7 @@ public class SchedulerEstablishConnectionState implements SchedulerState {
     /**
      * Returns a string representation of the state.
      *
-     * @return : the string representation of the currentr state
+     * @return : the string representation of the current state
      */
     public String toString() {
         return "Scheduler Establish Connection State";

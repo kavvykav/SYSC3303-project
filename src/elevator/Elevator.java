@@ -1,3 +1,8 @@
+package elevator;
+
+import common.FloorData;
+import common.UDPClient;
+
 import java.net.*;
 import java.util.ArrayList;
 
@@ -6,13 +11,13 @@ import java.util.ArrayList;
  */
 public class Elevator extends UDPClient implements Runnable {
 
-    // Elevator info
+    // elevator.Elevator info
     private ArrayList<Boolean> buttons;
     private ArrayList<Boolean> lamps;
     private Boolean door;
     private Integer currentFloor;
 
-    // Elevator state
+    // elevator.Elevator state
     private ElevatorState currentState = new ElevatorEstablishingConnectionState();
 
     /**
@@ -22,8 +27,8 @@ public class Elevator extends UDPClient implements Runnable {
      */
     public Elevator(int numFloors, InetAddress address, int port) {
         super(address, port);
-        this.lamps = new ArrayList<Boolean>(numFloors);
-        this.buttons = new ArrayList<Boolean>(numFloors);
+        this.lamps = new ArrayList<>(numFloors);
+        this.buttons = new ArrayList<>(numFloors);
         for (int i = 0; i < 20; i++) {
             this.lamps.add(false);
             this.buttons.add(false);

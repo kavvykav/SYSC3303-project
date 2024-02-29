@@ -1,3 +1,5 @@
+package scheduler;
+
 import java.net.*;
 
 /**
@@ -5,7 +7,7 @@ import java.net.*;
  * elevator),the address of whoever sent the packet, and the port number the
  * packet was sent through
  */
-public class ClientPacketData {
+public class SchedulerClient {
 
     // The type of the client (floor or elevator)
     private final String type;
@@ -14,12 +16,12 @@ public class ClientPacketData {
     private final int port;
 
     /**
-     * The constructor for a ClientPacketData object.
+     * The constructor for a scheduler.ClientPacketData object.
      *
      * @param receivePacket the packet we want the port and address of
      * @param type       floor or elevator
      */
-    public ClientPacketData(DatagramPacket receivePacket, String type) {
+    public SchedulerClient(DatagramPacket receivePacket, String type) {
         address = receivePacket.getAddress();
         port = receivePacket.getPort();
         this.type = type.toLowerCase();
@@ -53,11 +55,11 @@ public class ClientPacketData {
     }
 
     /**
-     * The equals method for the ClientPacketData class.
+     * The equals method for the scheduler.ClientPacketData class.
      *
-     * @param o The ClientPacketData object we are comparing
+     * @param o The scheduler.ClientPacketData object we are comparing
      *
-     * @return true if ClientPacketData objects are equal, false otherwise
+     * @return true if scheduler.ClientPacketData objects are equal, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -67,12 +69,12 @@ public class ClientPacketData {
             return true;
         }
 
-        if (!(o instanceof ClientPacketData)) {
+        if (!(o instanceof SchedulerClient)) {
             return false;
         }
 
-        // typecast o to ClientPacketData so that we can compare data members
-        ClientPacketData data = (ClientPacketData) o;
+        // typecast o to scheduler.ClientPacketData so that we can compare data members
+        SchedulerClient data = (SchedulerClient) o;
         return type.equalsIgnoreCase(data.type)
                 && address.equals(data.address)
                 && port == data.port;

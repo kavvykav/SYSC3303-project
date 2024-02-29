@@ -1,59 +1,60 @@
-import java.io.*;
+package common;
+
 import java.net.*;
+import java.io.*;
 
 /**
- * UDPClient represents a simple client that communicates over UDP with a specified server.
- * The client is designed to send and receive any type of data using serialization and deserialization methods.
+ * This class is simply a handler for the scheduler.Scheduler, which is supposed to send
+ * and receive events in this particular order : floor->scheduler.Scheduler, scheduler.Scheduler->
+ * elevator.Elevator, elevator.Elevator->scheduler.Scheduler, scheduler.Scheduler->floor
  */
-public class UDPClient {
+public class UDPServer {
 
-    // For sending and receiving data
     private static final int BUFFER_SIZE = 1024;
     private DatagramPacket sendPacket, receivePacket;
-    private DatagramSocket sendReceiveSocket;
+    private DatagramSocket sendSocket, receiveSocket;
     private byte[] receivedMsg;
 
-    // Server information
-    InetAddress serverAddress;
-    int serverPort;
-
-    public UDPClient(InetAddress address, int port) {
-
+    /**
+     * The constructor for the common.UDPServer object.
+     * 
+     **/
+    public UDPServer() {
         try {
-            // This socket will be used to send and receive UDP Datagram packets.
-            sendReceiveSocket = new DatagramSocket();
+            receiveSocket = new DatagramSocket(5000);
+            sendSocket = new DatagramSocket();
         } catch (SocketException e) {
             // e.printStackTrace();
             System.exit(1);
         }
         receivedMsg = new byte[BUFFER_SIZE];
         receivePacket = new DatagramPacket(receivedMsg, receivedMsg.length);
-
-        serverAddress = address;
-        serverPort = port;
+    }
+    public DatagramPacket getReceivePacket() {
+        return receivePacket;
     }
 
     /**
-     * Send data to the client's server
+     * A method for the server to send a DatagramPacket to a specific client.
      *
-     * @param data The data to be sent to the server
+     * @param clientAddress the address of the client we want to send to
+     * @param clientPort    the port of the client we want to send to
+     *
      * @return 0 if successful, -1 otherwise
      */
-    public int send(Object data) {
-
+    public int send(Object data, InetAddress clientAddress, int clientPort) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
             objectOutputStream.writeObject(data);
             byte[] msg = byteArrayOutputStream.toByteArray();
-            sendPacket = new DatagramPacket(msg, msg.length, serverAddress, serverPort);
+            sendPacket = new DatagramPacket(msg, msg.length, clientAddress, clientPort);
         } catch (IOException e) {
             // e.printStackTrace();
             System.exit(1);
         }
-
         try {
-            sendReceiveSocket.send(sendPacket);
+            sendSocket.send(sendPacket);
         } catch (IOException e) {
             System.err.println("Failed to send data");
             return -1;
@@ -62,26 +63,24 @@ public class UDPClient {
     }
 
     /**
-     * Receive data from the clients server
-     * NOTE: The client will block indefinitely until it receives data, there is currently no timeout
-     *
-     * @return The data that was received by the client, null on failure
+     * A method to receive a packet from a client.
+     * 
+     * @return the object that was received from the server
      */
     public Object receive() {
 
         try {
-            sendReceiveSocket.receive(receivePacket);
+            receiveSocket.receive(receivePacket);
         } catch (IOException e) {
-            System.err.println("Failed to get data from server");
+            //e.printStackTrace();
             return null;
         }
-
         try {
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(receivedMsg);
             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
             return objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Failed to deserialize data");
+            //e.printStackTrace();
             return null;
         }
     }

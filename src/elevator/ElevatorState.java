@@ -1,3 +1,8 @@
+package elevator;
+
+import common.FloorData;
+import elevator.Elevator;
+
 /**
  * ElevatorState
  */
