@@ -78,9 +78,9 @@ public class Floor extends UDPClient implements Runnable {
 
                 System.out.println("Floor: Reading data" +
                         "\n\tTime: " + timestamp +
-                        "\n\tCurrent floor.Floor: " + floorNumber +
+                        "\n\tCurrent Floor: " + floorNumber +
                         "\n\tDirection: " + lineArray[2] +
-                        "\n\tDestination floor.Floor: " + carButton);
+                        "\n\tDestination Floor: " + carButton);
 
                 // Send data to scheduler.Scheduler via UDP
                 FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);
