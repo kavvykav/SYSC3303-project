@@ -1,15 +1,12 @@
-import java.io.Serial;
+package common;
+
 import java.io.Serializable;
 
 /**
- * The FloorData class represents the necessary information to be shared between the three main subsystems (Floor,
- * Scheduler, and Elevator). It represents a data structure to be sent over UDP.
+ * The common.FloorData class represents the necessary information to be shared between the three main subsystems (floor.Floor,
+ * scheduler.Scheduler, and elevator.Elevator). It represents a data structure to be sent over UDP.
  */
 public class FloorData implements Serializable {
-
-    // For ensuring compatibility
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     // The time at which a passenger arrives
     private final String timestamp;
@@ -28,13 +25,13 @@ public class FloorData implements Serializable {
     private boolean status;
 
     /**
-     * Basic constructor for FloorData class
+     * Basic constructor for common.FloorData class
      * NOTE: The status field is set to false by default
      *
-     * @param timestamp
-     * @param floorNumber
-     * @param direction
-     * @param carButton
+     * @param timestamp The time the request was made
+     * @param floorNumber The floor at which the request was made
+     * @param direction The direction (Up or Down)
+     * @param carButton The floor to which the passenger wants to go
      */
     public FloorData(String timestamp, int floorNumber,
             boolean direction, int carButton) {
@@ -46,12 +43,12 @@ public class FloorData implements Serializable {
     }
 
     /**
-     * The equals method for the FloorData class.
-     * NOTE: This method does not compare the status field
+     * The equals method for the common.FloorData class.
+     * NOTE: This method does not currently compare the status field
      *
-     * @param o
+     * @param o The FloorData object to compare it to
      *
-     * @return true if FloorData objects are equivalent, false otherwise
+     * @return true if common.FloorData objects are equivalent, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -65,7 +62,7 @@ public class FloorData implements Serializable {
             return false;
         }
 
-        // typecast o to FloorData so that we can compare data members
+        // typecast o to common.FloorData so that we can compare data members
         FloorData data = (FloorData) o;
         return timestamp.equals(data.timestamp)
                 && floorNumber == data.floorNumber

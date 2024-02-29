@@ -1,3 +1,7 @@
+package scheduler;
+
+import common.FloorData;
+
 /**
  * This is the SchedulerState interface, which includes a doAction() method and
  * a toString() method.

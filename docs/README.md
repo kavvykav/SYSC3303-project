@@ -1,6 +1,5 @@
 # Elevator Control System - Iteration 2
 
-
 Authors + Student ID:  
 Matthew Huybregts 101185221  
 Sean Pruss 101189970  
@@ -12,49 +11,56 @@ Date: February 17th, 2024
 
 ## Overview
 
-This project implements an elevator control system with three main subsystems: Floor, Scheduler, and Elevator. The communication between these subsystems is achieved using User Datagram Protocol (UDP).
+This project implements an elevator control system with three main subsystems: floor.Floor, scheduler.Scheduler, and 
+elevator.Elevator. The communication between these subsystems is achieved using User Datagram Protocol (UDP).
 
 ## Components
 
-### Elevator
+### elevator
 
-- **Elevator.java:** Represents the Elevator Subsystem.
-- **ElevatorState.java:** Interface which represents the state of the Elevator. This is used to follow the State Pattern.
-- **ElevatorEstablishingConnectionState.java:** Represents the initial connection state.
-- **ElevatorIdleState.java:** Represents the Idle State of the Elevator.
-- **ElevatorTaskReceivedState.java:** Represents the state when the Elevator receives a task.
-- **ElevatorMotorRunningState.java:** Represents the state where the elevator motor is running.
-- **ElevatorDestinationReachedState.java** Represents the state where the destination is reached.
-- **UDPClient.java:** Handles communication with the Scheduler using UDP.
+- **elevator.Elevator.java:** Represents the elevator.Elevator Subsystem.
+- **elevator.ElevatorState.java:** Interface which represents the state of the elevator.Elevator. 
+This is used to follow the State Pattern.
+- **elevator.ElevatorEstablishingConnectionState.java:** Represents the initial connection state.
+- **elevator.ElevatorIdleState.java:** Represents the Idle State of the elevator.Elevator.
+- **elevator.ElevatorTaskReceivedState.java:** Represents the state when the elevator.Elevator receives a task.
+- **elevator.ElevatorMotorRunningState.java:** Represents the state where the elevator motor is running.
+- **elevator.ElevatorDestinationReachedState.java** Represents the state where the destination is reached.
+- **common.UDPClient.java:** Handles communication with the scheduler.Scheduler using UDP.
   
-### Floor
+### floor
 
-- **Floor.java:** Represents the Floor subsystem
-- **FloorData.java:** Represents the information to be shared between subsystems, including timestamp, floor number, direction, and requested floor.
-- **UDPClient.java:** Handles communication with the Scheduler using UDP.
+- **floor.Floor.java:** Represents the floor.Floor subsystem
+- **common.FloorData.java:** Represents the information to be shared between subsystems, including timestamp, floor 
+number, direction, and requested floor.
+- **common.UDPClient.java:** Handles communication with the scheduler.Scheduler using UDP.
 
-### Scheduler
+### scheduler
 
-- **Scheduler.java:** Manages the coordination between the Floor and Elevator subsystems.
-- **UDPServer.java:** Handles communication with both the Floor and Elevator subsystems using UDP.
-- **SchedulerState.java:** The interface used for the Scheduler state to implement the State Pattern.
-- **SchedulerEstablishConnectionState.java:** The state that represents the initial connection state.
-- **SchedulerIdleState.java:** The state that represents the Scheduler's Idle state.
-- **SchedulerRequestReceivedState.java:** The state that represents the Scheduler receiving a request from the Floor.
-- **SchedulerWaitState.java:** The state that represents the Scheduler waiting for a reply from the Elevator.
-- **SchedulerResponseReceivedState.java:** The state that represents the Scheduler receiving a response from the Elevator.
+- **scheduler.Scheduler.java:** Manages the coordination between the floor.Floor and elevator.Elevator subsystems
+- **common.UDPServer.java:** Handles communication with both the floor.Floor and elevator.Elevator subsystems using UDP
+- **scheduler.SchedulerState.java:** The interface used for the scheduler.Scheduler state to implement the State Pattern
+- **scheduler.SchedulerEstablishConnectionState.java:** The state that represents the initial connection state
+- **scheduler.SchedulerIdleState.java:** The state that represents the scheduler.Scheduler's Idle state
+- **scheduler.SchedulerRequestReceivedState.java:** The state that represents the scheduler.Scheduler receiving a 
+request from the floor.Floor
+- **scheduler.SchedulerWaitState.java:** The state that represents the scheduler.Scheduler waiting for a reply from the 
+elevator.Elevator
+- **scheduler.SchedulerResponseReceivedState.java:** The state that represents the scheduler.Scheduler receiving a 
+response from the elevator.Elevator
 
-## Test Files
+### test
+
 There are three (3) test files that are included to ensure the system states and data is correct.
 
-The test files are FloorDataTest.java, SchedulerTest.java, and Elevator.java
-
-### ElevatorTest.java
-The tests included in this file are used to ensure that each state that is called is the correct state that is required in the elevator subsystem. States tested include: DestinationReached, EstablishingConnection, Idle, MotorRunning, and TaskReceived
-### SchedulerTest.java
-The tests included in this file are used to ensure that each state that is called is the correct state that is required in the scheduler subsystem. States tested include: ResponseReceived, EstablishingConnection, Idle, RequestReceived, and Wait
-### FloorDataTest.java
-The tests included in this file are used to ensure that the data in a FloorData object is correct. Floor Number, TimeStamp, Car Button, and Direction are tested in this file.
+- test.ElevatorTest.java: The tests included in this file are used to ensure that each state that is called is the 
+correct state that is required in the elevator subsystem. States tested include: DestinationReached, 
+EstablishingConnection, Idle, MotorRunning, and TaskReceived
+- test.SchedulerTest.java: The tests included in this file are used to ensure that each state that is called is the 
+correct state that is required in the scheduler subsystem. States tested include: ResponseReceived, 
+EstablishingConnection, Idle, RequestReceived, and Wait
+- test.FloorDataTest.java: The tests included in this file are used to ensure that the data in a common.FloorData 
+object is correct. Floor Number, Timestamp, Car Button, and Direction fields are included in the tests 
 
 ## Usage
 
@@ -63,16 +69,19 @@ The tests included in this file are used to ensure that the data in a FloorData 
 
 ## Input File Format
 
-The Floor subsystem reads input from a file, and each line in the file represents an event. The format is as follows:
+The floor.Floor subsystem reads input from a file, and each line in the file represents an event.  
+The format is as follows:
 
 [timestamp] [floor_number] [direction (up/down)] [requested_floor]
 
 ## Notes
 
-- The project uses UDP for communication, and the communication flow is: Floor -> Scheduler -> Elevator -> Scheduler -> Floor.
-- The code includes error handling for invalid data and communication failures.
+- The project uses UDP for communication, and the communication flow is: floor.Floor -> scheduler.Scheduler -> 
+elevator.Elevator -> scheduler.Scheduler -> floor.Floor
+- The code includes error handling for invalid data and communication failures
 
-Feel free to explore and modify the code to suit your specific requirements. If you encounter any issues or have questions, please contact one of the authors.
+Feel free to explore and modify the code to suit your specific requirements. If you encounter any issues or have 
+questions, please contact one of the authors.
 
 ## Delegation of Responsibilities
 

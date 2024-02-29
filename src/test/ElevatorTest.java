@@ -1,3 +1,6 @@
+package test;
+
+import elevator.*;
 import org.junit.jupiter.api.*;
 
 import java.net.InetAddress;
@@ -28,7 +31,7 @@ class ElevatorTest {
     void DestinationReachedState(){
         ElevatorState ElevatorDestinationReachedState = new ElevatorDestinationReachedState();
         elevator.setCurrentState(ElevatorDestinationReachedState);
-        assertInstanceOf(ElevatorDestinationReachedState.class, elevator.getCurrentState());
+        assertInstanceOf(elevator.ElevatorDestinationReachedState.class, elevator.getCurrentState());
     }
     @Test
     void EstablishConnectionState(){
@@ -40,7 +43,7 @@ class ElevatorTest {
     void IdleState(){
         ElevatorState ElevatorIdleState = new ElevatorIdleState();
         elevator.setCurrentState(ElevatorIdleState);
-        assertInstanceOf(ElevatorIdleState.class, elevator.getCurrentState());
+        assertInstanceOf(elevator.ElevatorIdleState.class, elevator.getCurrentState());
     }
     @Test
     void TaskReceivedState(){
@@ -60,10 +63,10 @@ class ElevatorTest {
     }
     @Test
     void doorClosed () {
-        //assertTrue(elevator.getCurrentState().equals("ElevatorMotorRunningState"));
+        //assertTrue(elevator.getCurrentState().equals("elevator.ElevatorMotorRunningState"));
     }
     @Test
     void doorOpen () {
-        //assertTrue(elevator.getCurrentState() != ElevatorMotorRunningState);
+        //assertTrue(elevator.getCurrentState() != elevator.ElevatorMotorRunningState);
     }
 }

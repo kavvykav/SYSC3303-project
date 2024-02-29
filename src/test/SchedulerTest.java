@@ -1,5 +1,7 @@
+package test;
 
 import org.junit.jupiter.api.*;
+import scheduler.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,18 +29,18 @@ class SchedulerTest {
     void IdleState(){
         SchedulerState SchedulerIdleState = new SchedulerIdleState();
         scheduler.setCurrentState(SchedulerIdleState);
-        assertInstanceOf(SchedulerIdleState.class, scheduler.getCurrentState());
+        assertInstanceOf(scheduler.SchedulerIdleState.class, scheduler.getCurrentState());
     }
     @Test
     void RequestReceivedState(){
         SchedulerState SchedulerRequestReceivedState = new SchedulerRequestReceivedState();
         scheduler.setCurrentState(SchedulerRequestReceivedState);
-        assertInstanceOf(SchedulerRequestReceivedState.class, scheduler.getCurrentState());
+        assertInstanceOf(scheduler.SchedulerRequestReceivedState.class, scheduler.getCurrentState());
     }
     @Test
     void WaitState(){
         SchedulerState SchedulerWaitState = new SchedulerWaitState();
         scheduler.setCurrentState(SchedulerWaitState);
-        assertInstanceOf(SchedulerWaitState.class, scheduler.getCurrentState());
+        assertInstanceOf(scheduler.SchedulerWaitState.class, scheduler.getCurrentState());
     }
 }
