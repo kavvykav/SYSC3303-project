@@ -10,7 +10,9 @@ import java.util.ArrayList;
 /**
  * Elevator represents the elevator subsystem
  */
-public class Elevator extends UDPClient {
+public class Elevator extends UDPClient implements Runnable {
+    // Number of Elevators
+    private static final int NUM_ELEVATORS = 4;
 
     // elevator.Elevator info
     private ArrayList<Boolean> buttons;
@@ -119,12 +121,21 @@ public class Elevator extends UDPClient {
         }
     }
 
+    public void run() {
+        serveRequests();
+    }
+
     public static void main(String[] args) {
 
         InetAddress localHost = NetworkConstants.localHost();
         assert (localHost != null);
 
-        Elevator elevator = new Elevator(22, localHost, NetworkConstants.SCHEDULER_PORT);
-        elevator.serveRequests();
+        ArrayList<Thread> elevators = new ArrayList<Thread>(NUM_ELEVATORS);
+        for (Thread elevator : elevators) {
+            elevator = new Thread(new Elevator(22, localHost, NetworkConstants.SCHEDULER_PORT));
+        }
+        for (Thread elevator : elevators) {
+            elevator.start();
+        }
     }
 }
