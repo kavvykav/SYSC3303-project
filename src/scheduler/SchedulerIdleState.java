@@ -13,20 +13,21 @@ public class SchedulerIdleState implements SchedulerState {
     public FloorData doAction(Scheduler scheduler, FloorData data) {
 
         Object receivedObject = scheduler.receive();
-        if (receivedObject instanceof FloorData) {
 
-            FloorData receivedData = (FloorData) receivedObject;
-            String type = receivedData.getStatus() ? "floor" : "elevator";
-            SchedulerClient client = scheduler.getClient(type.toLowerCase());
-            if (client == null) {
-                System.err.println("Scheduler: Message from unknown " + type);
+        if (receivedObject instanceof FloorData) {
+            // Received a request
+            return (FloorData) receivedObject;
+        } else if (receivedObject instanceof String) {
+            // We have a new elevator connecting
+            String type = (String) receivedObject;
+            if (!type.equalsIgnoreCase("elevator")) {
+                System.err.println("Scheduler: Invalid Client type: " + type);
             }
-            System.out.println("Scheduler: Got FloorData from " + type);
-            return receivedData;
-        } else {
-            System.err.println("Scheduler: Invalid type of object received.");
+            ElevatorClient client = new ElevatorClient(scheduler.getReceivePacket());
+            scheduler.addClient(client);
             return null;
         }
+        return null;
     }
 
     /**

@@ -13,7 +13,8 @@ public class SchedulerRequestReceivedState implements SchedulerState {
      * The action the scheduler.Scheduler performs when in the Request Received state
      */
     public FloorData doAction(Scheduler scheduler, FloorData data) {
-        SchedulerClient client = scheduler.getClient("elevator");
+
+        ElevatorClient client = scheduler.getElevator(data);
         if (data != null) {
             if (scheduler.send(data, client.getAddress(), client.getPort()) != 0) {
                 System.err.println("Scheduler: Failed to send FloorData to elevator");

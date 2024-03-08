@@ -1,5 +1,6 @@
 package scheduler;
 
+import common.FloorData;
 import java.net.*;
 
 /**
@@ -7,33 +8,38 @@ import java.net.*;
  * elevator),the address of whoever sent the packet, and the port number the
  * packet was sent through
  */
-public class SchedulerClient {
+public class ElevatorClient {
 
-    // The type of the client (floor or elevator)
-    private final String type;
-    // IP address and port number
+    // For describing the status of the elevator
+    public enum Status {
+        STATIONARY,
+        DOWN,
+        UP
+    }
+
+    // IP address and port number of the elevator
     private final InetAddress address;
     private final int port;
+
+    // Status of the elevator
+    private int currentFloor;
+    private Status status;
+
+    private FloorData request;
 
     /**
      * The constructor for a scheduler.ClientPacketData object.
      *
      * @param receivePacket the packet we want the port and address of
-     * @param type       floor or elevator
      */
-    public SchedulerClient(DatagramPacket receivePacket, String type) {
+    public ElevatorClient(DatagramPacket receivePacket) {
+
         address = receivePacket.getAddress();
         port = receivePacket.getPort();
-        this.type = type.toLowerCase();
-    }
 
-    /**
-     * A getter for the type of client that sent the packet
-     *
-     * @return the client that sent the packet
-     */
-    public String getType() {
-        return type;
+        currentFloor = 0;
+        status = Status.STATIONARY;
+        request = null;
     }
 
     /**
@@ -69,14 +75,13 @@ public class SchedulerClient {
             return true;
         }
 
-        if (!(o instanceof SchedulerClient)) {
+        if (!(o instanceof ElevatorClient)) {
             return false;
         }
 
         // typecast o to scheduler.ClientPacketData so that we can compare data members
-        SchedulerClient data = (SchedulerClient) o;
-        return type.equalsIgnoreCase(data.type)
-                && address.equals(data.address)
+        ElevatorClient data = (ElevatorClient) o;
+        return address.equals(data.address)
                 && port == data.port;
     }
 }
