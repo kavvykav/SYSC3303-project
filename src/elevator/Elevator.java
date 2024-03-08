@@ -37,6 +37,7 @@ public class Elevator extends UDPClient implements Runnable {
             this.buttons.add(false);
         }
         this.door = false;
+        this.currentFloor = 1;
     }
 
     /**
