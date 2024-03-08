@@ -1,6 +1,7 @@
 package elevator;
 
 import common.FloorData;
+import common.NetworkConstants;
 import common.UDPClient;
 
 import java.net.*;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Elevator represents the elevator subsystem
  */
-public class Elevator extends UDPClient implements Runnable {
+public class Elevator extends UDPClient {
 
     // elevator.Elevator info
     private ArrayList<Boolean> buttons;
@@ -98,7 +99,7 @@ public class Elevator extends UDPClient implements Runnable {
         return currentState;
     }
 
-    public void run() {
+    public void serveRequests() {
         // Establish connection
         currentState.doAction(this, null);
         while (true) {
@@ -116,5 +117,14 @@ public class Elevator extends UDPClient implements Runnable {
             setCurrentState(new ElevatorDestinationReachedState());
             currentState.doAction(this, receivedData);
         }
+    }
+
+    public static void main(String[] args) {
+
+        InetAddress localHost = NetworkConstants.localHost();
+        assert (localHost != null);
+
+        Elevator elevator = new Elevator(22, localHost, NetworkConstants.SCHEDULER_PORT);
+        elevator.serveRequests();
     }
 }

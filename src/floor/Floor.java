@@ -1,6 +1,7 @@
 package floor;
 
 import common.FloorData;
+import common.NetworkConstants;
 import common.UDPClient;
 
 import java.io.BufferedReader;
@@ -10,6 +11,7 @@ import java.net.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Random;
 
 /**
  * The Floor class simulates the arrival of passengers, as well as button
@@ -20,7 +22,7 @@ import java.time.format.DateTimeParseException;
  * @author Matthew Huybregts 101185221
  *         Date: February 29th, 2024
  */
-public class Floor extends UDPClient implements Runnable {
+public class Floor extends UDPClient {
 
     // Input file for floor subsystem
     private final String filename;
@@ -40,18 +42,7 @@ public class Floor extends UDPClient implements Runnable {
         filename = file;
     }
 
-    /**
-     * The main method for the floor.Floor. Here, the floor reads an input file line by
-     * line, translates the data into a
-     * custom structure, serializes the data, and sends it to the scheduler.
-     */
-    public void run() {
-
-        if (send("floor") != 0) {
-            System.err.println("Floor: Failed to send initial message");
-            System.exit(1);
-        }
-        System.out.println("Floor: Established connection with scheduler");
+    public void sendRequests() {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -90,11 +81,13 @@ public class Floor extends UDPClient implements Runnable {
                     continue;
                 }
 
-                FloorData receivedData = (FloorData) receive();
-                if (receivedData.getStatus()) {
-                    System.out.println("Floor: Valid response from scheduler");
-                } else {
-                    System.err.println("Floor: Invalid response from scheduler");
+                // Wait a random amount of time between 5 and 15 seconds
+                try {
+                    Random random = new Random();
+                    int randomMillis = random.nextInt(15000 - 5000 + 1) + 5000;
+                    Thread.sleep(randomMillis);
+                } catch (InterruptedException e) {
+                    System.exit(130);
                 }
             }
         } catch (IOException e) {
@@ -103,5 +96,19 @@ public class Floor extends UDPClient implements Runnable {
         }
         System.out.println("Floor: Finished reading input, exiting program");
         System.exit(0);
+    }
+
+    /**
+     * The main method for the floor.Floor. Here, the floor reads an input file line by
+     * line, translates the data into a
+     * custom structure, serializes the data, and sends it to the scheduler.
+     */
+    public static void main(String[] args) {
+
+        InetAddress localHost = NetworkConstants.localHost();
+        assert (localHost != null);
+
+        Floor floor = new Floor("test_input.txt", localHost, NetworkConstants.SCHEDULER_PORT);
+        floor.sendRequests();
     }
 }

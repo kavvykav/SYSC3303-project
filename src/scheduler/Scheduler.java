@@ -3,15 +3,16 @@ package scheduler;
 import common.FloorData;
 import common.UDPServer;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 /**
  * This is the main component of the scheduler.Scheduler Subsystem
  */
-public class Scheduler extends UDPServer implements Runnable {
+public class Scheduler extends UDPServer {
 
-    // elevator.Elevator and floor.Floor Ports and IP Addresses
-    private ArrayList<SchedulerClient> clients;
+    // Port and IP Address
+    private ArrayList<ElevatorClient> elevators;
 
     // scheduler.Scheduler Context
     private SchedulerState currentState;
@@ -21,22 +22,28 @@ public class Scheduler extends UDPServer implements Runnable {
      */
     public Scheduler() {
         super();
-        clients = new ArrayList<>(2);
+        elevators = new ArrayList<>(4);
+        setCurrentState(new SchedulerIdleState());
     }
 
     /**
-     * Gets information about the specified client.
+     * Adds a client to the ArrayList if it's not already there
      *
-     * @param type: elevator or floor
-     * @return a scheduler.ClientPacketData object containing the IP address and the Port.
+     * @param client : the client we want to add
      */
-    public SchedulerClient getClient(String type) {
-        for (SchedulerClient client : clients) {
-            if (client.getType().equalsIgnoreCase(type)) {
-                return client;
-            }
+    public void addClient(ElevatorClient client) {
+        if (!elevators.contains(client)) {
+            elevators.add(client);
         }
-        return null;
+    }
+
+    /**
+     * Returns the current state.
+     *
+     * @return the current state of the scheduler.Scheduler
+     */
+    public SchedulerState getCurrentState() {
+        return currentState;
     }
 
     /**
@@ -50,50 +57,45 @@ public class Scheduler extends UDPServer implements Runnable {
     }
 
     /**
-     * Returns the current state.
+     * Algorithm for determining which elevator to use for a request.
      *
-     * @return the current state of the scheduler.Scheduler
-     */
-    public SchedulerState getCurrentState() {
-        return currentState;
-    }
-
-    /**
-     * Adds a client to the ArrayList if it's not already there
+     * @param data The request information
      *
-     * @param client : the client we want to add
+     * @return The elevator to use
      */
-    public void addClient(SchedulerClient client) {
-        if (!clients.contains(client)) {
-            clients.add(client);
-        }
+    public ElevatorClient getElevator(FloorData data) {
+        return elevators.get(0);
     }
 
     /**
      * The thread routine for the scheduler
      */
-    public void run() {
-        // Establish initial connections
-        setCurrentState(new SchedulerEstablishConnectionState());
-        currentState.doAction(this, null);
+    public void handleRequests() {
+
         // Repeat indefinitely
         while (true) {
 
             // Idle state : wait for request from floor
-            setCurrentState(new SchedulerIdleState());
             FloorData data = currentState.doAction(this, null);
+            if (data == null) {
+                continue; // Remain in the idle state
+            }
 
-            // Retrieve data received in the Idle state, switch to the request
-            setCurrentState(new SchedulerRequestReceivedState());
+            // We have received a request, check the status of it
+            if (data.getStatus()) {
+                System.out.println("Scheduler: Received a response from Elevator");
+                setCurrentState(new SchedulerResponseReceivedState());
+            } else {
+                System.out.println("Scheduler: Received a new floor request");
+                setCurrentState(new SchedulerRequestReceivedState());
+            }
             currentState.doAction(this, data);
-
-            // After the request is sent to the floor, wait for response
-            setCurrentState(new SchedulerWaitState());
-            data = currentState.doAction(this, null);
-
-            // Retrieve data received in the Wait state, and send it back to the floor.
-            setCurrentState(new SchedulerResponseReceivedState());
-            currentState.doAction(this, data);
+            setCurrentState(new SchedulerIdleState());
         }
+    }
+
+    public static void main(String[] args) {
+        Scheduler scheduler = new Scheduler();
+        scheduler.handleRequests();
     }
 }

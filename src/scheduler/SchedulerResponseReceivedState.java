@@ -12,11 +12,11 @@ public class SchedulerResponseReceivedState implements SchedulerState {
      * The action the scheduler.Scheduler performs when in the Response Received state
      */
     public FloorData doAction(Scheduler scheduler, FloorData data) {
-        SchedulerClient client = scheduler.getClient("floor");
-        if (data != null) {
-            if (scheduler.send(data, client.getAddress(), client.getPort()) != 0) {
-                System.err.println("Scheduler: failed to send common.FloorData to elevator");
-            }
+
+        if (data.getStatus()) {
+            System.out.println("Scheduler: Elevator request served successfully");
+        } else {
+            System.err.println("Scheduler: Elevator request was not served");
         }
         return null;
     }

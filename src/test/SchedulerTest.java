@@ -19,12 +19,12 @@ class SchedulerTest {
         assertInstanceOf(SchedulerResponseReceivedState.class, scheduler.getCurrentState());
     }
 
-    @Test
-    void EstablishConnectionState(){
-        SchedulerState SchedulerEstablishConnectionState = new SchedulerEstablishConnectionState();
-        scheduler.setCurrentState(SchedulerEstablishConnectionState);
-        assertInstanceOf(SchedulerEstablishConnectionState.class, scheduler.getCurrentState());
-    }
+//    @Test
+//    void EstablishConnectionState(){
+//        SchedulerState SchedulerEstablishConnectionState = new SchedulerEstablishConnectionState();
+//        scheduler.setCurrentState(SchedulerEstablishConnectionState);
+//        assertInstanceOf(SchedulerEstablishConnectionState.class, scheduler.getCurrentState());
+//    }
     @Test
     void IdleState(){
         SchedulerState SchedulerIdleState = new SchedulerIdleState();
@@ -37,10 +37,10 @@ class SchedulerTest {
         scheduler.setCurrentState(SchedulerRequestReceivedState);
         assertInstanceOf(scheduler.SchedulerRequestReceivedState.class, scheduler.getCurrentState());
     }
-    @Test
-    void WaitState(){
-        SchedulerState SchedulerWaitState = new SchedulerWaitState();
-        scheduler.setCurrentState(SchedulerWaitState);
-        assertInstanceOf(scheduler.SchedulerWaitState.class, scheduler.getCurrentState());
-    }
+//    @Test
+//    void WaitState(){
+//        SchedulerState SchedulerWaitState = new SchedulerWaitState();
+//        scheduler.setCurrentState(SchedulerWaitState);
+//        assertInstanceOf(scheduler.SchedulerWaitState.class, scheduler.getCurrentState());
+//    }
 }
