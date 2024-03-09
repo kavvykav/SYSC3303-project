@@ -1,6 +1,6 @@
 package scheduler;
 
-import common.FloorData;
+import common.ElevatorStatus;
 import java.net.*;
 
 /**
@@ -10,36 +10,24 @@ import java.net.*;
  */
 public class ElevatorClient {
 
-    // For describing the status of the elevator
-    public enum Status {
-        STATIONARY,
-        DOWN,
-        UP
-    }
-
     // IP address and port number of the elevator
     private final InetAddress address;
     private final int port;
 
     // Status of the elevator
-    private int currentFloor;
-    private Status status;
-
-    private FloorData request;
+    private ElevatorStatus status;
 
     /**
      * The constructor for a scheduler.ClientPacketData object.
      *
      * @param receivePacket the packet we want the port and address of
      */
-    public ElevatorClient(DatagramPacket receivePacket) {
+    public ElevatorClient(DatagramPacket receivePacket, int id) {
 
         address = receivePacket.getAddress();
         port = receivePacket.getPort();
 
-        currentFloor = 0;
-        status = Status.STATIONARY;
-        request = null;
+        status = new ElevatorStatus(id);
     }
 
     /**
@@ -58,6 +46,14 @@ public class ElevatorClient {
      */
     public int getPort() {
         return port;
+    }
+
+    public ElevatorStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ElevatorStatus newStatus) {
+        status = newStatus;
     }
 
     /**

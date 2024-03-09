@@ -1,5 +1,6 @@
 package elevator;
 
+import common.ElevatorStatus;
 import common.FloorData;
 
 /**
@@ -7,7 +8,10 @@ import common.FloorData;
  */
 public class ElevatorTaskReceivedState implements ElevatorState {
     public FloorData doAction(Elevator elevator, FloorData receivedData) {
-        System.out.println("Elevator: Received task from scheduler");
+
+        elevator.elevatorPrint("Received task from scheduler");
+
+
         return null;
     }
 }

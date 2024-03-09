@@ -8,12 +8,9 @@ import common.FloorData;
 public class ElevatorEstablishingConnectionState implements ElevatorState {
     @Override
     public FloorData doAction(Elevator elevator, FloorData receivedData) {
-        System.out.println("Elevator: Establishing connection with scheduler");
+        elevator.elevatorPrint("Establishing connection with scheduler");
         elevator.setCurrentState(this);
-        if (elevator.send("elevator") != 0) {
-            System.err.println("Elevator: Failed to send initial message");
-            System.exit(1);
-        }
+        elevator.sendStatus();
         return null;
     }
 }
