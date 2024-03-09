@@ -1,13 +1,18 @@
 package elevator;
 
 import common.ElevatorStatus;
+import common.UDPClient;
+
+import java.net.InetAddress;
 import java.util.ArrayList;
 
-public class Motor implements Runnable {
+public class Motor extends UDPClient implements Runnable {
 
     Elevator elevator;
 
-    public Motor(Elevator elevator) {
+    public Motor(Elevator elevator, InetAddress address, int port) {
+
+        super(address, port);
         this.elevator = elevator;
     }
 
@@ -16,17 +21,14 @@ public class Motor implements Runnable {
         if (elevator.getStatus().getDirection() == ElevatorStatus.Direction.STATIONARY) {
             return;
         }
-
         ArrayList<Integer> requests = elevator.getRequests();
-        while (true) {
 
-//            elevator.elevatorPrint("Going to floor " + requests.get(0));
-//            elevator.elevatorPrint("Currently at floor " + elevator.getStatus().getFloor());
+        while (true) {
 
             if (requests.get(0).equals(elevator.getStatus().getFloor())) {
 
                 elevator.elevatorPrint("Stopping at floor " + elevator.getStatus().getFloor());
-                requests.remove(0);
+                Integer floor = requests.remove(0);
                 elevator.openDoor();
                 try {
                     Thread.sleep(5000);
@@ -36,9 +38,16 @@ public class Motor implements Runnable {
 
                 if (requests.isEmpty()) {
                     elevator.getStatus().setDirection(ElevatorStatus.Direction.STATIONARY);
-                    elevator.sendStatus();
+                    send(elevator.getStatus());
                     break;
                 }
+                else if (requests.get(0) > floor) {
+                    elevator.getStatus().setDirection(ElevatorStatus.Direction.UP);
+                } else {
+                    elevator.getStatus().setDirection(ElevatorStatus.Direction.DOWN);
+                }
+                send(elevator.getStatus());
+
                 elevator.elevatorPrint("Next Stop is floor " + requests.get(0));
                 elevator.closeDoor();
 
@@ -54,7 +63,7 @@ public class Motor implements Runnable {
             } else {
                 elevator.getStatus().setFloor(currentFloor - 1);
             }
-            elevator.sendStatus();
+            send(elevator.getStatus());
         }
     }
 }

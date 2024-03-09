@@ -42,10 +42,10 @@ public class Scheduler extends UDPServer {
         }
     }
 
-    public ElevatorClient getClient(DatagramPacket packet) {
+    public ElevatorClient getClient(int id) {
 
         for (ElevatorClient client : elevators) {
-            if (client.equals(new ElevatorClient(packet))) {
+            if (client.getStatus().getId() == id) {
                 return client;
             }
         }

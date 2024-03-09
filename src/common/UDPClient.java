@@ -24,7 +24,6 @@ public class UDPClient {
         try {
             // This socket will be used to send and receive UDP Datagram packets.
             sendReceiveSocket = new DatagramSocket();
-            sendReceiveSocket.setSoTimeout(10);
         } catch (SocketException e) {
             // e.printStackTrace();
             System.exit(1);

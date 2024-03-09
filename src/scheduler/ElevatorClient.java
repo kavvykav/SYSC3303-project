@@ -22,12 +22,12 @@ public class ElevatorClient {
      *
      * @param receivePacket the packet we want the port and address of
      */
-    public ElevatorClient(DatagramPacket receivePacket) {
+    public ElevatorClient(DatagramPacket receivePacket, int id) {
 
         address = receivePacket.getAddress();
         port = receivePacket.getPort();
 
-        status = new ElevatorStatus();
+        status = new ElevatorStatus(id);
     }
 
     /**

@@ -12,11 +12,18 @@ public class ElevatorStatus implements Serializable {
 
     private int floor;
 
+    private final int id;
+
     private Direction direction;
 
-    public ElevatorStatus() {
+    public ElevatorStatus(int id) {
+        this.id = id;
         floor = 1;
         direction = Direction.STATIONARY;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public synchronized int getFloor() {

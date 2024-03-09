@@ -37,7 +37,7 @@ public class Elevator extends UDPClient implements Runnable {
 
         super(address, port);
         this.id = id;
-        status = new ElevatorStatus();
+        status = new ElevatorStatus(id);
 
         requests = new ArrayList<>(0);
         door = false;
