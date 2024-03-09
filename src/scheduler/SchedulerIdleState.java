@@ -25,7 +25,8 @@ public class SchedulerIdleState implements SchedulerState {
             if (client != null) {
                 client.setStatus((ElevatorStatus) receivedObject);
             } else {
-                ElevatorClient newClient = new ElevatorClient(scheduler.getReceivePacket(), status.getId());
+                ElevatorClient newClient = new ElevatorClient(scheduler.getReceivePacket().getAddress(),
+                        scheduler.getReceivePacket().getPort(), status.getId());
                 scheduler.addClient(newClient);
             }
         }

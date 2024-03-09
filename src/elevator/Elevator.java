@@ -14,9 +14,6 @@ import java.util.ArrayList;
  */
 public class Elevator extends UDPClient implements Runnable {
 
-    // Elevator ID
-    private final int id;
-
     // The list of requests that need to be served by the elevator
     private final ArrayList<Integer> requests;
 
@@ -26,7 +23,10 @@ public class Elevator extends UDPClient implements Runnable {
     private ElevatorState currentState = new ElevatorEstablishingConnectionState();
 
     // Status of the elevator
-    private ElevatorStatus status;
+    private final ElevatorStatus status;
+
+    // The number of floors in the elevator
+    private final int numFloors;
 
     /**
      * Constructor for the elevator subsystem
@@ -34,23 +34,73 @@ public class Elevator extends UDPClient implements Runnable {
      * @param numFloors the number of floors the elevator goes to
      */
     public Elevator(int numFloors, InetAddress address, int port, int id) {
-
         super(address, port);
-        this.id = id;
-        status = new ElevatorStatus(id);
+        this.numFloors = numFloors;
 
+        status = new ElevatorStatus(id, 1, ElevatorStatus.Direction.STATIONARY);
         requests = new ArrayList<>(0);
         door = false;
     }
 
+    /**
+     * Helper method for distinguishing the output of an elevator
+     *
+     * @param output The message to be printed by the elevator
+     */
     public void elevatorPrint(String output) {
-        System.out.println("Elevator " + id + ": " + output);
+        System.out.println("Elevator " + status.getId() + ": " + output);
     }
 
-    public ArrayList<Integer> getRequests() {
-        return requests;
+
+    /**
+     * Returns if the elevator should stop based on its request and current floor
+     *
+     * @return true if the elevator should stop, false otherwise
+     */
+    public boolean shouldStop() {
+        synchronized (requests) {
+            return requests.get(0).equals(getStatus().getFloor());
+        }
     }
 
+    /**
+     * Removes and returns the request at the front of the list
+     *
+     * @return The floor number request that has been serviced
+     */
+    public Integer updateRequests() {
+        synchronized (requests) {
+            return requests.remove(0);
+        }
+    }
+
+    /**
+     * Returns the current floor request the elevator is serving
+     *
+     * @return The floor number the elevator is currently going to
+     */
+    public Integer getCurrentRequest() {
+        synchronized (requests) {
+            return requests.get(0);
+        }
+    }
+
+    /**
+     * Returns the number of request the elevator has
+     *
+     * @return The size of the requests list
+     */
+    public int getNumRequests() {
+        synchronized (requests) {
+            return requests.size();
+        }
+    }
+
+    /**
+     * Returns the status of the elevator
+     *
+     * @return The ElevatorStatus object
+     */
     public ElevatorStatus getStatus() {
         return status;
     }
@@ -87,10 +137,6 @@ public class Elevator extends UDPClient implements Runnable {
         return currentState;
     }
 
-    public void sendStatus() {
-        send(status);
-    }
-
     /**
      * Add a floor to the queue of floors the elevator will go to
      *
@@ -98,14 +144,16 @@ public class Elevator extends UDPClient implements Runnable {
      */
     public void add(int floor) {
 
-        System.out.println("Adding floor " + floor);
-
+        elevatorPrint("Adding floor " + floor);
         synchronized (requests) {
+
+            // If there are no requests, add the floor
             if (requests.isEmpty()){
                 requests.add(floor);
                 return;
             }
 
+            // If the direction of the elevator is UP, put the floor in front of the closest higher floor
             boolean added = false;
             if (status.getDirection() == ElevatorStatus.Direction.UP) {
                 for (int i=0; i < requests.size(); i++) {
@@ -117,6 +165,7 @@ public class Elevator extends UDPClient implements Runnable {
                 }
             }
 
+            // If the direction of the elevator is DOWN, put the floor in front of the closest lower floor
             if (status.getDirection() == ElevatorStatus.Direction.DOWN) {
                 for (int i=0; i < requests.size(); i++) {
                     if (floor > requests.get(i)) {
@@ -126,44 +175,45 @@ public class Elevator extends UDPClient implements Runnable {
                     }
                 }
             }
+
+            // If floor was not inserted within the list, add it to the end
             if (!added) {
                 requests.add(floor);
             }
-            System.out.println(requests);
         }
+        elevatorPrint(requests.toString());
     }
 
+    /**
+     * The main sequence for an Elevator instance. Listens for requests and moves accordingly.
+     */
     public void serveRequests() {
 
         // Establish connection
         currentState.doAction(this, null);
 
         while (true) {
-
-            FloorData receivedData = null;
+            // Wait to receive a request
             setCurrentState(new ElevatorIdleState());
-            receivedData = currentState.doAction(this, receivedData);
-            if (receivedData == null) {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    continue;
-                }
-                continue;
-            }
+            FloorData receivedData = currentState.doAction(this, null);
 
-//            setCurrentState(new ElevatorTaskReceivedState());
-//            currentState.doAction(this, receivedData);
-
+            // Upon receiving request, start motor and return to idle state
             setCurrentState(new ElevatorMotorRunningState());
             currentState.doAction(this, receivedData);
         }
     }
 
+    /**
+     * Run method for the Elevator thread
+     */
     public void run() {
         serveRequests();
     }
 
+    /**
+     * Creates and runs four Elevator instances
+     * @param args Not used at the moment
+     */
     public static void main(String[] args) {
 
         InetAddress localHost = NetworkConstants.localHost();

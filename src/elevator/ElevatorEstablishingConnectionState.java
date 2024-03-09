@@ -10,7 +10,7 @@ public class ElevatorEstablishingConnectionState implements ElevatorState {
     public FloorData doAction(Elevator elevator, FloorData receivedData) {
         elevator.elevatorPrint("Establishing connection with scheduler");
         elevator.setCurrentState(this);
-        elevator.sendStatus();
+        elevator.send(elevator.getStatus());
         return null;
     }
 }
