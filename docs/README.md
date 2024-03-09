@@ -1,18 +1,21 @@
-# Elevator Control System - Iteration 2
+# Elevator Control System - Iteration 3
 
 Authors + Student ID:  
-Matthew Huybregts 101185221  
+Matthew Huybregts 101185221
 Sean Pruss 101189970  
 William Kavanagh 101182915  
-Joshua Robson 101195802  
+Joshua Robson 101195802
 Abed Qubbaj  101205030
 
-Date: February 17th, 2024
+Date: March 9, 2024
 
 ## Overview
 
 This project implements an elevator control system with three main subsystems: floor.Floor, scheduler.Scheduler, and 
 elevator.Elevator. The communication between these subsystems is achieved using User Datagram Protocol (UDP).
+
+## Requirements
+Java `SDK 21`, and Language Level set to `Default SDK` in Intellij.
 
 ## Components
 
@@ -23,9 +26,7 @@ elevator.Elevator. The communication between these subsystems is achieved using 
 This is used to follow the State Pattern.
 - **elevator.ElevatorEstablishingConnectionState.java:** Represents the initial connection state.
 - **elevator.ElevatorIdleState.java:** Represents the Idle State of the elevator.Elevator.
-- **elevator.ElevatorTaskReceivedState.java:** Represents the state when the elevator.Elevator receives a task.
 - **elevator.ElevatorMotorRunningState.java:** Represents the state where the elevator motor is running.
-- **elevator.ElevatorDestinationReachedState.java** Represents the state where the destination is reached.
 - **common.UDPClient.java:** Handles communication with the scheduler.Scheduler using UDP.
   
 ### floor
@@ -40,12 +41,9 @@ number, direction, and requested floor.
 - **scheduler.Scheduler.java:** Manages the coordination between the floor.Floor and elevator.Elevator subsystems
 - **common.UDPServer.java:** Handles communication with both the floor.Floor and elevator.Elevator subsystems using UDP
 - **scheduler.SchedulerState.java:** The interface used for the scheduler.Scheduler state to implement the State Pattern
-- **scheduler.SchedulerEstablishConnectionState.java:** The state that represents the initial connection state
 - **scheduler.SchedulerIdleState.java:** The state that represents the scheduler.Scheduler's Idle state
 - **scheduler.SchedulerRequestReceivedState.java:** The state that represents the scheduler.Scheduler receiving a 
 request from the floor.Floor
-- **scheduler.SchedulerWaitState.java:** The state that represents the scheduler.Scheduler waiting for a reply from the 
-elevator.Elevator
 - **scheduler.SchedulerResponseReceivedState.java:** The state that represents the scheduler.Scheduler receiving a 
 response from the elevator.Elevator
 
@@ -64,8 +62,9 @@ object is correct. Floor Number, Timestamp, Car Button, and Direction fields are
 
 ## Usage
 
-1. Compile all Java files: `javac src/*.java`
-2. Run the program: `java src/Main`
+1. Run `scheduler.Scheduler.java`
+2. Run `elevator.Elevator.java`
+3. Run `floor.Floor.java`
 
 ## Input File Format
 
@@ -85,8 +84,8 @@ questions, please contact one of the authors.
 
 ## Delegation of Responsibilities
 
-- Liam Kavanagh -> Scheduler State Diagram and Scheduler Coding
-- Matthew Huybregts -> Floor refactor and Scheduler Coding
-- Sean Pruss -> Elevator State Diagram and Elevator Coding
+- Liam Kavanagh -> Scheduler algorithm and coding
+- Matthew Huybregts -> Coding, debugging, refactoring
+- Sean Pruss -> Debugging, also helped out with JUnit tests
 - Joshua Robson -> JUnit tests
-- Abed Qubbaj -> Class diagram, sequence diagram and README.md
+- Abed Qubbaj -> Updated diagrams and README.md
