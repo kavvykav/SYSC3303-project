@@ -4,9 +4,12 @@ import java.net.*;
 import java.io.*;
 
 /**
- * This class is simply a handler for the scheduler.Scheduler, which is supposed to send
- * and receive events in this particular order : floor->scheduler.Scheduler, scheduler.Scheduler->
- * elevator.Elevator, elevator.Elevator->scheduler.Scheduler, scheduler.Scheduler->floor
+ * This class is simply a handler for the scheduler.Scheduler, which is supposed
+ * to send
+ * and receive events in this particular order : floor->scheduler.Scheduler,
+ * scheduler.Scheduler->
+ * elevator.Elevator, elevator.Elevator->scheduler.Scheduler,
+ * scheduler.Scheduler->floor
  */
 public class UDPServer {
 
@@ -30,6 +33,7 @@ public class UDPServer {
         receivedMsg = new byte[BUFFER_SIZE];
         receivePacket = new DatagramPacket(receivedMsg, receivedMsg.length);
     }
+
     public DatagramPacket getReceivePacket() {
         return receivePacket;
     }
@@ -72,7 +76,7 @@ public class UDPServer {
         try {
             receiveSocket.receive(receivePacket);
         } catch (IOException e) {
-            //e.printStackTrace();
+            // e.printStackTrace();
             return null;
         }
         try {
@@ -80,7 +84,7 @@ public class UDPServer {
             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
             return objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            //e.printStackTrace();
+            // e.printStackTrace();
             return null;
         }
     }

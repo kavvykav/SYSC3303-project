@@ -22,6 +22,7 @@ public class ElevatorClient {
     private final int port;
 
     // Status of the elevator
+    private int id;
     private int currentFloor;
     private Status status;
 
@@ -32,11 +33,12 @@ public class ElevatorClient {
      *
      * @param receivePacket the packet we want the port and address of
      */
-    public ElevatorClient(DatagramPacket receivePacket) {
+    public ElevatorClient(DatagramPacket receivePacket, int id) {
 
         address = receivePacket.getAddress();
         port = receivePacket.getPort();
 
+        this.id = id;
         currentFloor = 0;
         status = Status.STATIONARY;
         request = null;
@@ -58,6 +60,22 @@ public class ElevatorClient {
      */
     public int getPort() {
         return port;
+    }
+
+    public int getCurrentFloor() {
+        return currentFloor;
+    }
+
+    public void setCurrentFloor(int floor) {
+        currentFloor = floor;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status newStatus) {
+        status = newStatus;
     }
 
     /**

@@ -8,7 +8,8 @@ import common.FloorData;
 public class SchedulerIdleState implements SchedulerState {
 
     /**
-     * The action that is performed when the scheduler.Scheduler is in the Idle state.
+     * The action that is performed when the scheduler.Scheduler is in the Idle
+     * state.
      */
     public FloorData doAction(Scheduler scheduler, FloorData data) {
 
@@ -23,7 +24,7 @@ public class SchedulerIdleState implements SchedulerState {
             if (!type.equalsIgnoreCase("elevator")) {
                 System.err.println("Scheduler: Invalid Client type: " + type);
             }
-            ElevatorClient client = new ElevatorClient(scheduler.getReceivePacket());
+            ElevatorClient client = new ElevatorClient(scheduler.getReceivePacket(), 1);
             scheduler.addClient(client);
             return null;
         }

@@ -3,13 +3,16 @@ package scheduler;
 import common.FloorData;
 import common.UDPServer;
 
-import java.net.InetAddress;
+import java.lang.Math;
 import java.util.ArrayList;
 
 /**
  * This is the main component of the scheduler.Scheduler Subsystem
  */
 public class Scheduler extends UDPServer {
+
+    // Number of elevators
+    private static final int NUM_ELEVATORS = 4;
 
     // Port and IP Address
     private ArrayList<ElevatorClient> elevators;
@@ -22,7 +25,7 @@ public class Scheduler extends UDPServer {
      */
     public Scheduler() {
         super();
-        elevators = new ArrayList<>(4);
+        elevators = new ArrayList<>(NUM_ELEVATORS);
         setCurrentState(new SchedulerIdleState());
     }
 
@@ -63,8 +66,18 @@ public class Scheduler extends UDPServer {
      *
      * @return The elevator to use
      */
-    public ElevatorClient getElevator(FloorData data) {
-        return elevators.get(0);
+    public ElevatorClient chooseElevator(FloorData data) {
+        ElevatorClient chosenElevator = elevators.get(0);
+        int maxDistance = 22;
+
+        for (ElevatorClient elevator : elevators) {
+            int distance = Math.abs(elevator.getCurrentFloor() - data.returnFloorNumber());
+            if (distance <= maxDistance && canServiceRequest(elevator, data)) {
+                maxDistance = distance;
+                chosenElevator = elevator;
+            }
+        }
+        return chosenElevator;
     }
 
     /**
@@ -92,6 +105,18 @@ public class Scheduler extends UDPServer {
             currentState.doAction(this, data);
             setCurrentState(new SchedulerIdleState());
         }
+    }
+
+    public boolean canServiceRequest(ElevatorClient elevator, FloorData data) {
+        // Case 1: Direction is UP
+        if (data.returnDirection() && data.returnFloorNumber() > elevator.getCurrentFloor()) {
+            return true;
+        }
+        // Case 2 : Direction is DOWN
+        else if (!data.returnDirection() && data.returnFloorNumber() < elevator.getCurrentFloor()) {
+            return true;
+        }
+        return false;
     }
 
     public static void main(String[] args) {

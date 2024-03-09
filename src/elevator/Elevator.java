@@ -131,12 +131,15 @@ public class Elevator extends UDPClient implements Runnable {
         InetAddress localHost = NetworkConstants.localHost();
         assert (localHost != null);
 
-        ArrayList<Thread> elevators = new ArrayList<Thread>(NUM_ELEVATORS);
-        for (Thread elevator : elevators) {
-            elevator = new Thread(new Elevator(22, localHost, NetworkConstants.SCHEDULER_PORT));
-        }
-        for (Thread elevator : elevators) {
-            elevator.start();
-        }
+        Thread car1 = new Thread(new Elevator(22, localHost, NetworkConstants.SCHEDULER_PORT), "1");
+        Thread car2 = new Thread(new Elevator(22, localHost, NetworkConstants.SCHEDULER_PORT), "2");
+        Thread car3 = new Thread(new Elevator(22, localHost, NetworkConstants.SCHEDULER_PORT), "3");
+        Thread car4 = new Thread(new Elevator(22, localHost, NetworkConstants.SCHEDULER_PORT), "4");
+
+        car1.start();
+        car2.start();
+        car3.start();
+        car4.start();
+
     }
 }
