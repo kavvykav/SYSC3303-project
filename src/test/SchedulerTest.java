@@ -70,9 +70,9 @@ class SchedulerTest {
     void ChooseElevatorTest(){
         FloorData data = new FloorData("10:35:25", 16, true, 18);
         elevator1.setStatus(new ElevatorStatus(1, 18, ElevatorStatus.Direction.UP));
-        elevator2.setStatus(new ElevatorStatus(1, 9, ElevatorStatus.Direction.STATIONARY));
-        elevator3.setStatus(new ElevatorStatus(1, 1, ElevatorStatus.Direction.UP));
-        elevator4.setStatus(new ElevatorStatus(1, 20, ElevatorStatus.Direction.DOWN));
+        elevator2.setStatus(new ElevatorStatus(2, 9, ElevatorStatus.Direction.STATIONARY));
+        elevator3.setStatus(new ElevatorStatus(3, 1, ElevatorStatus.Direction.UP));
+        elevator4.setStatus(new ElevatorStatus(4, 20, ElevatorStatus.Direction.DOWN));
         scheduler.addClient(elevator1);
         scheduler.addClient(elevator2);
         scheduler.addClient(elevator3);
@@ -86,9 +86,9 @@ class SchedulerTest {
     void CanServiceRequestTest(){
         FloorData data = new FloorData("10:35:25", 16, true, 18 );
         elevator1.setStatus(new ElevatorStatus(1, 18, ElevatorStatus.Direction.UP));
-        elevator2.setStatus(new ElevatorStatus(1, 9, ElevatorStatus.Direction.STATIONARY));
-        elevator3.setStatus(new ElevatorStatus(1, 1, ElevatorStatus.Direction.UP));
-        elevator4.setStatus(new ElevatorStatus(1, 20, ElevatorStatus.Direction.DOWN));
+        elevator2.setStatus(new ElevatorStatus(2, 9, ElevatorStatus.Direction.STATIONARY));
+        elevator3.setStatus(new ElevatorStatus(3, 1, ElevatorStatus.Direction.UP));
+        elevator4.setStatus(new ElevatorStatus(4, 20, ElevatorStatus.Direction.DOWN));
         assertFalse(scheduler.canServiceRequest(elevator1, data));
         assertTrue(scheduler.canServiceRequest(elevator2, data));
         assertTrue(scheduler.canServiceRequest(elevator3, data));
