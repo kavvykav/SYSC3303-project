@@ -62,9 +62,9 @@ object is correct. Floor Number, Timestamp, Car Button, and Direction fields are
 
 ## Usage
 
-1. Run `floor.Floor.java`
+1. Run `scheduler.Scheduler.java`
 2. Run `elevator.Elevator.java`
-3. Run `scheduler.Scheduler.java`
+3. Run `floor.Floor.java`
 
 ## Input File Format
 
