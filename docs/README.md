@@ -14,6 +14,9 @@ Date: March 9, 2024
 This project implements an elevator control system with three main subsystems: floor.Floor, scheduler.Scheduler, and 
 elevator.Elevator. The communication between these subsystems is achieved using User Datagram Protocol (UDP).
 
+## Requirements
+Java `SDK 21`, and Language Level set to `Default SDK` in Intellij.
+
 ## Components
 
 ### elevator
