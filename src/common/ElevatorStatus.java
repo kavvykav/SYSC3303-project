@@ -58,4 +58,23 @@ public class ElevatorStatus implements Serializable {
     public synchronized void setDirection(Direction direction) {
         this.direction = direction;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof ElevatorStatus)) {
+            return false;
+        }
+
+        // typecast o to common.FloorData so that we can compare data members
+        ElevatorStatus data = (ElevatorStatus) o;
+        return floor == data.floor
+                && id == data.id
+                && direction == data.direction;
+    }
 }
