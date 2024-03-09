@@ -24,6 +24,7 @@ public class UDPClient {
         try {
             // This socket will be used to send and receive UDP Datagram packets.
             sendReceiveSocket = new DatagramSocket();
+            sendReceiveSocket.setSoTimeout(10);
         } catch (SocketException e) {
             // e.printStackTrace();
             System.exit(1);
@@ -41,7 +42,7 @@ public class UDPClient {
      * @param data The data to be sent to the server
      * @return 0 if successful, -1 otherwise
      */
-    public int send(Object data) {
+    public synchronized int send(Object data) {
 
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -50,15 +51,17 @@ public class UDPClient {
             byte[] msg = byteArrayOutputStream.toByteArray();
             sendPacket = new DatagramPacket(msg, msg.length, serverAddress, serverPort);
         } catch (IOException e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             System.exit(1);
         }
 
-        try {
-            sendReceiveSocket.send(sendPacket);
-        } catch (IOException e) {
-            System.err.println("Failed to send data");
-            return -1;
+        synchronized (sendReceiveSocket) {
+            try {
+                sendReceiveSocket.send(sendPacket);
+            } catch (IOException e) {
+                System.err.println("Failed to send data");
+                return -1;
+            }
         }
         return 0;
     }
@@ -71,11 +74,15 @@ public class UDPClient {
      */
     public Object receive() {
 
-        try {
-            sendReceiveSocket.receive(receivePacket);
-        } catch (IOException e) {
-            System.err.println("Failed to get data from server");
-            return null;
+        synchronized (sendReceiveSocket) {
+            try {
+                sendReceiveSocket.receive(receivePacket);
+            } catch (SocketTimeoutException e) {
+                return null;
+            } catch (IOException e) {
+                System.err.println("Failed to get data from server");
+                return null;
+            }
         }
 
         try {

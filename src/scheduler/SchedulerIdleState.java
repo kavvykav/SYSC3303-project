@@ -1,5 +1,6 @@
 package scheduler;
 
+import common.ElevatorStatus;
 import common.FloorData;
 
 /**
@@ -24,9 +25,14 @@ public class SchedulerIdleState implements SchedulerState {
             if (!type.equalsIgnoreCase("elevator")) {
                 System.err.println("Scheduler: Invalid Client type: " + type);
             }
-            ElevatorClient client = new ElevatorClient(scheduler.getReceivePacket(), 1);
+            ElevatorClient client = new ElevatorClient(scheduler.getReceivePacket());
             scheduler.addClient(client);
             return null;
+        } else if (receivedObject instanceof ElevatorStatus) {
+            ElevatorClient client = scheduler.getClient(scheduler.getReceivePacket());
+            if (client != null) {
+                client.setStatus((ElevatorStatus) receivedObject);
+            }
         }
         return null;
     }

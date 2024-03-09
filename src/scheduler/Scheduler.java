@@ -1,9 +1,11 @@
 package scheduler;
 
+import common.ElevatorStatus;
 import common.FloorData;
 import common.UDPServer;
 
 import java.lang.Math;
+import java.net.DatagramPacket;
 import java.util.ArrayList;
 
 /**
@@ -40,6 +42,16 @@ public class Scheduler extends UDPServer {
         }
     }
 
+    public ElevatorClient getClient(DatagramPacket packet) {
+
+        for (ElevatorClient client : elevators) {
+            if (client.equals(new ElevatorClient(packet))) {
+                return client;
+            }
+        }
+        return null;
+    }
+
     /**
      * Returns the current state.
      *
@@ -60,6 +72,33 @@ public class Scheduler extends UDPServer {
     }
 
     /**
+     * Helper function for determining if the Elevator is available to server the request.
+     *
+     * @param elevator The elevator to be checked
+     * @param data The request to be served
+     *
+     * @return True if the elevator can serve the request, false otherwise
+     */
+    public boolean canServiceRequest(ElevatorClient elevator, FloorData data) {
+
+        // If the elevator is not currently serving a request, it can serve the request
+        if (elevator.getStatus().getDirection() == ElevatorStatus.Direction.STATIONARY) {
+            return true;
+        }
+
+        // If the elevator is going up and the passenger wants to go up, check the floor number
+        if (elevator.getStatus().getDirection()==ElevatorStatus.Direction.UP && data.returnDirection()) {
+            return elevator.getStatus().getFloor() < data.returnFloorNumber();
+        }
+
+        // If the elevator is going down and the passenger wants to go down, check the floor number
+        if (elevator.getStatus().getDirection()==ElevatorStatus.Direction.DOWN && !data.returnDirection()) {
+            return elevator.getStatus().getFloor() > data.returnFloorNumber();
+        }
+        return false;
+    }
+
+    /**
      * Algorithm for determining which elevator to use for a request.
      *
      * @param data The request information
@@ -67,11 +106,14 @@ public class Scheduler extends UDPServer {
      * @return The elevator to use
      */
     public ElevatorClient chooseElevator(FloorData data) {
+
+        // Initialize the chosen elevator and the maximum distance
         ElevatorClient chosenElevator = elevators.get(0);
         int maxDistance = 22;
 
         for (ElevatorClient elevator : elevators) {
-            int distance = Math.abs(elevator.getCurrentFloor() - data.returnFloorNumber());
+            // If the elevator can serve request and is closest, choose that elevator
+            int distance = Math.abs(elevator.getStatus().getFloor() - data.returnFloorNumber());
             if (distance <= maxDistance && canServiceRequest(elevator, data)) {
                 maxDistance = distance;
                 chosenElevator = elevator;
@@ -105,18 +147,6 @@ public class Scheduler extends UDPServer {
             currentState.doAction(this, data);
             setCurrentState(new SchedulerIdleState());
         }
-    }
-
-    public boolean canServiceRequest(ElevatorClient elevator, FloorData data) {
-        // Case 1: Direction is UP
-        if (data.returnDirection() && data.returnFloorNumber() > elevator.getCurrentFloor()) {
-            return true;
-        }
-        // Case 2 : Direction is DOWN
-        else if (!data.returnDirection() && data.returnFloorNumber() < elevator.getCurrentFloor()) {
-            return true;
-        }
-        return false;
     }
 
     public static void main(String[] args) {
