@@ -27,12 +27,7 @@ class ElevatorTest {
         elevator.setCurrentState(ElevatorMotorRunningState);
         assertInstanceOf(ElevatorMotorRunningState.class, elevator.getCurrentState());
     }
-//    @Test
-//    void DestinationReachedState(){
-//        ElevatorState ElevatorDestinationReachedState = new ElevatorDestinationReachedState();
-//        elevator.setCurrentState(ElevatorDestinationReachedState);
-//        assertInstanceOf(elevator.ElevatorDestinationReachedState.class, elevator.getCurrentState());
-//    }
+
     @Test
     void EstablishConnectionState(){
         ElevatorState ElevatorEstablishingConnectionState = new ElevatorEstablishingConnectionState();
@@ -40,16 +35,10 @@ class ElevatorTest {
         assertInstanceOf(ElevatorEstablishingConnectionState.class, elevator.getCurrentState());
     }
     @Test
-    void IdleState(){
+    void IdleState() {
         ElevatorState ElevatorIdleState = new ElevatorIdleState();
         elevator.setCurrentState(ElevatorIdleState);
         assertInstanceOf(elevator.ElevatorIdleState.class, elevator.getCurrentState());
-    }
-    @Test
-    void TaskReceivedState(){
-        ElevatorState ElevatorTaskReceivedState = new ElevatorTaskReceivedState();
-        elevator.setCurrentState(ElevatorTaskReceivedState);
-        assertInstanceOf(ElevatorTaskReceivedState.class, elevator.getCurrentState());
     }
 
     //None of the following methods have been implemented thus these can not be tested

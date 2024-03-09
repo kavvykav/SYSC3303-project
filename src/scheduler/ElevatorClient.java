@@ -20,14 +20,16 @@ public class ElevatorClient {
     /**
      * The constructor for a scheduler.ClientPacketData object.
      *
-     * @param receivePacket the packet we want the port and address of
+     * @param address The IP address of the elevator
+     * @param port The port number of the elevator
+     * @param id The ID of the elevator
      */
-    public ElevatorClient(DatagramPacket receivePacket, int id) {
+    public ElevatorClient(InetAddress address, int port, int id) {
 
-        address = receivePacket.getAddress();
-        port = receivePacket.getPort();
+        this.address = address;
+        this.port = port;
 
-        status = new ElevatorStatus(id);
+        status = new ElevatorStatus(id, 1, ElevatorStatus.Direction.STATIONARY);
     }
 
     /**
