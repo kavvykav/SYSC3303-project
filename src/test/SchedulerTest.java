@@ -81,6 +81,12 @@ class SchedulerTest {
 
         FloorData data2 = new FloorData("12:35:25", 20, false, 8);
         assertEquals(elevator4, scheduler.chooseElevator(data2));
+
+        FloorData data3 = new FloorData("2:35:25", 1, true, 8);
+        assertEquals(elevator1, scheduler.chooseElevator(data3));
+
+        FloorData data4 = new FloorData("3:35:25", 20, true, 22);
+        assertEquals(elevator3, scheduler.chooseElevator(data4));
     }
     @Test
     void CanServiceRequestTest(){

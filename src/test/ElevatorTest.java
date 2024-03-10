@@ -6,7 +6,6 @@ import org.junit.jupiter.api.*;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,42 +44,68 @@ class ElevatorTest {
     }
     @Test
     void GetStatusTest(){
-        ElevatorStatus status = new ElevatorStatus(1, 16, ElevatorStatus.Direction.STATIONARY);
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        ElevatorStatus status = new ElevatorStatus(1, 1, ElevatorStatus.Direction.STATIONARY);
         assertEquals(status, elevator.getStatus());
-        assertEquals(1, status.getId());
-        assertEquals(16, status.getFloor());
-        status.setFloor(8);
-        assertEquals(8, status.getFloor());
-        assertEquals(ElevatorStatus.Direction.STATIONARY, status.getDirection());
     }
     @Test
     void ShouldStopTest(){
-        ArrayList<Integer> requests = new ArrayList<>();
-        requests.add(16);
-        assertEquals((int) requests.get(0), elevator.getStatus().getFloor());
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        elevator.add(16);
+        assertFalse(elevator.shouldStop());
 
     }
     @Test
     void updateRequestsTest(){
-        ArrayList<Integer> requests = new ArrayList<>();
-        requests.add(16);
-        assertEquals(16, requests.remove(0));
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        elevator.add(16);
+        assertEquals(16, elevator.updateRequests());
     }
     @Test
-    void GetCurrentRequestsTest(){
-        ArrayList<Integer> requests = new ArrayList<>();
-        requests.add(16);
-        requests.add(8);
-        requests.add(3);
-        assertEquals(16, requests.get(0));
+    void GetCurrentRequestTest(){
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        elevator.add(16);
+        elevator.add(8);
+        elevator.add(3);
+        assertEquals(16, elevator.getCurrentRequest());
     }
     @Test
     void GetNumRequestsTest(){
-        ArrayList<Integer> requests = new ArrayList<>();
-        requests.add(16);
-        requests.add(8);
-        requests.add(3);
-        assertEquals(3, requests.size());
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        elevator.add(16);
+        elevator.add(8);
+        elevator.add(3);
+        assertEquals(3, elevator.getNumRequests());
     }
 
 
