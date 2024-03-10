@@ -57,8 +57,8 @@ correct state that is required in the elevator subsystem and to ensure elevator.
 correct state that is required in the scheduler subsystem and to ensure scheduler.Scheduler data correction. States tested include: ResponseReceived, Idle and RequestReceived. Data tests include: GetClient, ChooseElevator, and CanServiceRequest.
 - test.FloorDataTest.java: The tests included in this file are used to ensure that the data in a common.FloorData 
 object is correct. Floor Number, Timestamp, Car Button, and Direction fields are included in the tests.
-- test.ElevatorStatusTest.java: The tests included in this file are used to ensure that the elevator status data is correct. Tests include GetId, GetFloor, SetFloor, GetDirection, and SetDirection.
-- test.ElevatorClientTest.java: The tests included in this file are used to ensure that the elevator client data is correct. Tests include GetAddress, GetPort, and GetStatus.
+- test.ElevatorStatusTest.java: The tests included in this file are used to ensure that the common.ElevatorStatus data is correct. Tests include GetId, GetFloor, SetFloor, GetDirection, and SetDirection.
+- test.ElevatorClientTest.java: The tests included in this file are used to ensure that the scheduler.ElevatorClient data is correct. Tests include GetAddress, GetPort, and GetStatus.
 
 ## Usage
 
