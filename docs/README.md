@@ -49,16 +49,16 @@ response from the elevator.Elevator
 
 ### test
 
-There are three (3) test files that are included to ensure the system states and data is correct.
+There are five (5) test files that are included to ensure the system states and data is correct.
 
 - test.ElevatorTest.java: The tests included in this file are used to ensure that each state that is called is the 
-correct state that is required in the elevator subsystem. States tested include: DestinationReached, 
-EstablishingConnection, Idle, MotorRunning, and TaskReceived
+correct state that is required in the elevator subsystem and to ensure elevator.Elevator data correction. States tested include: EstablishingConnection, Idle and MotorRunning. Data tests include: GetNumRequests, GetCurrentRequest, updateRequestsTest, ShouldStop, and GetStatus.
 - test.SchedulerTest.java: The tests included in this file are used to ensure that each state that is called is the 
-correct state that is required in the scheduler subsystem. States tested include: ResponseReceived, 
-EstablishingConnection, Idle, RequestReceived, and Wait
+correct state that is required in the scheduler subsystem and to ensure scheduler.Scheduler data correction. States tested include: ResponseReceived, Idle and RequestReceived. Data tests include: GetClient, ChooseElevator, and CanServiceRequest.
 - test.FloorDataTest.java: The tests included in this file are used to ensure that the data in a common.FloorData 
-object is correct. Floor Number, Timestamp, Car Button, and Direction fields are included in the tests 
+object is correct. Floor Number, Timestamp, Car Button, and Direction fields are included in the tests.
+- test.ElevatorStatusTest.java: The tests included in this file are used to ensure that the elevator status data is correct. Tests include GetId, GetFloor, SetFloor, GetDirection, and SetDirection.
+- test.ElevatorClientTest.java: The tests included in this file are used to ensure that the elevator client data is correct. Tests include GetAddress, GetPort, and GetStatus.
 
 ## Usage
 
