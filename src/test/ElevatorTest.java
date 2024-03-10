@@ -1,5 +1,6 @@
 package test;
 
+import common.ElevatorStatus;
 import elevator.*;
 import org.junit.jupiter.api.*;
 
@@ -19,6 +20,8 @@ class ElevatorTest {
             throw new RuntimeException(e);
         }
         elevator = new Elevator(20, address, 5007, 1);
+        elevator.getStatus().setFloor(16);
+        elevator.getStatus().setDirection(ElevatorStatus.Direction.STATIONARY);
     }
 
     @Test
@@ -27,7 +30,6 @@ class ElevatorTest {
         elevator.setCurrentState(ElevatorMotorRunningState);
         assertInstanceOf(ElevatorMotorRunningState.class, elevator.getCurrentState());
     }
-
     @Test
     void EstablishConnectionState(){
         ElevatorState ElevatorEstablishingConnectionState = new ElevatorEstablishingConnectionState();
@@ -35,11 +37,77 @@ class ElevatorTest {
         assertInstanceOf(ElevatorEstablishingConnectionState.class, elevator.getCurrentState());
     }
     @Test
-    void IdleState() {
+    void IdleState(){
         ElevatorState ElevatorIdleState = new ElevatorIdleState();
         elevator.setCurrentState(ElevatorIdleState);
         assertInstanceOf(elevator.ElevatorIdleState.class, elevator.getCurrentState());
     }
+    @Test
+    void GetStatusTest(){
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        ElevatorStatus status = new ElevatorStatus(1, 1, ElevatorStatus.Direction.STATIONARY);
+        assertEquals(status, elevator.getStatus());
+    }
+    @Test
+    void ShouldStopTest(){
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        elevator.add(16);
+        assertFalse(elevator.shouldStop());
+
+    }
+    @Test
+    void updateRequestsTest(){
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        elevator.add(16);
+        assertEquals(16, elevator.updateRequests());
+    }
+    @Test
+    void GetCurrentRequestTest(){
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        elevator.add(16);
+        elevator.add(8);
+        elevator.add(3);
+        assertEquals(16, elevator.getCurrentRequest());
+    }
+    @Test
+    void GetNumRequestsTest(){
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        elevator = new Elevator(20, address, 5007, 1);
+        elevator.add(16);
+        elevator.add(8);
+        elevator.add(3);
+        assertEquals(3, elevator.getNumRequests());
+    }
+
 
     //None of the following methods have been implemented thus these can not be tested
     @Test
