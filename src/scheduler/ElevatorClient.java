@@ -77,9 +77,10 @@ public class ElevatorClient {
             return false;
         }
 
-        // typecast o to scheduler.ClientPacketData so that we can compare data members
+        // typecast o to Elevator so that we can compare data members
         ElevatorClient data = (ElevatorClient) o;
         return address.equals(data.address)
-                && port == data.port;
+                && port == data.port
+                && status.equals(data.status);
     }
 }

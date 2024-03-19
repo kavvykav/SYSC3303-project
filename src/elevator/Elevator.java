@@ -177,7 +177,7 @@ public class Elevator extends UDPClient implements Runnable {
             }
 
             // If floor was not inserted within the list, add it to the end
-            if (!added) {
+            if (!added && !requests.contains(floor)) {
                 requests.add(floor);
             }
         }
