@@ -4,7 +4,7 @@ import common.ElevatorStatus;
 import common.UDPClient;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Motor simulates the movement of the Elevator. It is implemented as thread so the Elevator can receive requests
@@ -70,7 +70,24 @@ public class Motor extends UDPClient implements Runnable {
                 send(elevator.getStatus());
 
                 elevator.elevatorPrint("Next Stop is floor " + elevator.getCurrentRequest());
-                elevator.closeDoor();
+                try {
+                    elevator.closeDoor();
+                    elevator.elevatorPrint("Elevator door successfully closed");
+                } catch (Exception e) {
+                    elevator.elevatorPrint("Elevator door is stuck open, trying again");
+
+                    // Sleep for a random amount of time between 5 and 15 seconds to simulate the door being stuck
+                    Random rand = new Random();
+                    int stuckTime = rand.nextInt(10000) + 5000;
+                    try {
+                        Thread.sleep(stuckTime);
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                        System.exit(1);
+                    }
+                    elevator.forceCloseDoor();
+                    elevator.elevatorPrint("Elevator door successfully closed after being stuck for " + stuckTime/1000 + " seconds");
+                }
             }
 
             // Simulate going from one floor to another

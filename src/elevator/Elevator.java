@@ -8,6 +8,7 @@ import common.UDPClient;
 
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Elevator represents the elevator subsystem
@@ -113,9 +114,20 @@ public class Elevator extends UDPClient implements Runnable {
     }
 
     /**
-     * Close the door
+     * Close the door. If the elevator door is stuck throw an exception.
      */
-    public void closeDoor() {
+    public void closeDoor() throws Exception {
+        Random rand = new Random();
+        if (rand.nextInt(5) == 2) {
+            throw new Exception();
+        }
+        door = false;
+    }
+
+    /**
+     * Force closes the door if it gets stuck.
+     */
+    public void forceCloseDoor() {
         door = false;
     }
 
