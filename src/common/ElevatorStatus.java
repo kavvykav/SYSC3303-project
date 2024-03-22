@@ -9,12 +9,13 @@ public class ElevatorStatus implements Serializable {
 
     /**
      * For representing the direction of the Elevator.
-     * Moving up, moving down, or stationary
+     * Moving up, moving down, stationary, or stuck
      */
     public enum Direction {
         STATIONARY,
         DOWN,
-        UP
+        UP,
+        STUCK
     }
 
     // The floor the elevator is currently on

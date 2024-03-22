@@ -16,8 +16,8 @@ public class UDPClient {
     private byte[] receivedMsg;
 
     // Server information
-    InetAddress serverAddress;
-    int serverPort;
+    protected InetAddress serverAddress;
+    protected int serverPort;
 
     public UDPClient(InetAddress address, int port) {
 

@@ -2,16 +2,11 @@ package elevator;
 
 import common.ElevatorStatus;
 import common.FloorData;
-import common.NetworkConstants;
-
-import java.net.InetAddress;
-
-import static common.NetworkConstants.SCHEDULER_PORT;
 
 /**
  * ElevatorMotorRunningState
  */
-public class ElevatorMotorRunningState implements ElevatorState {
+public class ElevatorRequestReceivedState implements ElevatorState {
     /**
      * In the motor running state, the elevator starts the motor if it is not currently running
      *
@@ -43,11 +38,7 @@ public class ElevatorMotorRunningState implements ElevatorState {
 
         // If not currently running, start the motor
         if (currentDirection == ElevatorStatus.Direction.STATIONARY) {
-            InetAddress localHost = NetworkConstants.localHost();
-            assert (localHost != null);
-            Thread motor = new Thread(new Motor(elevator, localHost, SCHEDULER_PORT), "Motor");
-            motor.start();
-            elevator.elevatorPrint("Motor is running");
+            elevator.startMotor();
         }
         return null;
     }
