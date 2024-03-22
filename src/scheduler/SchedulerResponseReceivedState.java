@@ -14,7 +14,7 @@ public class SchedulerResponseReceivedState implements SchedulerState {
     public FloorData doAction(Scheduler scheduler, FloorData data) {
 
         if (data.getStatus()) {
-            System.out.println("Scheduler: Elevator request served successfully");
+            scheduler.schedulerPrint("Elevator request served successfully");
         } else {
             System.err.println("Scheduler: Elevator request was not served");
         }
