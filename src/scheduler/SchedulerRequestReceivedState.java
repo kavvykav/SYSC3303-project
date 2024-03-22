@@ -21,6 +21,7 @@ public class SchedulerRequestReceivedState implements SchedulerState {
             if (scheduler.send(data, client.getAddress(), client.getPort()) != 0) {
                 System.err.println("Scheduler: Failed to send FloorData to elevator");
             }
+            scheduler.schedulerPrint("Assigned request to Elevator " + client.getStatus().getId());
         }
         return null;
     }
