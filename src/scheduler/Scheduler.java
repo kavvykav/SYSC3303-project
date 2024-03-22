@@ -5,7 +5,6 @@ import common.FloorData;
 import common.UDPServer;
 
 import java.lang.Math;
-import java.net.DatagramPacket;
 import java.util.ArrayList;
 
 /**
@@ -68,7 +67,6 @@ public class Scheduler extends UDPServer {
      */
     public void setCurrentState(SchedulerState state) {
         this.currentState = state;
-        System.out.println("Scheduler: Moved to " + state.toString());
     }
 
     /**
@@ -107,8 +105,15 @@ public class Scheduler extends UDPServer {
      */
     public ElevatorClient chooseElevator(FloorData data) {
 
-        // Initialize the chosen elevator and the maximum distance
-        ElevatorClient chosenElevator = elevators.get(0);
+        // Initialize the chosen elevator and the maximum distance, print error if user started Floor before Elevator
+        ElevatorClient chosenElevator = null;
+        try {
+            chosenElevator = elevators.get(0);
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("You must start the Elevator subsystem before the Floor subsystem!");
+            System.exit(1);
+        }
+
         int maxDistance = 22;
 
         for (ElevatorClient elevator : elevators) {
@@ -138,15 +143,24 @@ public class Scheduler extends UDPServer {
 
             // We have received a request, check the status of it
             if (data.getStatus()) {
-                System.out.println("Scheduler: Received a response from Elevator");
+                schedulerPrint("Received a response from an Elevator");
                 setCurrentState(new SchedulerResponseReceivedState());
             } else {
-                System.out.println("Scheduler: Received a new floor request");
+                schedulerPrint("Received a new Request From the Floor");
                 setCurrentState(new SchedulerRequestReceivedState());
             }
             currentState.doAction(this, data);
             setCurrentState(new SchedulerIdleState());
+            schedulerPrint("Waiting for a request");
         }
+    }
+
+    /**
+     * Wrapper method to print Scheduler information.
+     * @param output : what is being printed
+     */
+    public void schedulerPrint(String output) {
+        System.out.println("Scheduler: " + output);
     }
 
     public static void main(String[] args) {
