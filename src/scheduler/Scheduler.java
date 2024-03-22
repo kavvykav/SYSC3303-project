@@ -18,7 +18,7 @@ public class Scheduler extends UDPServer {
     // Port and IP Address
     private ArrayList<ElevatorClient> elevators;
 
-    // scheduler.Scheduler Context
+    // State of the Scheduler
     private SchedulerState currentState;
 
     /**
@@ -79,6 +79,11 @@ public class Scheduler extends UDPServer {
      */
     public boolean canServiceRequest(ElevatorClient elevator, FloorData data) {
 
+        // If the elevator is stuck between floors, it cannot serve the request
+        if (elevator.getStatus().getDirection() == ElevatorStatus.Direction.STUCK) {
+            return false;
+        }
+
         // If the elevator is not currently serving a request, it can serve the request
         if (elevator.getStatus().getDirection() == ElevatorStatus.Direction.STATIONARY) {
             return true;
@@ -107,13 +112,6 @@ public class Scheduler extends UDPServer {
 
         // Initialize the chosen elevator and the maximum distance, print error if user started Floor before Elevator
         ElevatorClient chosenElevator = null;
-        try {
-            chosenElevator = elevators.get(0);
-        } catch (IndexOutOfBoundsException e) {
-            System.err.println("You must start the Elevator subsystem before the Floor subsystem!");
-            System.exit(1);
-        }
-
         int maxDistance = 22;
 
         for (ElevatorClient elevator : elevators) {
@@ -128,7 +126,7 @@ public class Scheduler extends UDPServer {
     }
 
     /**
-     * The thread routine for the scheduler
+     * The main routine for the scheduler
      */
     public void handleRequests() {
 
@@ -165,6 +163,7 @@ public class Scheduler extends UDPServer {
 
     public static void main(String[] args) {
         Scheduler scheduler = new Scheduler();
+        scheduler.schedulerPrint("Starting...");
         scheduler.handleRequests();
     }
 }

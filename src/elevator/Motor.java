@@ -13,7 +13,10 @@ import java.util.Random;
 public class Motor extends UDPClient implements Runnable {
 
     // The elevator instance
-    Elevator elevator;
+    private final Elevator elevator;
+
+    // For injecting faults
+    private final Random rand;
 
     /**
      * Creates a Motor instance
@@ -26,6 +29,7 @@ public class Motor extends UDPClient implements Runnable {
 
         super(address, port);
         this.elevator = elevator;
+        rand = new Random();
     }
 
     /**
@@ -60,7 +64,7 @@ public class Motor extends UDPClient implements Runnable {
                 if (elevator.getNumRequests() == 0) {
                     elevator.getStatus().setDirection(ElevatorStatus.Direction.STATIONARY);
                     send(elevator.getStatus());
-                    break;
+                    return;
                 }
                 else if (elevator.getCurrentRequest() > floor) {
                     elevator.getStatus().setDirection(ElevatorStatus.Direction.UP);
@@ -77,7 +81,6 @@ public class Motor extends UDPClient implements Runnable {
                     elevator.elevatorPrint("Elevator door is stuck open, trying again");
 
                     // Sleep for a random amount of time between 5 and 15 seconds to simulate the door being stuck
-                    Random rand = new Random();
                     int stuckTime = rand.nextInt(10000) + 5000;
                     try {
                         Thread.sleep(stuckTime);
@@ -86,16 +89,24 @@ public class Motor extends UDPClient implements Runnable {
                         System.exit(1);
                     }
                     elevator.forceCloseDoor();
-                    elevator.elevatorPrint("Elevator door successfully closed after being stuck for " + stuckTime/1000 + " seconds");
+                    elevator.elevatorPrint("Elevator door successfully closed " +
+                            "after being stuck for " + stuckTime/1000 + " seconds");
                 }
             }
-
             // Simulate going from one floor to another
+            int sleepTime = (rand.nextInt(50) == 15) ? 10 : 5;
+            elevator.startTimer(8);
             try {
-                Thread.sleep(5000);
+                Thread.sleep(sleepTime * 1000L);
             } catch(InterruptedException e) {
+                elevator.getStatus().setDirection(ElevatorStatus.Direction.STUCK);
+                elevator.elevatorPrint("Stuck between floors, shutting down");
+                send(elevator.getStatus());
                 return;
             }
+            elevator.stopTimer(); // We have met the deadline, stop the timer
+
+            // Update fields
             int currentFloor = elevator.getStatus().getFloor();
             if (elevator.getStatus().getDirection() == ElevatorStatus.Direction.UP) {
                 elevator.getStatus().setFloor(currentFloor + 1);

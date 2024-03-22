@@ -26,9 +26,9 @@ class ElevatorTest {
 
     @Test
     void motorRunningState(){
-        ElevatorState ElevatorMotorRunningState = new ElevatorMotorRunningState();
+        ElevatorState ElevatorMotorRunningState = new ElevatorRequestReceivedState();
         elevator.setCurrentState(ElevatorMotorRunningState);
-        assertInstanceOf(ElevatorMotorRunningState.class, elevator.getCurrentState());
+        assertInstanceOf(ElevatorRequestReceivedState.class, elevator.getCurrentState());
     }
     @Test
     void EstablishConnectionState(){

@@ -29,6 +29,12 @@ public class Elevator extends UDPClient implements Runnable {
     // The number of floors in the elevator
     private final int numFloors;
 
+    // For moving the elevator
+    private Thread motor;
+
+    // For ensuring that deadlines are met
+    private Thread timer;
+
     /**
      * Constructor for the elevator subsystem
      *
@@ -150,6 +156,39 @@ public class Elevator extends UDPClient implements Runnable {
     }
 
     /**
+     * Start a motor thread
+     */
+    public void startMotor() {
+        motor = new Thread(new Motor(this, serverAddress, serverPort), "Motor");
+        motor.start();
+        elevatorPrint("Motor is running");
+    }
+
+    /**
+     * Start a timer thread
+     *
+     * @param time Amount of time in seconds
+     */
+    public void startTimer(int time) {
+        timer = new Thread(new Timer(this, time), "Timer: " + time + " seconds");
+        timer.start();
+    }
+
+    /**
+     * Interrupt the timer thread
+     */
+    public void stopTimer() {
+        timer.interrupt();
+    }
+
+    /**
+     * Interrupt the motor thread
+     */
+    public void timeout() {
+        motor.interrupt();
+    }
+
+    /**
      * Add a floor to the queue of floors the elevator will go to
      *
      * @param floor the first floor to add to the queue
@@ -158,17 +197,15 @@ public class Elevator extends UDPClient implements Runnable {
 
         elevatorPrint("Adding floor " + floor);
         synchronized (requests) {
-
             // If there are no requests, add the floor
             if (requests.isEmpty()){
                 requests.add(floor);
                 return;
             }
-
             // If the direction of the elevator is UP, put the floor in front of the closest higher floor
             boolean added = false;
             if (status.getDirection() == ElevatorStatus.Direction.UP) {
-                for (int i=0; i < requests.size(); i++) {
+                for (int i = 0; i < requests.size(); i++) {
                     if (floor < requests.get(i)) {
                         requests.add(i, floor);
                         added = true;
@@ -176,7 +213,6 @@ public class Elevator extends UDPClient implements Runnable {
                     }
                 }
             }
-
             // If the direction of the elevator is DOWN, put the floor in front of the closest lower floor
             if (status.getDirection() == ElevatorStatus.Direction.DOWN) {
                 for (int i=0; i < requests.size(); i++) {
@@ -187,7 +223,6 @@ public class Elevator extends UDPClient implements Runnable {
                     }
                 }
             }
-
             // If floor was not inserted within the list, add it to the end
             if (!added && !requests.contains(floor)) {
                 requests.add(floor);
@@ -210,7 +245,7 @@ public class Elevator extends UDPClient implements Runnable {
             FloorData receivedData = currentState.doAction(this, null);
 
             // Upon receiving request, start motor and return to idle state
-            setCurrentState(new ElevatorMotorRunningState());
+            setCurrentState(new ElevatorRequestReceivedState());
             currentState.doAction(this, receivedData);
         }
     }

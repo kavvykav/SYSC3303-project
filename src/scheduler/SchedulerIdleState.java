@@ -20,10 +20,14 @@ public class SchedulerIdleState implements SchedulerState {
             // Received a request
             return (FloorData) receivedObject;
         } else if (receivedObject instanceof ElevatorStatus) {
+            // Received an update about an elevator
             ElevatorStatus status = (ElevatorStatus) receivedObject;
             ElevatorClient client = scheduler.getClient(status.getId());
             if (client != null) {
-                client.setStatus((ElevatorStatus) receivedObject);
+                client.setStatus(status);
+                if (status.getDirection() == ElevatorStatus.Direction.STUCK) {
+                    scheduler.schedulerPrint("Elevator " + status.getId() + " is stuck between floors");
+                }
             } else {
                 ElevatorClient newClient = new ElevatorClient(scheduler.getReceivePacket().getAddress(),
                         scheduler.getReceivePacket().getPort(), status.getId());
