@@ -1,12 +1,19 @@
 package test;
 
 import common.FloorData;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FloorDataTest {
-    FloorData testPacket = new FloorData("10:25:35",15,true,15);
+
+    static FloorData testPacket;
+
+    @BeforeAll
+    static void setUp(){
+        testPacket = new FloorData("10:25:35",15,true,15);
+    }
     @Test
     void getTime() {
         assertEquals(testPacket.returnTimeStamp(),"10:25:35");

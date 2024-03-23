@@ -87,6 +87,16 @@ class SchedulerTest {
 
         FloorData data4 = new FloorData("3:35:25", 20, true, 22);
         assertEquals(elevator1, scheduler.chooseElevator(data4));
+
+        FloorData data5 = new FloorData("3:35:25", 1, false, 1);
+        assertEquals(elevator2, scheduler.chooseElevator(data5));
+
+        FloorData data6 = new FloorData("3:35:25", 22, true, 22);
+        assertEquals(elevator1, scheduler.chooseElevator(data6));
+
+        FloorData data7 = new FloorData("3:35:25", 22, false, 1);
+        assertEquals(elevator2, scheduler.chooseElevator(data7));
+
     }
     @Test
     void CanServiceRequestTest(){
@@ -99,5 +109,35 @@ class SchedulerTest {
         assertTrue(scheduler.canServiceRequest(elevator2, data));
         assertTrue(scheduler.canServiceRequest(elevator3, data));
         assertFalse(scheduler.canServiceRequest(elevator4, data));
+
+        FloorData data2 = new FloorData("10:35:25", 9, false, 3 );
+        assertFalse(scheduler.canServiceRequest(elevator1, data2));
+        assertTrue(scheduler.canServiceRequest(elevator2, data2));
+        assertFalse(scheduler.canServiceRequest(elevator3, data2));
+        assertTrue(scheduler.canServiceRequest(elevator4, data2));
+
+        FloorData data3 = new FloorData("10:35:25", 1, false, 1 );
+        assertFalse(scheduler.canServiceRequest(elevator1, data3));
+        assertTrue(scheduler.canServiceRequest(elevator2, data3));
+        assertFalse(scheduler.canServiceRequest(elevator3, data3));
+        assertTrue(scheduler.canServiceRequest(elevator4, data3));
+
+        FloorData data4 = new FloorData("10:35:25", 22, false, 9 );
+        assertFalse(scheduler.canServiceRequest(elevator1, data4));
+        assertTrue(scheduler.canServiceRequest(elevator2, data4));
+        assertFalse(scheduler.canServiceRequest(elevator3, data4));
+        assertFalse(scheduler.canServiceRequest(elevator4, data4));
+
+        FloorData data5 = new FloorData("10:35:25", 22, true, 22 );
+        assertTrue(scheduler.canServiceRequest(elevator1, data5));
+        assertTrue(scheduler.canServiceRequest(elevator2, data5));
+        assertTrue(scheduler.canServiceRequest(elevator3, data5));
+        assertFalse(scheduler.canServiceRequest(elevator4, data5));
+
+        FloorData data6 = new FloorData("10:35:25", 1, true, 22 );
+        assertFalse(scheduler.canServiceRequest(elevator1, data6));
+        assertTrue(scheduler.canServiceRequest(elevator2, data6));
+        assertTrue(scheduler.canServiceRequest(elevator3, data6));
+        assertFalse(scheduler.canServiceRequest(elevator4, data6));
     }
 }

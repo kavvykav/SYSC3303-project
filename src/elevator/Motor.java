@@ -33,6 +33,13 @@ public class Motor extends UDPClient implements Runnable {
     }
 
     /**
+     * Returns the elevator that the motor uses. For testing purposes only.
+     *
+     * @return the elevator object.
+     */
+    public Elevator getElevator(){ return elevator;}
+
+    /**
      * The main sequence for the Motor thread. Goes to the floors in the Elevator's list of requests, opening and
      * closing the door at each stop. Exits when there are no more requests to serve.
      */
