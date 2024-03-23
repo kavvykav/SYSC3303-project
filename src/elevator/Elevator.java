@@ -113,6 +113,13 @@ public class Elevator extends UDPClient implements Runnable {
     }
 
     /**
+     * Returns the status of the door. For testing purposes only
+     *
+     * @return true if door open, false if door is closed
+     */
+    public Boolean getDoorStatus(){ return door;}
+
+    /**
      * Open the door
      */
     public void openDoor() {
@@ -180,6 +187,20 @@ public class Elevator extends UDPClient implements Runnable {
     public void stopTimer() {
         timer.interrupt();
     }
+
+    /**
+     * get the timer status. For testing purposes only
+     *
+     * @return the timer object
+     */
+    public Thread getTimerStatus(){return timer;}
+
+    /**
+     * get the motor status. For testing purposes only
+     *
+     * @return the motor object
+     */
+    public Thread getMotorStatus(){return motor;}
 
     /**
      * Interrupt the motor thread

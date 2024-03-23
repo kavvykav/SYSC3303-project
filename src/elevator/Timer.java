@@ -18,6 +18,20 @@ public class Timer implements Runnable {
     }
 
     /**
+     * Returns the elevator that the timer uses. For testing purposes only.
+     *
+     * @return the elevator object.
+     */
+    public Elevator getElevator(){return elevator;}
+
+    /**
+     * Returns the time that the timer uses. For testing purposes only.
+     *
+     * @return the time to use for timer.
+     */
+    public int getTime(){return time;}
+
+    /**
      * Sleep for the specified amount of time and then generate a timeout event
      */
     public void run() {

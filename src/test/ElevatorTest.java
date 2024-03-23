@@ -11,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorTest {
     static Elevator elevator;
-    @BeforeAll
-    static void setUp() {
-        InetAddress address;
+
+    static InetAddress address;
+    @BeforeEach
+    void setUp() {
         try {
             address = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
         elevator = new Elevator(20, address, 5007, 1);
-        elevator.getStatus().setFloor(16);
         elevator.getStatus().setDirection(ElevatorStatus.Direction.STATIONARY);
     }
 
@@ -44,50 +44,22 @@ class ElevatorTest {
     }
     @Test
     void GetStatusTest(){
-        InetAddress address;
-        try {
-            address = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        elevator = new Elevator(20, address, 5007, 1);
         ElevatorStatus status = new ElevatorStatus(1, 1, ElevatorStatus.Direction.STATIONARY);
         assertEquals(status, elevator.getStatus());
     }
     @Test
     void ShouldStopTest(){
-        InetAddress address;
-        try {
-            address = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        elevator = new Elevator(20, address, 5007, 1);
         elevator.add(16);
         assertFalse(elevator.shouldStop());
 
     }
     @Test
     void updateRequestsTest(){
-        InetAddress address;
-        try {
-            address = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        elevator = new Elevator(20, address, 5007, 1);
         elevator.add(16);
         assertEquals(16, elevator.updateRequests());
     }
     @Test
     void GetCurrentRequestTest(){
-        InetAddress address;
-        try {
-            address = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        elevator = new Elevator(20, address, 5007, 1);
         elevator.add(16);
         elevator.add(8);
         elevator.add(3);
@@ -95,35 +67,110 @@ class ElevatorTest {
     }
     @Test
     void GetNumRequestsTest(){
-        InetAddress address;
-        try {
-            address = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        elevator = new Elevator(20, address, 5007, 1);
         elevator.add(16);
         elevator.add(8);
         elevator.add(3);
         assertEquals(3, elevator.getNumRequests());
     }
-
+    @Test
+    void getDoorStatusTest(){
+        assertEquals(false, elevator.getDoorStatus());
+        elevator.openDoor();
+        assertEquals(true, elevator.getDoorStatus());
+    }
+    @Test
+    void openDoorTest () {
+        assertFalse(elevator.getDoorStatus());
+        elevator.openDoor();
+        assertTrue(elevator.getDoorStatus());
+    }
+    @Test
+    void forceCloseDoorTest(){
+        assertFalse(elevator.getDoorStatus());
+        elevator.openDoor();
+        assertTrue(elevator.getDoorStatus());
+        elevator.forceCloseDoor();
+        assertFalse(elevator.getDoorStatus());
+    }
+    @Test
+    void closeDoorTest(){
+        boolean except = false;
+        assertFalse(elevator.getDoorStatus());
+        elevator.openDoor();
+        assertTrue(elevator.getDoorStatus());
+        try {
+            elevator.closeDoor();
+        } catch (Exception e) {
+            except = true;
+            System.out.println("Elevator door is stuck open!");
+        }
+        if (except){
+            assertTrue(elevator.getDoorStatus());
+            System.out.println("Forcing door closed...");
+            elevator.forceCloseDoor();
+            System.out.println("Forced door closure!");
+            assertFalse(elevator.getDoorStatus());
+        }
+        else{assertFalse(elevator.getDoorStatus());}
+    }
+    //Beyond here, Testing code gets kind of weird, due to threads, testing may or may not pass.
+    @Test
+    void getTimerStatusTest(){
+        assertNull(elevator.getTimerStatus());
+    }
+    @Test
+    void startTimerTest(){
+        elevator.startTimer(3);
+        assertNotNull(elevator.getTimerStatus());
+        assertTrue(elevator.getTimerStatus().isAlive());
+        assertFalse(elevator.getTimerStatus().isInterrupted());
+        assertEquals("Timer: " + 3 + " seconds", elevator.getTimerStatus().getName());
+    }
+    @Test
+    void stopTimerTest(){
+        elevator.startTimer(3);
+        assertNotNull(elevator.getTimerStatus());
+        assertTrue(elevator.getTimerStatus().isAlive());
+        assertFalse(elevator.getTimerStatus().isInterrupted());
+        assertEquals("Timer: " + 3 + " seconds", elevator.getTimerStatus().getName());
+        elevator.stopTimer();
+        assertTrue(elevator.getTimerStatus().isAlive());
+        assertTrue(elevator.getTimerStatus().isInterrupted());
+    }
+    @Test
+    void getMotorStatusTest(){
+        assertNull(elevator.getMotorStatus());
+    }
+    @Test
+    void startMotorTest(){
+        elevator.startMotor();
+        assertNotNull(elevator.getMotorStatus());
+        assertTrue(elevator.getMotorStatus().isAlive());
+        assertFalse(elevator.getMotorStatus().isInterrupted());
+        assertEquals("Motor", elevator.getMotorStatus().getName());
+    }
+    //Currently can not be tested
+    /*@Test
+    void timeoutTest(){
+        elevator.startMotor();
+        assertNotNull(elevator.getMotorStatus());
+        assertTrue(elevator.getMotorStatus().isAlive());
+        assertFalse(elevator.getMotorStatus().isInterrupted());
+        assertEquals("Motor", elevator.getMotorStatus().getName());
+        elevator.stopTimer();
+        assertTrue(elevator.getMotorStatus().isAlive());
+        assertTrue(elevator.getMotorStatus().isInterrupted());
+    }
+*/
 
     //None of the following methods have been implemented thus these can not be tested
-    @Test
+    /*@Test
     void testNumButtons () {
-        //assertEquals(elevator.getNumButtons(), 20);
+
     }
     @Test
     void testNumLamps () {
-        //assertEquals(elevator.getNumButtons(), 20);
+
     }
-    @Test
-    void doorClosed () {
-        //assertTrue(elevator.getCurrentState().equals("elevator.ElevatorMotorRunningState"));
-    }
-    @Test
-    void doorOpen () {
-        //assertTrue(elevator.getCurrentState() != elevator.ElevatorMotorRunningState);
-    }
+    */
 }
