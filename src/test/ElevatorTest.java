@@ -20,7 +20,7 @@ class ElevatorTest {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        elevator = new Elevator(20, address, 5007, 1);
+        elevator = new Elevator(22, address, 5007, 1);
         elevator.getStatus().setDirection(ElevatorStatus.Direction.STATIONARY);
     }
 
@@ -94,24 +94,19 @@ class ElevatorTest {
     }
     @Test
     void closeDoorTest(){
-        boolean except = false;
         assertFalse(elevator.getDoorStatus());
         elevator.openDoor();
         assertTrue(elevator.getDoorStatus());
         try {
             elevator.closeDoor();
         } catch (Exception e) {
-            except = true;
             System.out.println("Elevator door is stuck open!");
-        }
-        if (except){
             assertTrue(elevator.getDoorStatus());
             System.out.println("Forcing door closed...");
             elevator.forceCloseDoor();
             System.out.println("Forced door closure!");
-            assertFalse(elevator.getDoorStatus());
         }
-        else{assertFalse(elevator.getDoorStatus());}
+        assertFalse(elevator.getDoorStatus());
     }
     //Beyond here, Testing code gets kind of weird, due to threads, testing may or may not pass.
     @Test
@@ -143,6 +138,8 @@ class ElevatorTest {
     }
     @Test
     void startMotorTest(){
+        elevator.add(22);
+        elevator.getStatus().setDirection(ElevatorStatus.Direction.UP);
         elevator.startMotor();
         assertNotNull(elevator.getMotorStatus());
         assertTrue(elevator.getMotorStatus().isAlive());
