@@ -1,4 +1,4 @@
-# Elevator Control System - Iteration 3
+# Elevator Control System - Iteration 4
 
 Authors + Student ID:  
 Matthew Huybregts 101185221<br>
@@ -7,7 +7,7 @@ William Kavanagh 101182915<br>
 Joshua Robson 101195802<br>
 Abed Qubbaj  101205030<br>
 
-Date: March 9, 2024
+Date: March 23rd, 2024
 
 ## Overview
 
@@ -85,7 +85,7 @@ questions, please contact one of the authors.
 ## Delegation of Responsibilities
 
 - Liam Kavanagh -> Scheduler algorithm and coding
-- Matthew Huybregts -> Coding, debugging, refactoring
-- Sean Pruss -> Debugging, also helped out with JUnit tests
+- Matthew Huybregts -> Implementing Timer Class
+- Sean Pruss -> Timing Diagrams
 - Joshua Robson -> JUnit tests
 - Abed Qubbaj -> Updated diagrams and README.md
