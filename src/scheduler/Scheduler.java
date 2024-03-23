@@ -91,12 +91,12 @@ public class Scheduler extends UDPServer {
 
         // If the elevator is going up and the passenger wants to go up, check the floor number
         if (elevator.getStatus().getDirection()==ElevatorStatus.Direction.UP && data.returnDirection()) {
-            return elevator.getStatus().getFloor() < data.returnFloorNumber();
+            return elevator.getStatus().getFloor() <= data.returnFloorNumber();
         }
 
         // If the elevator is going down and the passenger wants to go down, check the floor number
         if (elevator.getStatus().getDirection()==ElevatorStatus.Direction.DOWN && !data.returnDirection()) {
-            return elevator.getStatus().getFloor() > data.returnFloorNumber();
+            return elevator.getStatus().getFloor() >= data.returnFloorNumber();
         }
         return false;
     }
