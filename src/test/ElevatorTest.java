@@ -149,22 +149,24 @@ class ElevatorTest {
         assertFalse(elevator.getMotorStatus().isInterrupted());
         assertEquals("Motor", elevator.getMotorStatus().getName());
     }
-    //Currently can not be tested
-    /*@Test
+
+    @Test
     void timeoutTest(){
+        elevator.add(22);
+        elevator.getStatus().setDirection(ElevatorStatus.Direction.UP);
         elevator.startMotor();
         assertNotNull(elevator.getMotorStatus());
         assertTrue(elevator.getMotorStatus().isAlive());
         assertFalse(elevator.getMotorStatus().isInterrupted());
         assertEquals("Motor", elevator.getMotorStatus().getName());
-        elevator.stopTimer();
+        elevator.timeout();
         assertTrue(elevator.getMotorStatus().isAlive());
         assertTrue(elevator.getMotorStatus().isInterrupted());
     }
-*/
 
-    //None of the following methods have been implemented thus these can not be tested
-    /*@Test
+    // None of the following methods have been implemented thus these can not be tested
+    /*
+    @Test
     void testNumButtons () {
 
     }
