@@ -85,7 +85,7 @@ questions, please contact one of the authors.
 
 ## Delegation of Responsibilities
 
-- Liam Kavanagh -> Scheduler algorithm and coding
+- Liam Kavanagh -> Implementing Door Faults and coding
 - Matthew Huybregts -> Implementing Timer Class
 - Sean Pruss -> Timing Diagrams
 - Joshua Robson -> JUnit tests, Debugging, Coding
