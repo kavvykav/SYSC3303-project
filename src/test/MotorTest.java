@@ -22,7 +22,7 @@ class MotorTest {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        elevator = new Elevator(22, address, port, 1);
+        elevator = new Elevator(22, address, port, 1, 15);
         motor = new Motor(elevator, address, port);
     }
     @Test

@@ -1,6 +1,6 @@
 package scheduler;
 
-import common.FloorData;
+import common.FloorRequest;
 
 /**
  * This is the state where the scheduler.Scheduler receives a response from the elevator.Elevator.
@@ -11,7 +11,7 @@ public class SchedulerResponseReceivedState implements SchedulerState {
     /**
      * The action the scheduler.Scheduler performs when in the Response Received state
      */
-    public FloorData doAction(Scheduler scheduler, FloorData data) {
+    public FloorRequest doAction(Scheduler scheduler, FloorRequest data) {
 
         if (data.getStatus()) {
             scheduler.schedulerPrint("Elevator request served successfully");

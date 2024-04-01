@@ -6,7 +6,10 @@ import java.io.Serializable;
  * The common.FloorData class represents the necessary information to be shared between the three main subsystems (floor.Floor,
  * scheduler.Scheduler, and elevator.Elevator). It represents a data structure to be sent over UDP.
  */
-public class FloorData implements Serializable {
+public class FloorRequest implements Serializable {
+
+    // ID of the request
+    private final int id;
 
     // The time at which a passenger arrives
     private final String timestamp;
@@ -19,6 +22,9 @@ public class FloorData implements Serializable {
 
     // The floor the passenger wants to go to
     private final int carButton;
+
+    // The number of passengers that are getting on
+    private final int numPassengers;
 
     // Flag indicating if the request has been fulfilled
     // True: request fulfilled, False: request pending
@@ -33,12 +39,14 @@ public class FloorData implements Serializable {
      * @param direction The direction (Up or Down)
      * @param carButton The floor to which the passenger wants to go
      */
-    public FloorData(String timestamp, int floorNumber,
-            boolean direction, int carButton) {
+    public FloorRequest(int id, String timestamp, int floorNumber,
+                        boolean direction, int carButton, int numPassengers) {
+        this.id = id;
         this.timestamp = timestamp;
         this.floorNumber = floorNumber;
         this.direction = direction;
         this.carButton = carButton;
+        this.numPassengers = numPassengers;
         status = false;
     }
 
@@ -58,12 +66,12 @@ public class FloorData implements Serializable {
             return true;
         }
 
-        if (!(o instanceof FloorData)) {
+        if (!(o instanceof FloorRequest)) {
             return false;
         }
 
         // typecast o to common.FloorData so that we can compare data members
-        FloorData data = (FloorData) o;
+        FloorRequest data = (FloorRequest) o;
         return timestamp.equals(data.timestamp)
                 && floorNumber == data.floorNumber
                 && direction == data.direction
@@ -85,8 +93,25 @@ public class FloorData implements Serializable {
     public void setStatus(boolean status) {
         this.status = status;
     }
-    public String returnTimeStamp(){return timestamp;}
-    public int returnFloorNumber(){return floorNumber;}
-    public boolean returnDirection(){return direction;}
-    public int returnCarButton(){return carButton;}
+
+    /* Getter methods */
+    public int getId() {
+        return id;
+    }
+
+    public String getTimeStamp(){
+        return timestamp;
+    }
+    public int getFloorNumber(){
+        return floorNumber;
+    }
+    public boolean getDirection(){
+        return direction;
+    }
+    public int getCarButton(){
+        return carButton;
+    }
+    public int getNumPassengers() {
+        return numPassengers;
+    }
 }

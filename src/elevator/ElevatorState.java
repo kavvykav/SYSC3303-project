@@ -1,11 +1,10 @@
 package elevator;
 
-import common.FloorData;
-import elevator.Elevator;
+import common.FloorRequest;
 
 /**
  * ElevatorState
  */
 public interface ElevatorState {
-    FloorData doAction(Elevator elevator, FloorData receivedData);
+    FloorRequest doAction(Elevator elevator, FloorRequest request);
 }

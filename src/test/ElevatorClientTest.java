@@ -12,6 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorClientTest {
     static ElevatorClient client;
+
+    static ElevatorStatus status;
+
     @BeforeAll
     static void setUp(){
         InetAddress address;
@@ -20,7 +23,8 @@ class ElevatorClientTest {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        client = new ElevatorClient(address, 5007, 1);
+        status = new ElevatorStatus(1, 1, ElevatorStatus.Direction.STATIONARY, 15);
+        client = new ElevatorClient(address, 5007, status);
     }
     @Test
     void GetAddressTest() {
@@ -40,7 +44,6 @@ class ElevatorClientTest {
 
     @Test
     void GetStatusTest() {
-        ElevatorStatus status = new ElevatorStatus(1, 1, ElevatorStatus.Direction.STATIONARY);
         assertEquals(status, client.getStatus());
     }
 }
