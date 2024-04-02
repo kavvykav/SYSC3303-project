@@ -4,6 +4,8 @@ import common.FloorData;
 import common.NetworkConstants;
 import common.UDPClient;
 
+import gui.GUI;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -107,6 +109,8 @@ public class Floor extends UDPClient {
 
         InetAddress localHost = NetworkConstants.localHost();
         assert (localHost != null);
+
+        GUI gui = new GUI();
 
         Floor floor = new Floor("test_input.txt", localHost, NetworkConstants.SCHEDULER_PORT);
         floor.sendRequests();
