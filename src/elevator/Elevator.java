@@ -1,7 +1,7 @@
 package elevator;
 
 import common.ElevatorStatus;
-import common.FloorRequest;
+import common.FloorData;
 import common.NetworkConstants;
 import static common.NetworkConstants.SCHEDULER_PORT;
 import common.UDPClient;
@@ -40,11 +40,11 @@ public class Elevator extends UDPClient implements Runnable {
      *
      * @param numFloors the number of floors the elevator goes to
      */
-    public Elevator(int numFloors, InetAddress address, int port, int id, int availablePassengers) {
+    public Elevator(int numFloors, InetAddress address, int port, int id) {
         super(address, port);
         this.numFloors = numFloors;
 
-        status = new ElevatorStatus(id, 1, ElevatorStatus.Direction.STATIONARY, availablePassengers);
+        status = new ElevatorStatus(id, 1, ElevatorStatus.Direction.STATIONARY);
         requests = new ArrayList<>(0);
         door = false;
     }
@@ -217,10 +217,6 @@ public class Elevator extends UDPClient implements Runnable {
     public void add(int floor) {
 
         elevatorPrint("Adding floor " + floor);
-        if (floor < 1 || floor > numFloors) {
-            elevatorPrint("Discarding invalid floor");
-        }
-
         synchronized (requests) {
             // If there are no requests, add the floor
             if (requests.isEmpty()){
@@ -267,7 +263,7 @@ public class Elevator extends UDPClient implements Runnable {
         while (true) {
             // Wait to receive a request
             setCurrentState(new ElevatorIdleState());
-            FloorRequest receivedData = currentState.doAction(this, null);
+            FloorData receivedData = currentState.doAction(this, null);
 
             // Upon receiving request, start motor and return to idle state
             setCurrentState(new ElevatorRequestReceivedState());
@@ -291,13 +287,10 @@ public class Elevator extends UDPClient implements Runnable {
         InetAddress localHost = NetworkConstants.localHost();
         assert (localHost != null);
 
-        int numFloors = 22;
-        int capacity = 15;
-
-        Thread car1 = new Thread(new Elevator(numFloors, localHost, SCHEDULER_PORT, 1, capacity), "Elevator 1");
-        Thread car2 = new Thread(new Elevator(numFloors, localHost, SCHEDULER_PORT, 2, capacity), "Elevator 2");
-        Thread car3 = new Thread(new Elevator(numFloors, localHost, SCHEDULER_PORT, 3, capacity), "Elevator 3");
-        Thread car4 = new Thread(new Elevator(numFloors, localHost, SCHEDULER_PORT, 4, capacity), "Elevator 4");
+        Thread car1 = new Thread(new Elevator(22, localHost, SCHEDULER_PORT, 1), "Elevator 1");
+        Thread car2 = new Thread(new Elevator(22, localHost, SCHEDULER_PORT, 2), "Elevator 2");
+        Thread car3 = new Thread(new Elevator(22, localHost, SCHEDULER_PORT, 3), "Elevator 3");
+        Thread car4 = new Thread(new Elevator(22, localHost, SCHEDULER_PORT, 4), "Elevator 4");
 
         car1.start();
         car2.start();

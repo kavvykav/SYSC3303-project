@@ -20,7 +20,7 @@ class ElevatorTest {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        elevator = new Elevator(22, address, 5007, 1, 15);
+        elevator = new Elevator(22, address, 5007, 1);
         elevator.getStatus().setDirection(ElevatorStatus.Direction.STATIONARY);
     }
 
@@ -44,7 +44,7 @@ class ElevatorTest {
     }
     @Test
     void GetStatusTest(){
-        ElevatorStatus status = new ElevatorStatus(1, 1, ElevatorStatus.Direction.STATIONARY, 15);
+        ElevatorStatus status = new ElevatorStatus(1, 1, ElevatorStatus.Direction.STATIONARY);
         assertEquals(status, elevator.getStatus());
     }
     @Test
@@ -160,4 +160,16 @@ class ElevatorTest {
         assertTrue(elevator.getMotorStatus().isAlive());
         assertTrue(elevator.getMotorStatus().isInterrupted());
     }
+
+    // None of the following methods have been implemented thus these can not be tested
+    /*
+    @Test
+    void testNumButtons () {
+
+    }
+    @Test
+    void testNumLamps () {
+
+    }
+    */
 }

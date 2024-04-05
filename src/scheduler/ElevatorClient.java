@@ -22,12 +22,14 @@ public class ElevatorClient {
      *
      * @param address The IP address of the elevator
      * @param port The port number of the elevator
-     * @param status The status of the elevator
+     * @param id The ID of the elevator
      */
-    public ElevatorClient(InetAddress address, int port, ElevatorStatus status) {
+    public ElevatorClient(InetAddress address, int port, int id) {
+
         this.address = address;
         this.port = port;
-        this.status = status;
+
+        status = new ElevatorStatus(id, 1, ElevatorStatus.Direction.STATIONARY);
     }
 
     /**

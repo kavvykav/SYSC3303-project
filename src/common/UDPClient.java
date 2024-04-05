@@ -19,13 +19,7 @@ public class UDPClient {
     protected InetAddress serverAddress;
     protected int serverPort;
 
-    /**
-     * Creates a UDPClient
-     *
-     * @param address The address of the server we are connecting to
-     * @param serverPort The port the server is listening on
-     */
-    public UDPClient(InetAddress address, int serverPort) {
+    public UDPClient(InetAddress address, int port) {
 
         try {
             // This socket will be used to send and receive UDP Datagram packets.
@@ -38,29 +32,7 @@ public class UDPClient {
         receivePacket = new DatagramPacket(receivedMsg, receivedMsg.length);
 
         serverAddress = address;
-        this.serverPort = serverPort;
-    }
-
-    /**
-     * Creates a UDP Client
-     *
-     * @param address The address of the server we are connecting to
-     * @param serverPort The port the server is listening on
-     * @param listenPort Optional: The port we want our client to bind to
-     */
-    public UDPClient(InetAddress address, int serverPort, int listenPort) {
-        try {
-            // This socket will be used to send and receive UDP Datagram packets.
-            sendReceiveSocket = new DatagramSocket(listenPort);
-        } catch (SocketException e) {
-            // e.printStackTrace();
-            System.exit(1);
-        }
-        receivedMsg = new byte[BUFFER_SIZE];
-        receivePacket = new DatagramPacket(receivedMsg, receivedMsg.length);
-
-        serverAddress = address;
-        this.serverPort = serverPort;
+        serverPort = port;
     }
 
     /**
@@ -69,7 +41,7 @@ public class UDPClient {
      * @param data The data to be sent to the server
      * @return 0 if successful, -1 otherwise
      */
-    public int send(Object data) {
+    public synchronized int send(Object data) {
 
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -81,11 +53,14 @@ public class UDPClient {
             e.printStackTrace();
             System.exit(1);
         }
-        try {
-            sendReceiveSocket.send(sendPacket);
-        } catch (IOException e) {
-            System.err.println("Failed to send data");
-            return -1;
+
+        synchronized (sendReceiveSocket) {
+            try {
+                sendReceiveSocket.send(sendPacket);
+            } catch (IOException e) {
+                System.err.println("Failed to send data");
+                return -1;
+            }
         }
         return 0;
     }
@@ -98,13 +73,15 @@ public class UDPClient {
      */
     public Object receive() {
 
-        try {
-            sendReceiveSocket.receive(receivePacket);
-        } catch (SocketTimeoutException e) {
-            return null;
-        } catch (IOException e) {
-            System.err.println("Failed to get data from server");
-            return null;
+        synchronized (sendReceiveSocket) {
+            try {
+                sendReceiveSocket.receive(receivePacket);
+            } catch (SocketTimeoutException e) {
+                return null;
+            } catch (IOException e) {
+                System.err.println("Failed to get data from server");
+                return null;
+            }
         }
 
         try {

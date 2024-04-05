@@ -1,7 +1,7 @@
 package elevator;
 
 import common.ElevatorStatus;
-import common.FloorRequest;
+import common.FloorData;
 
 /**
  * ElevatorMotorRunningState
@@ -15,22 +15,22 @@ public class ElevatorRequestReceivedState implements ElevatorState {
      *
      * @return Always null in this case
      */
-    public FloorRequest doAction(Elevator elevator, FloorRequest receivedData) {
+    public FloorData doAction(Elevator elevator, FloorData receivedData) {
 
         // Look at the current direction of the elevator
         ElevatorStatus.Direction currentDirection = elevator.getStatus().getDirection();
 
         // Use the direction of the request to determine how to add the floors
-        if (receivedData.getDirection()) {
+        if (receivedData.returnDirection()) {
             elevator.getStatus().setDirection(ElevatorStatus.Direction.UP);
         } else {
             elevator.getStatus().setDirection(ElevatorStatus.Direction.DOWN);
         }
-        elevator.add(receivedData.getFloorNumber());
-        elevator.add(receivedData.getCarButton());
+        elevator.add(receivedData.returnFloorNumber());
+        elevator.add(receivedData.returnCarButton());
 
         // Determine the direction the elevator needs to go
-        if (receivedData.getFloorNumber() > elevator.getStatus().getFloor()) {
+        if (receivedData.returnFloorNumber() > elevator.getStatus().getFloor()) {
             elevator.getStatus().setDirection(ElevatorStatus.Direction.UP);
         } else {
             elevator.getStatus().setDirection(ElevatorStatus.Direction.DOWN);

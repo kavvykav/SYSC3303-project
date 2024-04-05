@@ -11,9 +11,6 @@ public class NetworkConstants {
     // Port that the Scheduler will listen on
     public static final int SCHEDULER_PORT = 5000;
 
-    // Port that the Floor will listen on
-    public static final int FLOOR_PORT = 5001;
-
     /**
      * Wrapper method for getting localhost
      *

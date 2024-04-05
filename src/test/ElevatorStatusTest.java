@@ -14,10 +14,10 @@ class ElevatorStatusTest {
 
     @BeforeEach
     void setUp() {
-        status1 = new ElevatorStatus(1,12, ElevatorStatus.Direction.STATIONARY, 15);
-        status2 = new ElevatorStatus(2,7, ElevatorStatus.Direction.DOWN, 15);
-        status3 = new ElevatorStatus(3,2, ElevatorStatus.Direction.UP, 15);
-        status4 = new ElevatorStatus(4,9, ElevatorStatus.Direction.UP, 15);
+        status1 = new ElevatorStatus(1,12, ElevatorStatus.Direction.STATIONARY);
+        status2 = new ElevatorStatus(2,7, ElevatorStatus.Direction.DOWN);
+        status3 = new ElevatorStatus(3,2, ElevatorStatus.Direction.UP);
+        status4 = new ElevatorStatus(4,9, ElevatorStatus.Direction.UP);
     }
 
     @Test

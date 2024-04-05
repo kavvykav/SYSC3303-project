@@ -27,9 +27,6 @@ public class ElevatorStatus implements Serializable {
     // The direction of the elevator
     private Direction direction;
 
-    // The number of available places on the elevator
-    private int availablePassengers;
-
     /**
      * Initialize the status of an elevator
      *
@@ -37,11 +34,10 @@ public class ElevatorStatus implements Serializable {
      * @param floor The current floor of the elevator
      * @param direction The direction of the elevator
      */
-    public ElevatorStatus(int id, int floor, Direction direction, int availablePassengers) {
+    public ElevatorStatus(int id, int floor, Direction direction) {
         this.id = id;
         this.floor = floor;
         this.direction = direction;
-        this.availablePassengers = availablePassengers;
     }
 
     public synchronized int getId() {
@@ -62,14 +58,6 @@ public class ElevatorStatus implements Serializable {
 
     public synchronized void setDirection(Direction direction) {
         this.direction = direction;
-    }
-
-    public int getAvailablePassengers() {
-        return availablePassengers;
-    }
-
-    public void setAvailablePassengers(int availablePassengers) {
-        this.availablePassengers = availablePassengers;
     }
 
     @Override

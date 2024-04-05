@@ -1,7 +1,7 @@
 package test;
 
 import common.ElevatorStatus;
-import common.FloorRequest;
+import common.FloorData;
 import org.junit.jupiter.api.*;
 import scheduler.*;
 
@@ -26,10 +26,10 @@ class SchedulerTest {
         } catch (UnknownHostException e) {
         throw new RuntimeException(e);
         }
-        elevator1 = new ElevatorClient(address, 5007, new ElevatorStatus(1, 18, ElevatorStatus.Direction.UP, 15));
-        elevator2 = new ElevatorClient(address, 5007, new ElevatorStatus(2, 9, ElevatorStatus.Direction.STATIONARY, 15));
-        elevator3 = new ElevatorClient(address, 5007, new ElevatorStatus(3, 1, ElevatorStatus.Direction.UP, 15));
-        elevator4 = new ElevatorClient(address, 5007, new ElevatorStatus(4, 20, ElevatorStatus.Direction.DOWN, 15));
+        elevator1 = new ElevatorClient(address, 5007, 1);
+        elevator2 = new ElevatorClient(address, 5007, 2);
+        elevator3 = new ElevatorClient(address, 5007, 3);
+        elevator4 = new ElevatorClient(address, 5007, 4);
     }
 
     @Test
@@ -68,65 +68,73 @@ class SchedulerTest {
     }
     @Test
     void ChooseElevatorTest(){
-        FloorRequest data = new FloorRequest(1, "10:35:25", 16, true, 18, 2);
+        FloorData data = new FloorData("10:35:25", 16, true, 18);
+        elevator1.setStatus(new ElevatorStatus(1, 18, ElevatorStatus.Direction.UP));
+        elevator2.setStatus(new ElevatorStatus(2, 9, ElevatorStatus.Direction.STATIONARY));
+        elevator3.setStatus(new ElevatorStatus(3, 1, ElevatorStatus.Direction.UP));
+        elevator4.setStatus(new ElevatorStatus(4, 20, ElevatorStatus.Direction.DOWN));
         scheduler.addClient(elevator1);
         scheduler.addClient(elevator2);
         scheduler.addClient(elevator3);
         scheduler.addClient(elevator4);
         assertEquals(elevator2, scheduler.chooseElevator(data));
 
-        FloorRequest data2 = new FloorRequest(2, "12:35:25", 20, false, 8, 1);
+        FloorData data2 = new FloorData("12:35:25", 20, false, 8);
         assertEquals(elevator4, scheduler.chooseElevator(data2));
 
-        FloorRequest data3 = new FloorRequest(3, "2:35:25", 1, true, 8, 3);
+        FloorData data3 = new FloorData("2:35:25", 1, true, 8);
         assertEquals(elevator3, scheduler.chooseElevator(data3));
 
-        FloorRequest data4 = new FloorRequest(4, "3:35:25", 20, true, 22, 1);
+        FloorData data4 = new FloorData("3:35:25", 20, true, 22);
         assertEquals(elevator1, scheduler.chooseElevator(data4));
 
-        FloorRequest data5 = new FloorRequest(5, "3:35:25", 1, false, 1, 4);
+        FloorData data5 = new FloorData("3:35:25", 1, false, 1);
         assertEquals(elevator2, scheduler.chooseElevator(data5));
 
-        FloorRequest data6 = new FloorRequest(6, "3:35:25", 22, true, 22, 3);
+        FloorData data6 = new FloorData("3:35:25", 22, true, 22);
         assertEquals(elevator1, scheduler.chooseElevator(data6));
 
-        FloorRequest data7 = new FloorRequest(7, "3:35:25", 22, false, 1, 1);
+        FloorData data7 = new FloorData("3:35:25", 22, false, 1);
         assertEquals(elevator2, scheduler.chooseElevator(data7));
 
     }
     @Test
     void CanServiceRequestTest(){
-        FloorRequest data = new FloorRequest(1, "10:35:25", 16, true, 18, 3);
+        FloorData data = new FloorData("10:35:25", 16, true, 18 );
+        elevator1.setStatus(new ElevatorStatus(1, 18, ElevatorStatus.Direction.UP));
+        elevator2.setStatus(new ElevatorStatus(2, 9, ElevatorStatus.Direction.STATIONARY));
+        elevator3.setStatus(new ElevatorStatus(3, 1, ElevatorStatus.Direction.UP));
+        elevator4.setStatus(new ElevatorStatus(4, 20, ElevatorStatus.Direction.DOWN));
         assertFalse(scheduler.canServiceRequest(elevator1, data));
         assertTrue(scheduler.canServiceRequest(elevator2, data));
         assertTrue(scheduler.canServiceRequest(elevator3, data));
         assertFalse(scheduler.canServiceRequest(elevator4, data));
 
-        FloorRequest data2 = new FloorRequest(2, "10:35:25", 9, false, 3, 2);
+        FloorData data2 = new FloorData("10:35:25", 9, false, 3 );
         assertFalse(scheduler.canServiceRequest(elevator1, data2));
         assertTrue(scheduler.canServiceRequest(elevator2, data2));
         assertFalse(scheduler.canServiceRequest(elevator3, data2));
         assertTrue(scheduler.canServiceRequest(elevator4, data2));
 
-        FloorRequest data3 = new FloorRequest(3, "10:35:25", 1, false, 1, 1);
+        FloorData data3 = new FloorData("10:35:25", 1, false, 1 );
         assertFalse(scheduler.canServiceRequest(elevator1, data3));
         assertTrue(scheduler.canServiceRequest(elevator2, data3));
         assertFalse(scheduler.canServiceRequest(elevator3, data3));
         assertTrue(scheduler.canServiceRequest(elevator4, data3));
 
-        FloorRequest data4 = new FloorRequest(4, "10:35:25", 22, false, 9, 4);
+        FloorData data4 = new FloorData("10:35:25", 22, false, 9 );
         assertFalse(scheduler.canServiceRequest(elevator1, data4));
         assertTrue(scheduler.canServiceRequest(elevator2, data4));
         assertFalse(scheduler.canServiceRequest(elevator3, data4));
         assertFalse(scheduler.canServiceRequest(elevator4, data4));
 
-        FloorRequest data5 = new FloorRequest(5, "10:35:25", 22, true, 22, 1);
+        FloorData data5 = new FloorData("10:35:25", 22, true, 22 );
         assertTrue(scheduler.canServiceRequest(elevator1, data5));
         assertTrue(scheduler.canServiceRequest(elevator2, data5));
         assertTrue(scheduler.canServiceRequest(elevator3, data5));
         assertFalse(scheduler.canServiceRequest(elevator4, data5));
 
-        FloorRequest data6 = new FloorRequest(6, "10:35:25", 1, true, 22, 2);
+        FloorData data6 = new FloorData("10:35:25", 1, true, 22 );
         assertFalse(scheduler.canServiceRequest(elevator1, data6));
         assertTrue(scheduler.canServiceRequest(elevator2, data6));
         assertTrue(scheduler.canServiceRequest(elevator3, data6));

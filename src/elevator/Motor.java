@@ -59,6 +59,14 @@ public class Motor extends UDPClient implements Runnable {
                 elevator.elevatorPrint("Stopping at floor " + elevator.getStatus().getFloor());
                 Integer floor = elevator.updateRequests();
 
+                // Simulate opening and closing the door
+                elevator.openDoor();
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    return;
+                }
+
                 // Check if we have any more requests and update the status accordingly
                 if (elevator.getNumRequests() == 0) {
                     elevator.getStatus().setDirection(ElevatorStatus.Direction.STATIONARY);
@@ -72,14 +80,7 @@ public class Motor extends UDPClient implements Runnable {
                 }
                 send(elevator.getStatus());
 
-                // Simulate opening and closing the door
-                elevator.openDoor();
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    return;
-                }
-
+                elevator.elevatorPrint("Next Stop is floor " + elevator.getCurrentRequest());
                 try {
                     elevator.closeDoor();
                     elevator.elevatorPrint("Elevator door successfully closed");
@@ -98,8 +99,6 @@ public class Motor extends UDPClient implements Runnable {
                     elevator.elevatorPrint("Elevator door successfully closed " +
                             "after being stuck for " + stuckTime/1000 + " seconds");
                 }
-                elevator.elevatorPrint("Next Stop is floor " + elevator.getCurrentRequest());
-                send(elevator.getStatus());
             }
             // Simulate going from one floor to another
             int sleepTime = (rand.nextInt(50) == 15) ? 10 : 5;

@@ -1,6 +1,6 @@
 package elevator;
 
-import common.FloorRequest;
+import common.FloorData;
 
 /**
  * ElevatorIdleState
@@ -14,7 +14,7 @@ public class ElevatorIdleState implements ElevatorState {
      *
      * @return The request received by the elevator
      */
-    public FloorRequest doAction(Elevator elevator, FloorRequest receivedData) {
-        return (FloorRequest) elevator.receive();
+    public FloorData doAction(Elevator elevator, FloorData receivedData) {
+        return (FloorData) elevator.receive();
     }
 }

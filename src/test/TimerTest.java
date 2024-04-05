@@ -22,7 +22,7 @@ class TimerTest {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        elevator = new Elevator(20, address, 5007, 1, 15);
+        elevator = new Elevator(20, address, 5007, 1);
         time = 5;
         timer = new Timer(elevator, time);
     }

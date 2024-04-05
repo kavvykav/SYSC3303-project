@@ -1,13 +1,13 @@
 package elevator;
 
-import common.FloorRequest;
+import common.FloorData;
 
 /**
  * ElevatorEstablishingConnectionState
  */
 public class ElevatorEstablishingConnectionState implements ElevatorState {
     @Override
-    public FloorRequest doAction(Elevator elevator, FloorRequest receivedData) {
+    public FloorData doAction(Elevator elevator, FloorData receivedData) {
         elevator.elevatorPrint("Establishing connection with scheduler");
         elevator.setCurrentState(this);
         elevator.send(elevator.getStatus());

@@ -1,7 +1,7 @@
 package scheduler;
 
 import common.ElevatorStatus;
-import common.FloorRequest;
+import common.FloorData;
 
 /**
  * This state is the scheduler.Scheduler waiting to receive the request.
@@ -12,13 +12,13 @@ public class SchedulerIdleState implements SchedulerState {
      * The action that is performed when the scheduler.Scheduler is in the Idle
      * state.
      */
-    public FloorRequest doAction(Scheduler scheduler, FloorRequest data) {
+    public FloorData doAction(Scheduler scheduler, FloorData data) {
 
         Object receivedObject = scheduler.receive();
 
-        if (receivedObject instanceof FloorRequest) {
+        if (receivedObject instanceof FloorData) {
             // Received a request
-            return (FloorRequest) receivedObject;
+            return (FloorData) receivedObject;
         } else if (receivedObject instanceof ElevatorStatus) {
             // Received an update about an elevator
             ElevatorStatus status = (ElevatorStatus) receivedObject;
@@ -30,7 +30,7 @@ public class SchedulerIdleState implements SchedulerState {
                 }
             } else {
                 ElevatorClient newClient = new ElevatorClient(scheduler.getReceivePacket().getAddress(),
-                        scheduler.getReceivePacket().getPort(), status);
+                        scheduler.getReceivePacket().getPort(), status.getId());
                 scheduler.addClient(newClient);
             }
         }
