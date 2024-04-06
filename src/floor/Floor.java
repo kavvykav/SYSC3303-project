@@ -1,10 +1,6 @@
 package floor;
 
-import common.FloorData;
-import common.NetworkConstants;
-import common.UDPClient;
-
-import gui.GUI;
+import common.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,7 +9,10 @@ import java.net.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Random;
+
+import static common.NetworkConstants.FLOOR_PORT;
 
 /**
  * The Floor class simulates the arrival of passengers, as well as button
@@ -24,13 +23,19 @@ import java.util.Random;
  * @author Matthew Huybregts 101185221
  *         Date: February 29th, 2024
  */
-public class Floor extends UDPClient {
+public class Floor {
 
     // Input file for floor subsystem
     private final String filename;
 
     // The common format used to validate the timestamps
     private static final DateTimeFormatter timePattern = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
+
+    private final ArrayList<FloorData> passengers;
+
+    private final UDPClient sender;
+
+    private final UDPClient receiver;
 
     /**
      * Constructor for the floor.Floor class
@@ -40,8 +45,10 @@ public class Floor extends UDPClient {
      * @param port    Server port to be passed to common.UDPClient
      */
     public Floor(String file, InetAddress address, int port) {
-        super(address, port);
+        sender = new UDPClient(address, port);
+        receiver = new UDPClient(address, port, FLOOR_PORT);
         filename = file;
+        passengers = new ArrayList<>();
     }
 
     public void sendRequests() {
@@ -77,9 +84,13 @@ public class Floor extends UDPClient {
 
                 // Send data to scheduler.Scheduler via UDP
                 FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);
+                synchronized (passengers) {
+                    passengers.add(data);
+                }
 
-                if (send(data) != 0) {
-                    System.err.println("Floor: Failed to send floor data");
+                FloorRequest request = new FloorRequest(floorNumber, 0, direction);
+                if (sender.send(request) != 0) {
+                    System.err.println("Floor: Failed to send request");
                     continue;
                 }
 
@@ -89,15 +100,68 @@ public class Floor extends UDPClient {
                     int randomMillis = random.nextInt(15000 - 5000 + 1) + 5000;
                     Thread.sleep(randomMillis);
                 } catch (InterruptedException e) {
-                    System.exit(130);
+                    return;
                 }
             }
         } catch (IOException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             System.err.println("Floor: Invalid data, discarding line");
         }
-        System.out.println("Floor: Finished reading input, exiting program");
-        System.exit(0);
+        System.out.println("Floor: Finished reading input");
+    }
+
+    public void receiveResponses(){
+
+        while (true) {
+            // Wait for an elevator arrival
+            ElevatorStatus update = (ElevatorStatus) receiver.receive();
+            FloorRequest floorRequest = null;
+            PassengerRequest passengerRequest = null;
+            FloorData servedPassenger = null;
+
+            // Iterate over our list of waiting passengers
+            synchronized (passengers) {
+                for (FloorData passenger: passengers) {
+                    boolean direction = passenger.getDirection();
+                    int currFloor = passenger.getFloorNumber();
+                    int destFloor = passenger.getCarButton();
+                    if (currFloor == update.getFloor() && direction == update.isGoingUp()) {
+                        // The elevator has arrived at the floor of a passenger
+                        // Check if there is space on the elevator
+                        if (!update.isEmpty()) {
+                            // Send a new request at the passenger floor for a different elevator
+                            floorRequest = new FloorRequest(currFloor, update.getId() * -1, direction);
+                            break;
+                        }
+                        // Board the elevator
+                        passenger.setElevator(update.getId());
+                        passengerRequest = new PassengerRequest(true, update.getId());
+                        floorRequest = new FloorRequest(destFloor, update.getId(), direction);
+
+                    } else if (destFloor== update.getFloor() && passenger.getElevator() == update.getId()) {
+                        // The elevator has arrived at the destination floor of a passengers
+                        // Get off the elevator
+                        passengerRequest = new PassengerRequest(false, update.getId());
+                        servedPassenger = passenger;
+                        break;
+                    }
+                }
+            }
+            // Send a passenger to request to the scheduler (Boarding or Getting Off)
+            if (passengerRequest != null) {
+                receiver.send(passengerRequest);
+            }
+            // Send a request for a floor to the scheduler
+            if (floorRequest != null) {
+                receiver.send(floorRequest);
+            }
+            // If a passenger has been served, remove them from our list
+            if (servedPassenger != null) {
+                synchronized (passengers) {
+                    passengers.remove(servedPassenger);
+                }
+            }
+        }
     }
 
     /**
@@ -107,12 +171,41 @@ public class Floor extends UDPClient {
      */
     public static void main(String[] args) {
 
+        //GUI gui = new GUI();
+
         InetAddress localHost = NetworkConstants.localHost();
         assert (localHost != null);
 
-        GUI gui = new GUI();
-
         Floor floor = new Floor("test_input.txt", localHost, NetworkConstants.SCHEDULER_PORT);
+        Thread sender = new Thread(new Sender(floor), "Sender");
+        Thread receiver = new Thread(new Receiver(floor), "Receiver");
+        sender.start();
+        receiver.start();
+    }
+}
+
+class Sender implements Runnable {
+
+    private final Floor floor;
+
+    public Sender(Floor floor) {
+        this.floor = floor;
+    }
+
+    public void run() {
         floor.sendRequests();
+    }
+}
+
+class Receiver implements Runnable {
+
+    private final Floor floor;
+
+    public Receiver(Floor floor) {
+        this.floor = floor;
+    }
+
+    public void run() {
+        floor.receiveResponses();
     }
 }

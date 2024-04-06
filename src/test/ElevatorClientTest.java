@@ -1,5 +1,6 @@
 package test;
 
+import common.Direction;
 import common.ElevatorStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ class ElevatorClientTest {
 
     @Test
     void GetStatusTest() {
-        ElevatorStatus status = new ElevatorStatus(1, 1, ElevatorStatus.Direction.STATIONARY);
+        ElevatorStatus status = new ElevatorStatus(1, 1, Direction.STATIONARY);
         assertEquals(status, client.getStatus());
     }
 }

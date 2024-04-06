@@ -1,6 +1,6 @@
 package scheduler;
 
-import common.FloorData;
+import common.FloorRequest;
 
 /**
  * This is the SchedulerState interface, which includes a doAction() method and
@@ -8,8 +8,8 @@ import common.FloorData;
  */
 public interface SchedulerState {
     /* The action performed in each state */
-    public FloorData doAction(Scheduler scheduler, FloorData floorData);
+    FloorRequest doAction(Scheduler scheduler, FloorRequest request);
 
     /* Returns a string representation in each state */
-    public String toString();
+    String toString();
 }

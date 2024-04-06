@@ -7,17 +7,6 @@ import java.io.Serializable;
  */
 public class ElevatorStatus implements Serializable {
 
-    /**
-     * For representing the direction of the Elevator.
-     * Moving up, moving down, stationary, or stuck
-     */
-    public enum Direction {
-        STATIONARY,
-        DOWN,
-        UP,
-        STUCK
-    }
-
     // The floor the elevator is currently on
     private int floor;
 
@@ -26,6 +15,12 @@ public class ElevatorStatus implements Serializable {
 
     // The direction of the elevator
     private Direction direction;
+
+    private boolean stopped;
+
+    private boolean goingUp;
+
+    private boolean empty;
 
     /**
      * Initialize the status of an elevator
@@ -38,6 +33,9 @@ public class ElevatorStatus implements Serializable {
         this.id = id;
         this.floor = floor;
         this.direction = direction;
+        this.stopped = false;
+        this.goingUp = false;
+        empty = true;
     }
 
     public synchronized int getId() {
@@ -60,6 +58,30 @@ public class ElevatorStatus implements Serializable {
         this.direction = direction;
     }
 
+    public synchronized boolean isStopped() {
+        return stopped;
+    }
+
+    public synchronized void setStopped(boolean stopped) {
+        this.stopped = stopped;
+    }
+
+    public synchronized boolean isGoingUp() {
+        return goingUp;
+    }
+
+    public synchronized void setGoingUp(boolean goingUp) {
+        this.goingUp = goingUp;
+    }
+
+    public synchronized boolean isEmpty() {
+        return empty;
+    }
+
+    public synchronized void setEmpty(boolean empty) {
+        this.empty = empty;
+    }
+
     @Override
     public boolean equals(Object o) {
 
@@ -76,6 +98,8 @@ public class ElevatorStatus implements Serializable {
         ElevatorStatus data = (ElevatorStatus) o;
         return floor == data.floor
                 && id == data.id
-                && direction == data.direction;
+                && direction == data.direction
+                && stopped == data.stopped
+                && goingUp == data.goingUp;
     }
 }

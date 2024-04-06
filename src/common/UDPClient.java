@@ -35,6 +35,22 @@ public class UDPClient {
         serverPort = port;
     }
 
+    public UDPClient(InetAddress address, int port, int listenPort) {
+
+        try {
+            // This socket will be used to send and receive UDP Datagram packets.
+            sendReceiveSocket = new DatagramSocket(listenPort);
+        } catch (SocketException e) {
+            // e.printStackTrace();
+            System.exit(1);
+        }
+        receivedMsg = new byte[BUFFER_SIZE];
+        receivePacket = new DatagramPacket(receivedMsg, receivedMsg.length);
+
+        serverAddress = address;
+        serverPort = port;
+    }
+
     /**
      * Send data to the client's server
      *

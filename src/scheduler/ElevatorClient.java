@@ -1,5 +1,6 @@
 package scheduler;
 
+import common.Direction;
 import common.ElevatorStatus;
 import java.net.*;
 
@@ -29,7 +30,7 @@ public class ElevatorClient {
         this.address = address;
         this.port = port;
 
-        status = new ElevatorStatus(id, 1, ElevatorStatus.Direction.STATIONARY);
+        status = new ElevatorStatus(id, 1, Direction.STATIONARY);
     }
 
     /**

@@ -1,6 +1,6 @@
 package scheduler;
 
-import common.FloorData;
+import common.FloorRequest;
 
 /**
  * This is the state for when the scheduler.Scheduler receives a request. It
@@ -14,11 +14,14 @@ public class SchedulerRequestReceivedState implements SchedulerState {
      * The action the scheduler.Scheduler performs when in the Request Received
      * state
      */
-    public FloorData doAction(Scheduler scheduler, FloorData data) {
+    public FloorRequest doAction(Scheduler scheduler, FloorRequest request) {
 
-        ElevatorClient client = scheduler.chooseElevator(data);
-        if (client != null && data != null) {
-            if (scheduler.send(data, client.getAddress(), client.getPort()) != 0) {
+        ElevatorClient client = null;
+        if (request != null) {
+            client = scheduler.chooseElevator(request);
+        }
+        if (client != null) {
+            if (scheduler.send(request, client.getAddress(), client.getPort()) != 0) {
                 System.err.println("Scheduler: Failed to send FloorData to elevator");
             }
             scheduler.schedulerPrint("Assigned request to Elevator " + client.getStatus().getId());
