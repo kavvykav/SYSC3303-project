@@ -2,7 +2,7 @@ package test;
 
 import common.Direction;
 import common.ElevatorStatus;
-import common.FloorData;
+import floor.FloorData;
 import org.junit.jupiter.api.*;
 import scheduler.*;
 

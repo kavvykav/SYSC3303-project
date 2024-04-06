@@ -20,6 +20,8 @@ public class ElevatorStatus implements Serializable {
 
     private boolean goingUp;
 
+    private boolean empty;
+
     /**
      * Initialize the status of an elevator
      *
@@ -33,6 +35,7 @@ public class ElevatorStatus implements Serializable {
         this.direction = direction;
         this.stopped = false;
         this.goingUp = false;
+        empty = true;
     }
 
     public synchronized int getId() {
@@ -63,12 +66,20 @@ public class ElevatorStatus implements Serializable {
         this.stopped = stopped;
     }
 
-    public boolean isGoingUp() {
+    public synchronized boolean isGoingUp() {
         return goingUp;
     }
 
-    public void setGoingUp(boolean goingUp) {
+    public synchronized void setGoingUp(boolean goingUp) {
         this.goingUp = goingUp;
+    }
+
+    public synchronized boolean isEmpty() {
+        return empty;
+    }
+
+    public synchronized void setEmpty(boolean empty) {
+        this.empty = empty;
     }
 
     @Override

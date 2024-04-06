@@ -1,6 +1,6 @@
 package test;
 
-import common.FloorData;
+import floor.FloorData;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

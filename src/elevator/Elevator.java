@@ -207,6 +207,16 @@ public class Elevator extends UDPClient implements Runnable {
         motor.interrupt();
     }
 
+    public void addPassenger() {
+        elevatorPrint("Boarding a passenger on floor " + status.getFloor());
+        status.setEmpty(false);
+    }
+
+    public void removePassenger() {
+        elevatorPrint("Passenger getting off on floor " + status.getFloor());
+        status.setEmpty(true);
+    }
+
     /**
      * Add a floor to the queue of floors the elevator will go to
      *
@@ -215,15 +225,19 @@ public class Elevator extends UDPClient implements Runnable {
     public void add(int floor) {
 
         elevatorPrint("Adding floor " + floor);
+        if (floor > numFloors || floor < 1) {
+            return;
+        }
+
         synchronized (requests) {
             // If there are no requests, add the floor
             if (requests.isEmpty()){
                 requests.add(floor);
                 return;
             }
-            // If the direction of the elevator is UP, put the floor in front of the closest higher floor
+            // If the elevator is taking passengers up, put the floor in front of the closest higher floor
             boolean added = false;
-            if (status.getDirection() == Direction.UP) {
+            if (status.isGoingUp()) {
                 for (int i = 0; i < requests.size(); i++) {
                     if (floor < requests.get(i)) {
                         requests.add(i, floor);
@@ -231,9 +245,7 @@ public class Elevator extends UDPClient implements Runnable {
                         break;
                     }
                 }
-            }
-            // If the direction of the elevator is DOWN, put the floor in front of the closest lower floor
-            if (status.getDirection() == Direction.DOWN) {
+            } else {
                 for (int i=0; i < requests.size(); i++) {
                     if (floor > requests.get(i)) {
                         requests.add(i, floor);
@@ -261,7 +273,11 @@ public class Elevator extends UDPClient implements Runnable {
         while (true) {
             // Wait to receive a request
             setCurrentState(new ElevatorIdleState());
-            FloorData receivedData = currentState.doAction(this, null);
+            FloorRequest receivedData = currentState.doAction(this, null);
+
+            if (receivedData == null) {
+                continue;
+            }
 
             // Upon receiving request, start motor and return to idle state
             setCurrentState(new ElevatorRequestReceivedState());
@@ -285,14 +301,13 @@ public class Elevator extends UDPClient implements Runnable {
         InetAddress localHost = NetworkConstants.localHost();
         assert (localHost != null);
 
-        Thread car1 = new Thread(new Elevator(22, localHost, SCHEDULER_PORT, 1), "Elevator 1");
-        Thread car2 = new Thread(new Elevator(22, localHost, SCHEDULER_PORT, 2), "Elevator 2");
-        Thread car3 = new Thread(new Elevator(22, localHost, SCHEDULER_PORT, 3), "Elevator 3");
-        Thread car4 = new Thread(new Elevator(22, localHost, SCHEDULER_PORT, 4), "Elevator 4");
+        int numFloors = 22;
+        int numElevators = 4;
 
-        car1.start();
-        car2.start();
-        car3.start();
-        car4.start();
+        for (int i=1; i<numElevators+1; i++) {
+            Elevator elevator = new Elevator(numFloors, localHost, SCHEDULER_PORT, i);
+            Thread thread = new Thread(elevator, "Elevator " + i);
+            thread.start();
+        }
     }
 }

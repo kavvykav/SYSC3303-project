@@ -1,4 +1,4 @@
-package common;
+package floor;
 
 import java.io.Serializable;
 
@@ -20,9 +20,8 @@ public class FloorData implements Serializable {
     // The floor the passenger wants to go to
     private final int carButton;
 
-    // Flag indicating if the request has been fulfilled
-    // True: request fulfilled, False: request pending
-    private boolean status;
+    // ID of the elevator currently carrying this passenger (0 if there is currently no elevator)
+    private int elevator;
 
     /**
      * Basic constructor for common.FloorData class
@@ -39,7 +38,7 @@ public class FloorData implements Serializable {
         this.floorNumber = floorNumber;
         this.direction = direction;
         this.carButton = carButton;
-        status = false;
+        elevator = 0;
     }
 
     /**
@@ -67,26 +66,27 @@ public class FloorData implements Serializable {
         return timestamp.equals(data.timestamp)
                 && floorNumber == data.floorNumber
                 && direction == data.direction
-                && carButton == data.carButton;
+                && carButton == data.carButton
+                && elevator == data.elevator;
     }
 
-    /**
-     * Getter method for the status
-     * @return The status of the request
-     */
-    public boolean getStatus() {
-        return status;
+    public int getFloorNumber(){
+        return floorNumber;
     }
 
-    /**
-     * Setter method for the status
-     * @param status The value we want to update the status to
-     */
-    public void setStatus(boolean status) {
-        this.status = status;
+    public boolean getDirection(){
+        return direction;
     }
-    public String returnTimeStamp(){return timestamp;}
-    public int returnFloorNumber(){return floorNumber;}
-    public boolean returnDirection(){return direction;}
-    public int returnCarButton(){return carButton;}
+
+    public int getCarButton(){
+        return carButton;
+    }
+
+    public int getElevator() {
+        return elevator;
+    }
+
+    public void setElevator(int elevator) {
+        this.elevator = elevator;
+    }
 }

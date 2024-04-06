@@ -34,7 +34,7 @@ Java `SDK 21`, and Language Level set to `Default SDK` in Intellij.
 ### floor
 
 - **floor.Floor.java:** Represents the floor.Floor subsystem
-- **common.FloorData.java:** Represents the information to be shared between subsystems, including timestamp, floor
+- **floor.FloorData.java:** Represents the information to be shared between subsystems, including timestamp, floor
   number, direction, and requested floor.
 - **common.UDPClient.java:** Handles communication with the scheduler.Scheduler using UDP.
 
@@ -56,7 +56,7 @@ There are seven (7) test files that are included to ensure the system states and
 - **test.ElevatorTest.java**: The tests included in this file are used to ensure that each state that is called is the
   correct state that is required in the elevator subsystem and to ensure elevator.Elevator data correction. States tested include: EstablishingConnection, Idle and MotorRunning. Data tests include: GetNumRequests, GetCurrentRequest, updateRequestsTest, ShouldStop, GetStatus, GetDoorStatus, OpenDoor, ForceCloseDoor, CloseDoor, GetTimerStatus, StartTimer, StopTimer, GetMotorStatus, StartMotor, and Timeout.
 - **test.SchedulerTest.java**: The tests included in this file are used to ensure that each state that is called is the correct state that is required in the scheduler subsystem and to ensure scheduler.Scheduler data correction. States tested include: ResponseReceived, Idle and RequestReceived. Data tests include: GetClient, ChooseElevator, and CanServiceRequest.
-- **test.FloorDataTest.java**: The tests included in this file are used to ensure that the data in a common.FloorData
+- **test.FloorDataTest.java**: The tests included in this file are used to ensure that the data in a floor.FloorData
   object is correct. Floor Number, Timestamp, Car Button, and Direction fields are included in the tests.
 - **test.ElevatorStatusTest.java**: The tests included in this file are used to ensure that the common.ElevatorStatus data is correct. Tests include GetId, GetFloor, SetFloor, GetDirection, and SetDirection.
 - **test.ElevatorClientTest.java**: The tests included in this file are used to ensure that the scheduler.ElevatorClient data is correct. Tests include GetAddress, GetPort, and GetStatus.

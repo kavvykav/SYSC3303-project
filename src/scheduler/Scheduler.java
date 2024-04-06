@@ -1,7 +1,7 @@
 package scheduler;
 
 import common.Direction;
-import common.FloorData;
+import common.FloorRequest;
 import common.UDPServer;
 
 import java.lang.Math;
@@ -16,7 +16,7 @@ public class Scheduler extends UDPServer {
     private static final int NUM_ELEVATORS = 4;
 
     // Port and IP Address
-    private ArrayList<ElevatorClient> elevators;
+    private final ArrayList<ElevatorClient> elevators;
 
     // State of the Scheduler
     private SchedulerState currentState;
@@ -73,11 +73,13 @@ public class Scheduler extends UDPServer {
      * Helper function for determining if the Elevator is available to server the request.
      *
      * @param elevator The elevator to be checked
-     * @param data The request to be served
+     * @param request The request to be served
      *
      * @return True if the elevator can serve the request, false otherwise
      */
-    public boolean canServiceRequest(ElevatorClient elevator, FloorData data) {
+    public boolean canServiceRequest(ElevatorClient elevator, FloorRequest request) {
+
+
 
         // If the elevator is stuck between floors, it cannot serve the request
         if (elevator.getStatus().getDirection() == Direction.STUCK) {
@@ -90,13 +92,13 @@ public class Scheduler extends UDPServer {
         }
 
         // If the elevator is going up and the passenger wants to go up, check the floor number
-        if (elevator.getStatus().getDirection()== Direction.UP && data.returnDirection()) {
-            return elevator.getStatus().getFloor() <= data.returnFloorNumber();
+        if (elevator.getStatus().isGoingUp() && request.isGoingUp()) {
+            return elevator.getStatus().getFloor() <= request.getFloor();
         }
 
         // If the elevator is going down and the passenger wants to go down, check the floor number
-        if (elevator.getStatus().getDirection()== Direction.DOWN && !data.returnDirection()) {
-            return elevator.getStatus().getFloor() >= data.returnFloorNumber();
+        if (!elevator.getStatus().isGoingUp() && !request.isGoingUp()) {
+            return elevator.getStatus().getFloor() >= request.getFloor();
         }
         return false;
     }
@@ -104,22 +106,33 @@ public class Scheduler extends UDPServer {
     /**
      * Algorithm for determining which elevator to use for a request.
      *
-     * @param data The request information
+     * @param request The request information
      *
      * @return The elevator to use
      */
-    public ElevatorClient chooseElevator(FloorData data) {
+    public ElevatorClient chooseElevator(FloorRequest request) {
 
         // Initialize the chosen elevator and the maximum distance, print error if user started Floor before Elevator
         ElevatorClient chosenElevator = null;
         int maxDistance = 22;
 
         for (ElevatorClient elevator : elevators) {
+            if (elevator.getStatus().getId() == request.getElevator() * -1) {
+                continue;
+            }
+            boolean canService = canServiceRequest(elevator, request);
+            int distance = Math.abs(elevator.getStatus().getFloor() - request.getFloor());
+
             // If the elevator can serve request and is closest, choose that elevator
-            int distance = Math.abs(elevator.getStatus().getFloor() - data.returnFloorNumber());
-            if (distance <= maxDistance && canServiceRequest(elevator, data)) {
-                maxDistance = distance;
-                chosenElevator = elevator;
+            if (canService) {
+                if (elevator.getStatus().getId() == request.getElevator()) {
+                    chosenElevator = elevator;
+                    break;
+                }
+                else if (distance <= maxDistance) {
+                    maxDistance = distance;
+                    chosenElevator = elevator;
+                }
             }
         }
         return chosenElevator;
@@ -134,20 +147,16 @@ public class Scheduler extends UDPServer {
         while (true) {
 
             // Idle state : wait for request from floor
-            FloorData data = currentState.doAction(this, null);
-            if (data == null) {
+            FloorRequest request = currentState.doAction(this, null);
+            if (request == null) {
                 continue; // Remain in the idle state
             }
 
             // We have received a request, check the status of it
-            if (data.getStatus()) {
-                schedulerPrint("Received a response from an Elevator");
-                setCurrentState(new SchedulerResponseReceivedState());
-            } else {
-                schedulerPrint("Received a new Request From the Floor");
-                setCurrentState(new SchedulerRequestReceivedState());
-            }
-            currentState.doAction(this, data);
+            schedulerPrint("Received a new Request From the Floor");
+            setCurrentState(new SchedulerRequestReceivedState());
+
+            currentState.doAction(this, request);
             setCurrentState(new SchedulerIdleState());
             schedulerPrint("Waiting for a request");
         }
