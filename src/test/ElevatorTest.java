@@ -162,6 +162,22 @@ class ElevatorTest {
         assertTrue(elevator.getMotorStatus().isInterrupted());
     }
 
+    @Test
+    void addPassengerTest(){
+        assertTrue(elevator.getStatus().isEmpty());
+        elevator.addPassenger();
+        assertFalse(elevator.getStatus().isEmpty());
+    }
+
+    @Test
+    void removePassengerTest(){
+        assertTrue(elevator.getStatus().isEmpty());
+        elevator.addPassenger();
+        assertFalse(elevator.getStatus().isEmpty());
+        elevator.removePassenger();
+        assertTrue(elevator.getStatus().isEmpty());
+    }
+
     // None of the following methods have been implemented thus these can not be tested
     /*
     @Test

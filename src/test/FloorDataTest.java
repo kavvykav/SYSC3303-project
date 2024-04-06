@@ -15,22 +15,32 @@ class FloorDataTest {
         testPacket = new FloorData("10:25:35",15,true,15);
     }
     @Test
-    void getTime() {
-        assertEquals(testPacket.returnTimeStamp(),"10:25:35");
+    void getTimeTest() {
+        assertEquals(testPacket.getTimeStamp(),"10:25:35");
     }
 
     @Test
-    void getFloor() {
-        assertEquals(testPacket.returnFloorNumber(),15);
+    void getFloorTest() {
+        assertEquals(testPacket.getFloorNumber(),15);
     }
 
     @Test
-    void getDirection() {
-        assertTrue(testPacket.returnDirection());
+    void getDirectionTest() {
+        assertTrue(testPacket.getDirection());
     }
 
     @Test
-    void getCarButton() {
-        assertEquals(testPacket.returnCarButton(),15);
+    void getCarButtonTest() {
+        assertEquals(testPacket.getCarButton(),15);
     }
+    @Test
+    void getElevatorTest() {
+        assertEquals(testPacket.getElevator(),0);
+    }
+    @Test
+    void setElevatorTest() {
+        testPacket.setElevator(5);
+        assertEquals(5, testPacket.getElevator());
+    }
+
 }
