@@ -1,6 +1,6 @@
 package scheduler;
 
-import common.ElevatorStatus;
+import common.Direction;
 import common.FloorData;
 import common.UDPServer;
 
@@ -80,22 +80,22 @@ public class Scheduler extends UDPServer {
     public boolean canServiceRequest(ElevatorClient elevator, FloorData data) {
 
         // If the elevator is stuck between floors, it cannot serve the request
-        if (elevator.getStatus().getDirection() == ElevatorStatus.Direction.STUCK) {
+        if (elevator.getStatus().getDirection() == Direction.STUCK) {
             return false;
         }
 
         // If the elevator is not currently serving a request, it can serve the request
-        if (elevator.getStatus().getDirection() == ElevatorStatus.Direction.STATIONARY) {
+        if (elevator.getStatus().getDirection() == Direction.STATIONARY) {
             return true;
         }
 
         // If the elevator is going up and the passenger wants to go up, check the floor number
-        if (elevator.getStatus().getDirection()==ElevatorStatus.Direction.UP && data.returnDirection()) {
+        if (elevator.getStatus().getDirection()== Direction.UP && data.returnDirection()) {
             return elevator.getStatus().getFloor() <= data.returnFloorNumber();
         }
 
         // If the elevator is going down and the passenger wants to go down, check the floor number
-        if (elevator.getStatus().getDirection()==ElevatorStatus.Direction.DOWN && !data.returnDirection()) {
+        if (elevator.getStatus().getDirection()== Direction.DOWN && !data.returnDirection()) {
             return elevator.getStatus().getFloor() >= data.returnFloorNumber();
         }
         return false;

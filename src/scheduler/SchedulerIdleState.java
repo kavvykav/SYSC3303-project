@@ -1,5 +1,6 @@
 package scheduler;
 
+import common.Direction;
 import common.ElevatorStatus;
 import common.FloorData;
 
@@ -25,7 +26,7 @@ public class SchedulerIdleState implements SchedulerState {
             ElevatorClient client = scheduler.getClient(status.getId());
             if (client != null) {
                 client.setStatus(status);
-                if (status.getDirection() == ElevatorStatus.Direction.STUCK) {
+                if (status.getDirection() == Direction.STUCK) {
                     scheduler.schedulerPrint("Elevator " + status.getId() + " is stuck between floors");
                 }
             } else {

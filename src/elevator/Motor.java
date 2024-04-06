@@ -1,6 +1,6 @@
 package elevator;
 
-import common.ElevatorStatus;
+import common.Direction;
 import common.UDPClient;
 
 import java.net.InetAddress;
@@ -46,7 +46,7 @@ public class Motor extends UDPClient implements Runnable {
     public void run() {
 
         // If the elevator is not moving or there are no requests, return
-        if (elevator.getStatus().getDirection() == ElevatorStatus.Direction.STATIONARY ||
+        if (elevator.getStatus().getDirection() == Direction.STATIONARY ||
                 elevator.getNumRequests() == 0) {
             return;
         }
@@ -59,6 +59,10 @@ public class Motor extends UDPClient implements Runnable {
                 elevator.elevatorPrint("Stopping at floor " + elevator.getStatus().getFloor());
                 Integer floor = elevator.updateRequests();
 
+                // Let the elevator know that we have stopped at floor
+                elevator.getStatus().setStopped(true);
+                send(elevator.getStatus());
+
                 // Simulate opening and closing the door
                 elevator.openDoor();
                 try {
@@ -66,17 +70,18 @@ public class Motor extends UDPClient implements Runnable {
                 } catch (InterruptedException e) {
                     return;
                 }
+                elevator.getStatus().setStopped(false);
 
                 // Check if we have any more requests and update the status accordingly
                 if (elevator.getNumRequests() == 0) {
-                    elevator.getStatus().setDirection(ElevatorStatus.Direction.STATIONARY);
+                    elevator.getStatus().setDirection(Direction.STATIONARY);
                     send(elevator.getStatus());
                     return;
                 }
                 else if (elevator.getCurrentRequest() > floor) {
-                    elevator.getStatus().setDirection(ElevatorStatus.Direction.UP);
+                    elevator.getStatus().setDirection(Direction.UP);
                 } else {
-                    elevator.getStatus().setDirection(ElevatorStatus.Direction.DOWN);
+                    elevator.getStatus().setDirection(Direction.DOWN);
                 }
                 send(elevator.getStatus());
 
@@ -101,12 +106,12 @@ public class Motor extends UDPClient implements Runnable {
                 }
             }
             // Simulate going from one floor to another
-            int sleepTime = (rand.nextInt(50) == 15) ? 10 : 5;
+            int sleepTime = (rand.nextInt(100) == 15) ? 10 : 5;
             elevator.startTimer(8);
             try {
                 Thread.sleep(sleepTime * 1000L);
             } catch(InterruptedException e) {
-                elevator.getStatus().setDirection(ElevatorStatus.Direction.STUCK);
+                elevator.getStatus().setDirection(Direction.STUCK);
                 elevator.elevatorPrint("Stuck between floors, shutting down");
                 send(elevator.getStatus());
                 return;
@@ -115,7 +120,7 @@ public class Motor extends UDPClient implements Runnable {
 
             // Update fields
             int currentFloor = elevator.getStatus().getFloor();
-            if (elevator.getStatus().getDirection() == ElevatorStatus.Direction.UP) {
+            if (elevator.getStatus().getDirection() == Direction.UP) {
                 elevator.getStatus().setFloor(currentFloor + 1);
             } else {
                 elevator.getStatus().setFloor(currentFloor - 1);

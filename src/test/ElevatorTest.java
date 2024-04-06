@@ -1,5 +1,6 @@
 package test;
 
+import common.Direction;
 import common.ElevatorStatus;
 import elevator.*;
 import org.junit.jupiter.api.*;
@@ -21,7 +22,7 @@ class ElevatorTest {
             throw new RuntimeException(e);
         }
         elevator = new Elevator(22, address, 5007, 1);
-        elevator.getStatus().setDirection(ElevatorStatus.Direction.STATIONARY);
+        elevator.getStatus().setDirection(Direction.STATIONARY);
     }
 
     @Test
@@ -44,7 +45,7 @@ class ElevatorTest {
     }
     @Test
     void GetStatusTest(){
-        ElevatorStatus status = new ElevatorStatus(1, 1, ElevatorStatus.Direction.STATIONARY);
+        ElevatorStatus status = new ElevatorStatus(1, 1, Direction.STATIONARY);
         assertEquals(status, elevator.getStatus());
     }
     @Test
@@ -139,7 +140,7 @@ class ElevatorTest {
     @Test
     void startMotorTest(){
         elevator.add(22);
-        elevator.getStatus().setDirection(ElevatorStatus.Direction.UP);
+        elevator.getStatus().setDirection(Direction.UP);
         elevator.startMotor();
         assertNotNull(elevator.getMotorStatus());
         assertTrue(elevator.getMotorStatus().isAlive());
@@ -150,7 +151,7 @@ class ElevatorTest {
     @Test
     void timeoutTest(){
         elevator.add(22);
-        elevator.getStatus().setDirection(ElevatorStatus.Direction.UP);
+        elevator.getStatus().setDirection(Direction.UP);
         elevator.startMotor();
         assertNotNull(elevator.getMotorStatus());
         assertTrue(elevator.getMotorStatus().isAlive());

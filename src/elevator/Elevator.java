@@ -1,10 +1,8 @@
 package elevator;
 
-import common.ElevatorStatus;
-import common.FloorData;
-import common.NetworkConstants;
+import common.*;
+
 import static common.NetworkConstants.SCHEDULER_PORT;
-import common.UDPClient;
 
 import java.net.*;
 import java.util.ArrayList;
@@ -44,7 +42,7 @@ public class Elevator extends UDPClient implements Runnable {
         super(address, port);
         this.numFloors = numFloors;
 
-        status = new ElevatorStatus(id, 1, ElevatorStatus.Direction.STATIONARY);
+        status = new ElevatorStatus(id, 1, Direction.STATIONARY);
         requests = new ArrayList<>(0);
         door = false;
     }
@@ -225,7 +223,7 @@ public class Elevator extends UDPClient implements Runnable {
             }
             // If the direction of the elevator is UP, put the floor in front of the closest higher floor
             boolean added = false;
-            if (status.getDirection() == ElevatorStatus.Direction.UP) {
+            if (status.getDirection() == Direction.UP) {
                 for (int i = 0; i < requests.size(); i++) {
                     if (floor < requests.get(i)) {
                         requests.add(i, floor);
@@ -235,7 +233,7 @@ public class Elevator extends UDPClient implements Runnable {
                 }
             }
             // If the direction of the elevator is DOWN, put the floor in front of the closest lower floor
-            if (status.getDirection() == ElevatorStatus.Direction.DOWN) {
+            if (status.getDirection() == Direction.DOWN) {
                 for (int i=0; i < requests.size(); i++) {
                     if (floor > requests.get(i)) {
                         requests.add(i, floor);
