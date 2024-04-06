@@ -2,8 +2,11 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.InetAddress;
 
-public class GUI {
+import common.UDPClient;
+
+public class GUI extends UDPClient {
 
     private JFrame frame;
 
@@ -34,6 +37,18 @@ public class GUI {
     // Font constants
     private static final Font FONT = new Font("Monospaced", Font.BOLD, 20);
     private static final Font ERROR_FONT = new Font("Monospaced", Font.BOLD, 14);
+
+    /**
+     * The constructor for the GUI. It simply inherits from the UDPClient class,
+     * as it is a client in the Elevator Control System.
+     *
+     * @param address: The IP address of the server.
+     * @param port:    The Port that the GUI listens for updates from the Scheduler.
+     */
+    public GUI(InetAddress address, int port) {
+        super(address, port);
+        createAndShowGUI();
+    }
 
     /**
      * Creates and shows the GUI that will be made. It displays the current
@@ -199,26 +214,5 @@ public class GUI {
      */
     public void appendToErrorLog(int elevator, String msg) {
         errorLog.append("Elevator " + elevator + ": " + msg + "\n");
-    }
-
-    // For testing purposes only, to be removed
-    public static void main(String args[]) {
-        GUI g = new GUI();
-        g.createAndShowGUI();
-        g.updateLocationField(1, 20);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            System.exit(1);
-        }
-        g.updateLocationField(1, 1);
-        g.appendToErrorLog(1, "Door Fault");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            System.exit(1);
-        }
-        g.appendToErrorLog(2, "Elevator Stuck");
-
     }
 }
