@@ -9,7 +9,7 @@ import common.NetworkConstants;
 import static common.NetworkConstants.GUI_PORT;
 import static common.NetworkConstants.SCHEDULER_PORT;
 
-public class GUIHandler extends UDPClient implements Runnable {
+public class GUIHandler extends UDPClient {
     private static GUI gui;
 
     /**
@@ -26,16 +26,13 @@ public class GUIHandler extends UDPClient implements Runnable {
     /**
      * The thread routine for the GUIHandler.
      */
-    public void run() {
+    public void getUpdatesFromScheduler() {
         while (true) {
-            System.out.println("Start of thread routine");
             Object receivedData = receive();
-            System.out.println("Object received");
             synchronized (receivedData) {
                 if (receivedData instanceof ElevatorStatus) {
                     ElevatorStatus status = (ElevatorStatus) receivedData;
                     int elevator = status.getId();
-                    System.out.println("Elevator ID: " + elevator);
                     if (status.getDirection() == Direction.STUCK) {
                         gui.appendToErrorLog(elevator,
                                 "Currently stuck somewhere. Elevator will be out of service indefinitely.");
@@ -45,8 +42,7 @@ public class GUIHandler extends UDPClient implements Runnable {
                         Integer floor = Integer.valueOf(status.getFloor());
                         gui.updateLocationField(elevator, floor);
                     }
-                }
-                else {
+                } else {
                     System.err.println("Did not receive the correct type of information");
                 }
             }
@@ -54,11 +50,7 @@ public class GUIHandler extends UDPClient implements Runnable {
     }
 
     public static void main(String[] args) {
-        GUI gui = new GUI();
-        for (int i = 0; i < 4; i++) {
-            GUIHandler handler = new GUIHandler(NetworkConstants.localHost(), GUI_PORT, gui);
-            Thread thread = new Thread(handler, "GUI Thread" + (i+1));
-            thread.start();
-        }
+        GUIHandler guiHandler = new GUIHandler(NetworkConstants.localHost(), GUI_PORT, new GUI());
+        guiHandler.getUpdatesFromScheduler();
     }
 }

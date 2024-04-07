@@ -22,9 +22,9 @@ public class UDPServer {
      * The constructor for the common.UDPServer object.
      * 
      **/
-    public UDPServer() {
+    public UDPServer(int port) {
         try {
-            receiveSocket = new DatagramSocket(5000);
+            receiveSocket = new DatagramSocket(port);
             sendSocket = new DatagramSocket();
         } catch (SocketException e) {
             // e.printStackTrace();

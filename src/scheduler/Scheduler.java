@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * This is the main component of the scheduler.Scheduler Subsystem
  */
-public class Scheduler extends UDPServer {
+public class Scheduler extends UDPServer implements Runnable {
 
     // Number of elevators
     private static final int NUM_ELEVATORS = 4;
@@ -24,8 +24,8 @@ public class Scheduler extends UDPServer {
     /**
      * The constructor for the scheduler.Scheduler object.
      */
-    public Scheduler() {
-        super();
+    public Scheduler(int port) {
+        super(port);
         elevators = new ArrayList<>(NUM_ELEVATORS);
         setCurrentState(new SchedulerIdleState());
     }
@@ -78,9 +78,6 @@ public class Scheduler extends UDPServer {
      * @return True if the elevator can serve the request, false otherwise
      */
     public boolean canServiceRequest(ElevatorClient elevator, FloorRequest request) {
-
-
-
         // If the elevator is stuck between floors, it cannot serve the request
         if (elevator.getStatus().getDirection() == Direction.STUCK) {
             return false;
@@ -141,9 +138,7 @@ public class Scheduler extends UDPServer {
     /**
      * The main routine for the scheduler
      */
-    public void handleRequests() {
-
-        // Repeat indefinitely
+     public void run() {        // Repeat indefinitely
         while (true) {
 
             // Idle state : wait for request from floor
@@ -170,9 +165,5 @@ public class Scheduler extends UDPServer {
         System.out.println("Scheduler: " + output);
     }
 
-    public static void main(String[] args) {
-        Scheduler scheduler = new Scheduler();
-        scheduler.schedulerPrint("Starting...");
-        scheduler.handleRequests();
-    }
+
 }
