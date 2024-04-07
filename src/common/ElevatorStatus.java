@@ -29,12 +29,12 @@ public class ElevatorStatus implements Serializable {
      * @param floor The current floor of the elevator
      * @param direction The direction of the elevator
      */
-    public ElevatorStatus(int id, int floor, Direction direction) {
+    public ElevatorStatus(int id, int floor, Direction direction, boolean goingUp) {
         this.id = id;
         this.floor = floor;
         this.direction = direction;
         this.stopped = false;
-        this.goingUp = false;
+        this.goingUp = goingUp;
         empty = true;
     }
 

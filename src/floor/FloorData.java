@@ -89,4 +89,5 @@ public class FloorData implements Serializable {
     public void setElevator(int elevator) {
         this.elevator = elevator;
     }
+    public String getTimeStamp(){return timestamp;}
 }

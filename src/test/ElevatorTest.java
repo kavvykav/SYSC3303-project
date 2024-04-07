@@ -45,7 +45,7 @@ class ElevatorTest {
     }
     @Test
     void GetStatusTest(){
-        ElevatorStatus status = new ElevatorStatus(1, 1, Direction.STATIONARY);
+        ElevatorStatus status = new ElevatorStatus(1, 1, Direction.STATIONARY, false);
         assertEquals(status, elevator.getStatus());
     }
     @Test
@@ -160,6 +160,22 @@ class ElevatorTest {
         elevator.timeout();
         assertTrue(elevator.getMotorStatus().isAlive());
         assertTrue(elevator.getMotorStatus().isInterrupted());
+    }
+
+    @Test
+    void addPassengerTest(){
+        assertTrue(elevator.getStatus().isEmpty());
+        elevator.addPassenger();
+        assertFalse(elevator.getStatus().isEmpty());
+    }
+
+    @Test
+    void removePassengerTest(){
+        assertTrue(elevator.getStatus().isEmpty());
+        elevator.addPassenger();
+        assertFalse(elevator.getStatus().isEmpty());
+        elevator.removePassenger();
+        assertTrue(elevator.getStatus().isEmpty());
     }
 
     // None of the following methods have been implemented thus these can not be tested
