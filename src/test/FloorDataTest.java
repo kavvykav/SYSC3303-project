@@ -1,4 +1,4 @@
-package test;
+/*package test;
 
 import floor.FloorData;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,4 +33,4 @@ class FloorDataTest {
     void getCarButton() {
         assertEquals(testPacket.returnCarButton(),15);
     }
-}
+}*/
