@@ -26,7 +26,7 @@ class MotorTest {
         motor = new Motor(elevator, address, port);
     }
     @Test
-    void getElevator() {
+    void getElevatorTest() {
         assertEquals(elevator, motor.getElevator());
     }
 }

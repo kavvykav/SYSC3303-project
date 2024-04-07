@@ -205,4 +205,57 @@ public class GUI {
     public void appendToErrorLog(int elevator, String msg) {
         errorLog.append("Elevator " + elevator + ": " + msg + "\n");
     }
+
+    //METHODS BELOW ARE FOR TESTING PURPOSES ONLY
+
+    public JFrame getFrame(){return frame;}
+
+    public JPanel getPanel1() {
+        return panel1;
+    }
+    public JPanel getPanel2() {
+        return panel2;
+    }
+    public JPanel getPanel3() {
+        return panel3;
+    }
+    public JPanel getPanel4() {
+        return panel4;
+    }
+    public JPanel getErrorPanel() {
+        return errorPanel;
+    }
+
+    public JLabel getLabel1() {
+        return label1;
+    }
+    public JLabel getLabel2() {
+        return label2;
+    }
+    public JLabel getLabel3() {
+        return label3;
+    }
+    public JLabel getLabel4() {
+        return label4;
+    }
+
+    public JLabel getErrorLabel() {
+        return errorLabel;
+    }
+
+    public void setElevator1Position(JTextField elevator1Position) {
+        this.elevator1Position = elevator1Position;
+    }
+    public void setElevator2Position(JTextField elevator2Position) {
+        this.elevator2Position = elevator2Position;
+    }
+    public void setElevator3Position(JTextField elevator3Position) {
+        this.elevator3Position = elevator3Position;
+    }
+    public void setElevator4Position(JTextField elevator4Position) {
+        this.elevator4Position = elevator4Position;
+    }
+    public void setErrorLog(JTextArea errorLog) {
+        this.errorLog = errorLog;
+    }
 }
