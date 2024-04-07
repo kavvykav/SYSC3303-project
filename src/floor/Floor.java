@@ -171,8 +171,6 @@ public class Floor {
      */
     public static void main(String[] args) {
 
-        //GUI gui = new GUI();
-
         InetAddress localHost = NetworkConstants.localHost();
         assert (localHost != null);
 

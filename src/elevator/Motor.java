@@ -7,7 +7,8 @@ import java.net.InetAddress;
 import java.util.Random;
 
 /**
- * Motor simulates the movement of the Elevator. It is implemented as thread so the Elevator can receive requests
+ * Motor simulates the movement of the Elevator. It is implemented as thread so
+ * the Elevator can receive requests
  * from the Scheduler while it is running.
  */
 public class Motor extends UDPClient implements Runnable {
@@ -22,8 +23,8 @@ public class Motor extends UDPClient implements Runnable {
      * Creates a Motor instance
      *
      * @param elevator The Elevator instance
-     * @param address The address of the Scheduler
-     * @param port The port the Scheduler is listening on
+     * @param address  The address of the Scheduler
+     * @param port     The port the Scheduler is listening on
      */
     public Motor(Elevator elevator, InetAddress address, int port) {
 
@@ -37,11 +38,15 @@ public class Motor extends UDPClient implements Runnable {
      *
      * @return the elevator object.
      */
-    public Elevator getElevator(){ return elevator;}
+    public Elevator getElevator() {
+        return elevator;
+    }
 
     /**
-     * The main sequence for the Motor thread. Goes to the floors in the Elevator's list of requests, opening and
-     * closing the door at each stop. Exits when there are no more requests to serve.
+     * The main sequence for the Motor thread. Goes to the floors in the Elevator's
+     * list of requests, opening and
+     * closing the door at each stop. Exits when there are no more requests to
+     * serve.
      */
     public void run() {
 
@@ -77,8 +82,7 @@ public class Motor extends UDPClient implements Runnable {
                     elevator.getStatus().setDirection(Direction.STATIONARY);
                     send(elevator.getStatus());
                     return;
-                }
-                else if (elevator.getCurrentRequest() > floor) {
+                } else if (elevator.getCurrentRequest() > floor) {
                     elevator.getStatus().setDirection(Direction.UP);
                 } else {
                     elevator.getStatus().setDirection(Direction.DOWN);
@@ -90,9 +94,11 @@ public class Motor extends UDPClient implements Runnable {
                     elevator.closeDoor();
                     elevator.elevatorPrint("Elevator door successfully closed");
                 } catch (Exception e) {
+                    elevator.getStatus().setDirection(Direction.DOOR_STUCK);
                     elevator.elevatorPrint("Elevator door is stuck open, trying again");
 
-                    // Sleep for a random amount of time between 5 and 15 seconds to simulate the door being stuck
+                    // Sleep for a random amount of time between 5 and 15 seconds to simulate the
+                    // door being stuck
                     int stuckTime = rand.nextInt(10000) + 5000;
                     try {
                         Thread.sleep(stuckTime);
@@ -102,7 +108,8 @@ public class Motor extends UDPClient implements Runnable {
                     }
                     elevator.forceCloseDoor();
                     elevator.elevatorPrint("Elevator door successfully closed " +
-                            "after being stuck for " + stuckTime/1000 + " seconds");
+                            "after being stuck for " + stuckTime / 1000 + " seconds");
+                    elevator.getStatus().setDirection(Direction.STATIONARY);
                 }
             }
             // Simulate going from one floor to another
@@ -110,7 +117,7 @@ public class Motor extends UDPClient implements Runnable {
             elevator.startTimer(8);
             try {
                 Thread.sleep(sleepTime * 1000L);
-            } catch(InterruptedException e) {
+            } catch (InterruptedException e) {
                 elevator.getStatus().setDirection(Direction.STUCK);
                 elevator.elevatorPrint("Stuck between floors, shutting down");
                 send(elevator.getStatus());

@@ -4,9 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.InetAddress;
 
+import common.Direction;
+import common.ElevatorStatus;
 import common.UDPClient;
 
-public class GUI extends UDPClient {
+public class GUI {
 
     private JFrame frame;
 
@@ -39,22 +41,10 @@ public class GUI extends UDPClient {
     private static final Font ERROR_FONT = new Font("Monospaced", Font.BOLD, 14);
 
     /**
-     * The constructor for the GUI. It simply inherits from the UDPClient class,
-     * as it is a client in the Elevator Control System.
-     *
-     * @param address: The IP address of the server.
-     * @param port:    The Port that the GUI listens for updates from the Scheduler.
-     */
-    public GUI(InetAddress address, int port) {
-        super(address, port);
-        createAndShowGUI();
-    }
-
-    /**
      * Creates and shows the GUI that will be made. It displays the current
      * position of all four elevators, plus any faults.
      */
-    public void createAndShowGUI() {
+    public GUI() {
         // Set Up JFrame
         frame = new JFrame("Elevator Control System");
         frame.setSize(new Dimension(1920, 1080));
