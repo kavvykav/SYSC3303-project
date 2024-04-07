@@ -52,7 +52,7 @@ public class GUITest {
         Container contentPane = frame.getContentPane();
         assertThat(contentPane.getComponents()).contains(gui.getPanel1(), gui.getPanel2(), gui.getPanel3(), gui.getPanel4(), gui.getErrorPanel());
 
-        // Verify the layout and background color
+        // Verify the layout
         assertThat(contentPane.getLayout()).isInstanceOf(GridLayout.class);
 
         // Verify that the labels are initialized

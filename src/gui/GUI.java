@@ -216,6 +216,8 @@ public class GUI extends UDPClient {
         errorLog.append("Elevator " + elevator + ": " + msg + "\n");
     }
 
+    //METHODS BELOW ARE FOR TESTING PURPOSES ONLY
+
     public JFrame getFrame(){return frame;}
 
     public JPanel getPanel1() {

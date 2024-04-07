@@ -3,7 +3,6 @@ package test;
 import common.Direction;
 import common.ElevatorStatus;
 import common.FloorRequest;
-import floor.FloorData;
 import org.junit.jupiter.api.*;
 import scheduler.*;
 
@@ -71,10 +70,10 @@ class SchedulerTest {
     @Test
     void ChooseElevatorTest(){
         FloorRequest req1 = new FloorRequest( 16, 0, false);
-        elevator1.setStatus(new ElevatorStatus(1, 18, Direction.UP));
-        elevator2.setStatus(new ElevatorStatus(2, 9, Direction.STATIONARY));
-        elevator3.setStatus(new ElevatorStatus(3, 1, Direction.UP));
-        elevator4.setStatus(new ElevatorStatus(4, 20, Direction.DOWN));
+        elevator1.setStatus(new ElevatorStatus(1, 18, Direction.UP, true));
+        elevator2.setStatus(new ElevatorStatus(2, 9, Direction.STATIONARY, false));
+        elevator3.setStatus(new ElevatorStatus(3, 1, Direction.DOWN, true));
+        elevator4.setStatus(new ElevatorStatus(4, 20, Direction.DOWN, false));
         scheduler.addClient(elevator1);
         scheduler.addClient(elevator2);
         scheduler.addClient(elevator3);
@@ -103,10 +102,10 @@ class SchedulerTest {
     @Test
     void CanServiceRequestTest(){
         FloorRequest data = new FloorRequest(16, 0, true);
-        elevator1.setStatus(new ElevatorStatus(1, 18, Direction.UP));
-        elevator2.setStatus(new ElevatorStatus(2, 9, Direction.STATIONARY));
-        elevator3.setStatus(new ElevatorStatus(3, 1, Direction.UP));
-        elevator4.setStatus(new ElevatorStatus(4, 20, Direction.DOWN));
+        elevator1.setStatus(new ElevatorStatus(1, 18, Direction.UP, true));
+        elevator2.setStatus(new ElevatorStatus(2, 9, Direction.STATIONARY, false));
+        elevator3.setStatus(new ElevatorStatus(3, 1, Direction.UP, true));
+        elevator4.setStatus(new ElevatorStatus(4, 20, Direction.DOWN, false));
         assertFalse(scheduler.canServiceRequest(elevator1, data));
         assertTrue(scheduler.canServiceRequest(elevator2, data));
         assertTrue(scheduler.canServiceRequest(elevator3, data));

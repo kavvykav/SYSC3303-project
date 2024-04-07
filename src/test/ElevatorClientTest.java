@@ -41,7 +41,7 @@ class ElevatorClientTest {
 
     @Test
     void GetStatusTest() {
-        ElevatorStatus status = new ElevatorStatus(1, 1, Direction.STATIONARY);
+        ElevatorStatus status = new ElevatorStatus(1, 1, Direction.STATIONARY, false);
         assertEquals(status, client.getStatus());
     }
 }

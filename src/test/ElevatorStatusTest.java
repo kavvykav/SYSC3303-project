@@ -15,10 +15,10 @@ class ElevatorStatusTest {
 
     @BeforeEach
     void setUp() {
-        status1 = new ElevatorStatus(1,12, Direction.STATIONARY);
-        status2 = new ElevatorStatus(2,7, Direction.DOWN);
-        status3 = new ElevatorStatus(3,2, Direction.UP);
-        status4 = new ElevatorStatus(4,9, Direction.UP);
+        status1 = new ElevatorStatus(1,12, Direction.STATIONARY, true);
+        status2 = new ElevatorStatus(2,7, Direction.DOWN, false);
+        status3 = new ElevatorStatus(3,2, Direction.UP, true);
+        status4 = new ElevatorStatus(4,9, Direction.UP, false);
     }
 
     @Test
@@ -67,5 +67,65 @@ class ElevatorStatusTest {
         assertEquals(Direction.STATIONARY, status2.getDirection());
         assertEquals(Direction.STATIONARY, status3.getDirection());
         assertEquals(Direction.DOWN, status4.getDirection());
+    }
+
+    @Test
+    void isStoppedTest(){
+        assertFalse(status1.isStopped());
+        assertFalse(status2.isStopped());
+        assertFalse(status3.isStopped());
+        assertFalse(status4.isStopped());
+    }
+
+    @Test
+    void setStoppedTest(){
+        status1.setStopped(true);
+        assertTrue(status1.isStopped());
+        status2.setStopped(true);
+        assertTrue(status2.isStopped());
+        status3.setStopped(true);
+        assertTrue(status3.isStopped());
+        status4.setStopped(true);
+        assertTrue(status4.isStopped());
+    }
+
+    @Test
+    void isGoingUpTest(){
+        assertTrue(status1.isGoingUp());
+        assertFalse(status2.isGoingUp());
+        assertTrue(status3.isGoingUp());
+        assertFalse(status4.isGoingUp());
+    }
+
+    @Test
+    void setGoingUpTest(){
+        status1.setGoingUp(false);
+        assertFalse(status1.isGoingUp());
+        status2.setGoingUp(true);
+        assertTrue(status2.isGoingUp());
+        status3.setGoingUp(false);
+        assertFalse(status3.isGoingUp());
+        status4.setGoingUp(true);
+        assertTrue(status4.isGoingUp());
+    }
+
+    @Test
+    void isEmptyTest(){
+        assertTrue(status1.isEmpty());
+        assertTrue(status2.isEmpty());
+        assertTrue(status3.isEmpty());
+        assertTrue(status4.isEmpty());
+    }
+
+    @Test
+    void setEmptyTest(){
+        status1.setEmpty(false);
+        assertFalse(status1.isEmpty());
+        status2.setEmpty(false);
+        assertFalse(status2.isEmpty());
+        status3.setEmpty(false);
+        assertFalse(status3.isEmpty());
+        status4.setEmpty(false);
+        assertFalse(status4.isEmpty());
     }
 }
