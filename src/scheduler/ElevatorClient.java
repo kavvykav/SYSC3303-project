@@ -30,7 +30,7 @@ public class ElevatorClient {
         this.address = address;
         this.port = port;
 
-        status = new ElevatorStatus(id, 1, Direction.STATIONARY);
+        status = new ElevatorStatus(id, 1, Direction.STATIONARY, false);
     }
 
     /**
