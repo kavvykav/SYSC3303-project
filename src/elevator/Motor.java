@@ -97,6 +97,7 @@ public class Motor extends UDPClient implements Runnable {
                     Direction previousDirection = elevator.getStatus().getDirection();
                     elevator.getStatus().setDirection(Direction.DOOR_STUCK);
                     elevator.elevatorPrint("Elevator door is stuck open, trying again");
+                    send(elevator.getStatus());
 
                     // Sleep for a random amount of time between 5 and 15 seconds to simulate the
                     // door being stuck
@@ -111,6 +112,7 @@ public class Motor extends UDPClient implements Runnable {
                     elevator.elevatorPrint("Elevator door successfully closed " +
                             "after being stuck for " + stuckTime / 1000 + " seconds");
                     elevator.getStatus().setDirection(previousDirection);
+                    send(elevator.getStatus());
                 }
             }
             // Simulate going from one floor to another

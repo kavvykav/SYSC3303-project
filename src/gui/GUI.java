@@ -2,6 +2,8 @@ package gui;
 
 import java.net.InetAddress;
 
+import java.util.ArrayList;
+
 import common.Direction;
 import common.ElevatorStatus;
 import common.UDPClient;
@@ -28,7 +30,7 @@ public class GUI extends UDPClient {
      * The thread routine for the GUIHandler.
      */
     public void receiveUpdates() {
-
+        ArrayList<Integer> elevatorsWithStuckDoors = new ArrayList<Integer>();
         while (true) {
             Object receivedData = receive();
             if (receivedData instanceof ElevatorStatus) {
@@ -39,16 +41,22 @@ public class GUI extends UDPClient {
                                 "Stuck between floors. Unavailable.");
                 } else if (status.getDirection() == Direction.DOOR_STUCK) {
                     console.appendToErrorLog(elevator, "Door is stuck. Elevator will be temporarily out of service.");
+                    elevatorsWithStuckDoors.add(Integer.valueOf(status.getId()));
                 } else {
-                    Integer floor = null;
-                    if (status.getFloor() < 1) {
-                        floor = Integer.valueOf(1);
-                    } else if (status.getFloor() > 22) {
-                        floor = Integer.valueOf(22);
+                    if (elevatorsWithStuckDoors.contains(Integer.valueOf(status.getId()))) {
+                        console.appendToErrorLog(elevator,"Door is no longer stuck. Elevator is back in service.");
+                        elevatorsWithStuckDoors.remove(Integer.valueOf(status.getId()));
                     } else {
-                        floor = Integer.valueOf(status.getFloor());
+                        Integer floor = null;
+                        if (status.getFloor() < 1) {
+                            floor = Integer.valueOf(1);
+                        } else if (status.getFloor() > 22) {
+                            floor = Integer.valueOf(22);
+                        } else {
+                            floor = Integer.valueOf(status.getFloor());
+                        }
+                        console.updateLocationField(elevator, floor);
                     }
-                    console.updateLocationField(elevator, floor);
                 }
             } else {
                 System.err.println("Did not receive the correct type of information");
