@@ -68,6 +68,91 @@ There are seven (7) test files that are included to ensure the system states and
 - **test.TimerTest.java**: The tests included in this file are used to ensure that the elevator.Timer data is correct. Tests include GetElevator, GetTime.
 - **test.MotorTest.java**: The tests included in this file are used to ensure that the elevator.Motor data is correct. Tests include GetElevator.
 
+### Directory Structure
+
+```bash
+SYSC3303-project
+├── .gitignore
+├── docs
+│  ├── CommonClasses.png
+│  ├── ElevatorStateDiagram.png
+│  ├── ElevatorStuckTimingDiagram.png
+│  ├── ElevatorSubsystemClassDiagram.png
+│  ├── ElevatorTooSlowTimingDiagram.png
+│  ├── FloorSubsystemClassDiagram.png
+│  ├── README.md
+│  ├── SchedulerStateDiagram.png
+│  ├── SchedulerSubsystemClassDiagram.png
+│  └── SequenceDiagram.png
+├── lib
+│  ├── apiguardian-api-1.1.2.jar
+│  ├── assertj-core-3.17.2.jar
+│  ├── assertj-swing-3.17.1.jar
+│  ├── assertj-swing-junit-3.17.1.jar
+│  ├── byte-buddy-1.14.11.jar
+│  ├── byte-buddy-agent-1.14.11.jar
+│  ├── fest-reflect-1.4.1.jar
+│  ├── fest-util-1.2.5.jar
+│  ├── hamcrest-core-1.3.jar
+│  ├── junit-4.12.jar
+│  ├── junit-jupiter-5.8.1.jar
+│  ├── junit-jupiter-api-5.8.1.jar
+│  ├── junit-jupiter-api-5.10.1.jar
+│  ├── junit-jupiter-engine-5.8.1.jar
+│  ├── junit-jupiter-params-5.8.1.jar
+│  ├── junit-platform-commons-1.8.1.jar
+│  ├── junit-platform-commons-1.10.1.jar
+│  ├── junit-platform-engine-1.8.1.jar
+│  ├── mockito-core-5.10.0.jar
+│  ├── mockito-junit-jupiter-5.10.0.jar
+│  ├── objenesis-3.3.jar
+│  ├── opentest4j-1.2.0.jar
+│  └── opentest4j-1.3.0.jar
+├── src
+│  ├── common
+│  │  ├── Direction.java
+│  │  ├── ElevatorStatus.java
+│  │  ├── FloorRequest.java
+│  │  ├── NetworkConstants.java
+│  │  ├── PassengerRequest.java
+│  │  ├── UDPClient.java
+│  │  └── UDPServer.java
+│  ├── elevator
+│  │  ├── Elevator.java
+│  │  ├── ElevatorEstablishingConnectionState.java
+│  │  ├── ElevatorIdleState.java
+│  │  ├── ElevatorRequestReceivedState.java
+│  │  ├── ElevatorState.java
+│  │  ├── Motor.java
+│  │  └── Timer.java
+│  ├── floor
+│  │  ├── Floor.java
+│  │  └── FloorData.java
+│  ├── gui
+│  │  ├── Console.java
+│  │  └── GUI.java
+│  ├── scheduler
+│  │  ├── ElevatorClient.java
+│  │  ├── Scheduler.java
+│  │  ├── SchedulerIdleState.java
+│  │  ├── SchedulerRequestReceivedState.java
+│  │  ├── SchedulerResponseReceivedState.java
+│  │  └── SchedulerState.java
+│  └── test
+│     ├── ConsoleTest.java
+│     ├── ElevatorClientTest.java
+│     ├── ElevatorStatusTest.java
+│     ├── ElevatorTest.java
+│     ├── FloorDataTest.java
+│     ├── FloorRequestTest.java
+│     ├── MotorTest.java
+│     ├── PassengerRequestTest.java
+│     ├── SchedulerTest.java
+│     └── TimerTest.java
+├── SYSC3303-project.iml
+└── test_input.txt
+```
+
 ## Usage
 
 > [!IMPORTANT]
