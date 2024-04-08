@@ -8,5 +8,6 @@ public enum Direction {
     STATIONARY,
     DOWN,
     UP,
-    STUCK
+    STUCK,
+    DOOR_STUCK
 }

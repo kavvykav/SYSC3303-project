@@ -3,6 +3,7 @@ package scheduler;
 import common.*;
 
 import static common.NetworkConstants.FLOOR_PORT;
+import static common.NetworkConstants.GUI_PORT;
 
 /**
  * This state is the scheduler.Scheduler waiting to receive the request.
@@ -36,14 +37,21 @@ public class SchedulerIdleState implements SchedulerState {
                 client.setStatus(status);
                 if (status.getDirection() == Direction.STUCK) {
                     scheduler.schedulerPrint("Elevator " + status.getId() + " is stuck between floors");
-                }
-                else if (status.isStopped()) {
+                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
+                } else if (status.getDirection() == Direction.DOOR_STUCK) {
+                    scheduler.schedulerPrint("Elevator " + status.getId() + " has a stuck door");
+                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT );
+                } else if (status.isStopped()) {
                     scheduler.send(status, NetworkConstants.localHost(), FLOOR_PORT);
+                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
+                } else {
+                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
                 }
             } else {
                 ElevatorClient newClient = new ElevatorClient(scheduler.getReceivePacket().getAddress(),
                         scheduler.getReceivePacket().getPort(), status.getId());
                 scheduler.addClient(newClient);
+                scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
             }
         }
         return null;

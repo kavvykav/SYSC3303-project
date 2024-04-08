@@ -11,17 +11,18 @@ class FloorDataTest {
     static FloorData testPacket;
 
     @BeforeAll
-    static void setUp(){
-        testPacket = new FloorData("10:25:35",15,true,15);
+    static void setUp() {
+        testPacket = new FloorData("10:25:35", 15, true, 15);
     }
+
     @Test
     void getTimeTest() {
-        assertEquals(testPacket.getTimeStamp(),"10:25:35");
+        assertEquals(testPacket.getTimeStamp(), "10:25:35");
     }
 
     @Test
     void getFloorTest() {
-        assertEquals(testPacket.getFloorNumber(),15);
+        assertEquals(testPacket.getFloorNumber(), 15);
     }
 
     @Test
@@ -31,12 +32,14 @@ class FloorDataTest {
 
     @Test
     void getCarButtonTest() {
-        assertEquals(testPacket.getCarButton(),15);
+        assertEquals(testPacket.getCarButton(), 15);
     }
+
     @Test
     void getElevatorTest() {
-        assertEquals(testPacket.getElevator(),0);
+        assertEquals(testPacket.getElevator(), 0);
     }
+
     @Test
     void setElevatorTest() {
         testPacket.setElevator(5);

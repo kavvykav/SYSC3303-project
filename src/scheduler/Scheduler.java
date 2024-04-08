@@ -4,6 +4,8 @@ import common.Direction;
 import common.FloorRequest;
 import common.UDPServer;
 
+import static common.NetworkConstants.SCHEDULER_PORT;
+
 import java.lang.Math;
 import java.util.ArrayList;
 
@@ -70,17 +72,15 @@ public class Scheduler extends UDPServer {
     }
 
     /**
-     * Helper function for determining if the Elevator is available to server the request.
+     * Helper function for determining if the Elevator is available to server the
+     * request.
      *
      * @param elevator The elevator to be checked
-     * @param request The request to be served
+     * @param request  The request to be served
      *
      * @return True if the elevator can serve the request, false otherwise
      */
     public boolean canServiceRequest(ElevatorClient elevator, FloorRequest request) {
-
-
-
         // If the elevator is stuck between floors, it cannot serve the request
         if (elevator.getStatus().getDirection() == Direction.STUCK) {
             return false;
@@ -91,12 +91,14 @@ public class Scheduler extends UDPServer {
             return true;
         }
 
-        // If the elevator is going up and the passenger wants to go up, check the floor number
+        // If the elevator is going up and the passenger wants to go up, check the floor
+        // number
         if (elevator.getStatus().isGoingUp() && request.isGoingUp()) {
             return elevator.getStatus().getFloor() <= request.getFloor();
         }
 
-        // If the elevator is going down and the passenger wants to go down, check the floor number
+        // If the elevator is going down and the passenger wants to go down, check the
+        // floor number
         if (!elevator.getStatus().isGoingUp() && !request.isGoingUp()) {
             return elevator.getStatus().getFloor() >= request.getFloor();
         }
@@ -112,7 +114,8 @@ public class Scheduler extends UDPServer {
      */
     public ElevatorClient chooseElevator(FloorRequest request) {
 
-        // Initialize the chosen elevator and the maximum distance, print error if user started Floor before Elevator
+        // Initialize the chosen elevator and the maximum distance, print error if user
+        // started Floor before Elevator
         ElevatorClient chosenElevator = null;
         int maxDistance = 22;
 
@@ -128,8 +131,7 @@ public class Scheduler extends UDPServer {
                 if (elevator.getStatus().getId() == request.getElevator()) {
                     chosenElevator = elevator;
                     break;
-                }
-                else if (distance <= maxDistance) {
+                } else if (distance <= maxDistance) {
                     maxDistance = distance;
                     chosenElevator = elevator;
                 }
@@ -141,17 +143,13 @@ public class Scheduler extends UDPServer {
     /**
      * The main routine for the scheduler
      */
-    public void handleRequests() {
-
-        // Repeat indefinitely
+    public void serveRequests() { // Repeat indefinitely
         while (true) {
-
             // Idle state : wait for request from floor
             FloorRequest request = currentState.doAction(this, null);
             if (request == null) {
-                continue; // Remain in the idle state
+                continue;
             }
-
             // We have received a request, check the status of it
             schedulerPrint("Received a new Request From the Floor");
             setCurrentState(new SchedulerRequestReceivedState());
@@ -164,6 +162,7 @@ public class Scheduler extends UDPServer {
 
     /**
      * Wrapper method to print Scheduler information.
+     * 
      * @param output : what is being printed
      */
     public void schedulerPrint(String output) {
@@ -172,7 +171,7 @@ public class Scheduler extends UDPServer {
 
     public static void main(String[] args) {
         Scheduler scheduler = new Scheduler();
-        scheduler.schedulerPrint("Starting...");
-        scheduler.handleRequests();
+        scheduler.serveRequests();
     }
+
 }

@@ -14,6 +14,9 @@ public class NetworkConstants {
     // Port that the Floor will listen on for responses
     public static final int FLOOR_PORT = 5001;
 
+    // Port that the GUI will listen on
+    public static final int GUI_PORT = 5002;
+
     /**
      * Wrapper method for getting localhost
      *
