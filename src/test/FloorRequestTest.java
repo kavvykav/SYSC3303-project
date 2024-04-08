@@ -16,6 +16,8 @@ class FloorRequestTest {
     @Test
     void getFloorTest() {
         assertEquals(floor_request.getFloor(), 17);
+        floor_request = new FloorRequest(-8, 0, false);
+        assertEquals(floor_request.getFloor(), -8); // SHOULD FAIL
     }
 
     @Test
