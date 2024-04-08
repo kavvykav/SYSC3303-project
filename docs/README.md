@@ -16,7 +16,7 @@ elevator.Elevator. The communication between these subsystems is achieved using 
 
 ## Requirements
 
-Java `SDK 21`, and Language Level set to `Default SDK` in Intellij.
+Java `SDK 21`, and Language Level set to `Default SDK` in IntelliJ.
 
 ## Components
 
@@ -152,6 +152,10 @@ SYSC3303-project
 ├── SYSC3303-project.iml
 └── test_input.txt
 ```
+
+> [!IMPORTANT]
+> Make sure all `.jar` files in the `lib` directory are added to the project  
+> in IntelliJ
 
 ## Usage
 
