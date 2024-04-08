@@ -98,13 +98,13 @@ public class Scheduler extends UDPServer {
         // If the elevator is going up and the passenger wants to go up, check the floor
         // number of the request and the elevator
         if (status.getDirection() == Direction.UP && status.isGoingUp() && request.isGoingUp()) {
-            return elevator.getStatus().getFloor() <= request.getFloor();
+            return elevator.getStatus().getFloor() < request.getFloor();
         }
 
         // If the elevator is going down and the passenger wants to go down, check the
         // floor number of the request and the elevator
         if (status.getDirection() == Direction.DOWN && !status.isGoingUp() && !request.isGoingUp()) {
-            return elevator.getStatus().getFloor() >= request.getFloor();
+            return elevator.getStatus().getFloor() > request.getFloor();
         }
         return false;
     }
