@@ -96,8 +96,8 @@ questions, please contact one of the authors.
 
 ## Delegation of Responsibilities
 
-- Liam Kavanagh -> Implementing Door Faults and coding
-- Matthew Huybregts -> Implementing Timer Class
-- Sean Pruss -> Timing Diagrams
-- Joshua Robson -> JUnit tests, Debugging, Coding
-- Abed Qubbaj -> Updated diagrams and README.md
+- Liam Kavanagh -> Implementing and integrating GUI
+- Matthew Huybregts -> Implementing capacity limits and back end
+- Sean Pruss -> Update README.md
+- Joshua Robson -> JUnit tests, Debugging
+- Abed Qubbaj -> Update diagrams
