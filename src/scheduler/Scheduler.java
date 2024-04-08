@@ -4,13 +4,15 @@ import common.Direction;
 import common.FloorRequest;
 import common.UDPServer;
 
+import static common.NetworkConstants.SCHEDULER_PORT;
+
 import java.lang.Math;
 import java.util.ArrayList;
 
 /**
  * This is the main component of the scheduler.Scheduler Subsystem
  */
-public class Scheduler extends UDPServer implements Runnable {
+public class Scheduler extends UDPServer {
 
     // Number of elevators
     private static final int NUM_ELEVATORS = 4;
@@ -24,8 +26,8 @@ public class Scheduler extends UDPServer implements Runnable {
     /**
      * The constructor for the scheduler.Scheduler object.
      */
-    public Scheduler(int port) {
-        super(port);
+    public Scheduler() {
+        super();
         elevators = new ArrayList<>(NUM_ELEVATORS);
         setCurrentState(new SchedulerIdleState());
     }
@@ -70,10 +72,11 @@ public class Scheduler extends UDPServer implements Runnable {
     }
 
     /**
-     * Helper function for determining if the Elevator is available to server the request.
+     * Helper function for determining if the Elevator is available to server the
+     * request.
      *
      * @param elevator The elevator to be checked
-     * @param request The request to be served
+     * @param request  The request to be served
      *
      * @return True if the elevator can serve the request, false otherwise
      */
@@ -88,12 +91,14 @@ public class Scheduler extends UDPServer implements Runnable {
             return true;
         }
 
-        // If the elevator is going up and the passenger wants to go up, check the floor number
+        // If the elevator is going up and the passenger wants to go up, check the floor
+        // number
         if (elevator.getStatus().isGoingUp() && request.isGoingUp()) {
             return elevator.getStatus().getFloor() <= request.getFloor();
         }
 
-        // If the elevator is going down and the passenger wants to go down, check the floor number
+        // If the elevator is going down and the passenger wants to go down, check the
+        // floor number
         if (!elevator.getStatus().isGoingUp() && !request.isGoingUp()) {
             return elevator.getStatus().getFloor() >= request.getFloor();
         }
@@ -109,7 +114,8 @@ public class Scheduler extends UDPServer implements Runnable {
      */
     public ElevatorClient chooseElevator(FloorRequest request) {
 
-        // Initialize the chosen elevator and the maximum distance, print error if user started Floor before Elevator
+        // Initialize the chosen elevator and the maximum distance, print error if user
+        // started Floor before Elevator
         ElevatorClient chosenElevator = null;
         int maxDistance = 22;
 
@@ -125,8 +131,7 @@ public class Scheduler extends UDPServer implements Runnable {
                 if (elevator.getStatus().getId() == request.getElevator()) {
                     chosenElevator = elevator;
                     break;
-                }
-                else if (distance <= maxDistance) {
+                } else if (distance <= maxDistance) {
                     maxDistance = distance;
                     chosenElevator = elevator;
                 }
@@ -138,15 +143,13 @@ public class Scheduler extends UDPServer implements Runnable {
     /**
      * The main routine for the scheduler
      */
-     public void run() {        // Repeat indefinitely
+    public void serveRequests() { // Repeat indefinitely
         while (true) {
-
             // Idle state : wait for request from floor
             FloorRequest request = currentState.doAction(this, null);
             if (request == null) {
-                continue; // Remain in the idle state
+                continue;
             }
-
             // We have received a request, check the status of it
             schedulerPrint("Received a new Request From the Floor");
             setCurrentState(new SchedulerRequestReceivedState());
@@ -159,11 +162,16 @@ public class Scheduler extends UDPServer implements Runnable {
 
     /**
      * Wrapper method to print Scheduler information.
+     * 
      * @param output : what is being printed
      */
     public void schedulerPrint(String output) {
         System.out.println("Scheduler: " + output);
     }
 
+    public static void main(String[] args) {
+        Scheduler scheduler = new Scheduler();
+        scheduler.serveRequests();
+    }
 
 }

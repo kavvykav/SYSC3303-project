@@ -129,7 +129,7 @@ public class Elevator extends UDPClient implements Runnable {
      */
     public void closeDoor() throws Exception {
         Random rand = new Random();
-        if (rand.nextInt(5) == 2) {
+        if (rand.nextInt(3) == 2) {
             throw new Exception();
         }
         door = false;

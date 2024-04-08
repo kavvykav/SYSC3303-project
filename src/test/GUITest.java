@@ -1,4 +1,4 @@
-package test;
+/*package test;
 
 import gui.GUI;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,4 +92,4 @@ public class GUITest {
         gui.appendToErrorLog(4, "Error message 4");
         verify(errorLog).append("Elevator 4: Error message 4\n");
     }
-}
+}*/

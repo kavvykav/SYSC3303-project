@@ -40,15 +40,18 @@ public class SchedulerIdleState implements SchedulerState {
                     scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
                 } else if (status.getDirection() == Direction.DOOR_STUCK) {
                     scheduler.schedulerPrint("Elevator " + status.getId() + " has a stuck door");
-                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
+                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT );
                 } else if (status.isStopped()) {
                     scheduler.send(status, NetworkConstants.localHost(), FLOOR_PORT);
+                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
+                } else {
                     scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
                 }
             } else {
                 ElevatorClient newClient = new ElevatorClient(scheduler.getReceivePacket().getAddress(),
                         scheduler.getReceivePacket().getPort(), status.getId());
                 scheduler.addClient(newClient);
+                scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
             }
         }
         return null;
