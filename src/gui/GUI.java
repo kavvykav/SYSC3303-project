@@ -58,6 +58,7 @@ public class GUI extends UDPClient {
                         console.updateLocationField(elevator, floor);
                     }
                 }
+                console.updateDirectionField(elevator, status.getDirection());
             } else {
                 System.err.println("Did not receive the correct type of information");
             }
