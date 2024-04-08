@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -99,7 +100,7 @@ class ElevatorTest {
         elevator.openDoor();
         assertTrue(elevator.getDoorStatus());
         try {
-            elevator.closeDoor();
+            elevator.closeDoor(3, new Random());
         } catch (Exception e) {
             System.out.println("Elevator door is stuck open!");
             assertTrue(elevator.getDoorStatus());

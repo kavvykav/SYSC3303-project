@@ -1,5 +1,7 @@
 package gui;
 
+import common.Direction;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -28,6 +30,12 @@ public class Console {
     private JTextField elevator3Position;
     private JTextField elevator4Position;
 
+    // Text fields showing the direction of the elevator
+    private JTextField elevator1Direction;
+    private JTextField elevator2Direction;
+    private JTextField elevator3Direction;
+    private JTextField elevator4Direction;
+
     // Text box showing the errors
     private JTextArea errorLog;
 
@@ -37,7 +45,8 @@ public class Console {
 
     /**
      * Creates and shows the GUI that will be made. It displays the current
-     * position of all four elevators, plus any faults.
+     * position of all four elevators, the direction of movement of each elevator,
+     * and any faults.
      */
     public Console() {
         // Set Up JFrame
@@ -50,19 +59,20 @@ public class Console {
 
         // Set up the Panels that show each Elevator
         panel1 = new JPanel();
-        panel1.setSize(new Dimension(100, 200));
+        panel1.setLayout(new FlowLayout());
+        panel1.setSize(new Dimension(300, 200));
         panel1.setBackground(Color.DARK_GRAY);
 
         panel2 = new JPanel();
-        panel2.setSize(new Dimension(100, 200));
+        panel2.setSize(new Dimension(300, 200));
         panel2.setBackground(Color.DARK_GRAY);
 
         panel3 = new JPanel();
-        panel3.setSize(new Dimension(100, 200));
+        panel3.setSize(new Dimension(300, 200));
         panel3.setBackground(Color.DARK_GRAY);
 
         panel4 = new JPanel();
-        panel4.setSize(new Dimension(100, 200));
+        panel4.setSize(new Dimension(300, 200));
         panel4.setBackground(Color.DARK_GRAY);
 
         errorPanel = new JPanel();
@@ -71,22 +81,22 @@ public class Console {
 
         // Set up labels
         label1 = new JLabel();
-        label1.setText("Elevator 1 Position");
+        label1.setText("Elevator 1");
         label1.setFont(FONT);
         label1.setForeground(Color.WHITE);
 
         label2 = new JLabel();
-        label2.setText("Elevator 2 Position");
+        label2.setText("Elevator 2");
         label2.setFont(FONT);
         label2.setForeground(Color.WHITE);
 
         label3 = new JLabel();
-        label3.setText("Elevator 3 Position");
+        label3.setText("Elevator 3");
         label3.setFont(FONT);
         label3.setForeground(Color.WHITE);
 
         label4 = new JLabel();
-        label4.setText("Elevator 4 Position");
+        label4.setText("Elevator 4");
         label4.setFont(FONT);
         label4.setForeground(Color.WHITE);
 
@@ -128,6 +138,38 @@ public class Console {
         elevator4Position.setFont(FONT);
         elevator4Position.setEditable(false);
 
+        elevator1Direction = new JTextField();
+        elevator1Direction.setPreferredSize(new Dimension(280, 50));
+        elevator1Direction.setHorizontalAlignment(JTextField.CENTER);
+        elevator1Direction.setBackground(Color.BLACK);
+        elevator1Direction.setForeground(Color.WHITE);
+        elevator1Direction.setFont(FONT);
+        elevator1Direction.setEditable(false);
+
+        elevator2Direction = new JTextField();
+        elevator2Direction.setPreferredSize(new Dimension(280, 50));
+        elevator2Direction.setHorizontalAlignment(JTextField.CENTER);
+        elevator2Direction.setBackground(Color.BLACK);
+        elevator2Direction.setForeground(Color.WHITE);
+        elevator2Direction.setFont(FONT);
+        elevator2Direction.setEditable(false);
+
+        elevator3Direction = new JTextField();
+        elevator3Direction.setPreferredSize(new Dimension(280, 50));
+        elevator3Direction.setHorizontalAlignment(JTextField.CENTER);
+        elevator3Direction.setBackground(Color.BLACK);
+        elevator3Direction.setForeground(Color.WHITE);
+        elevator3Direction.setFont(FONT);
+        elevator3Direction.setEditable(false);
+
+        elevator4Direction = new JTextField();
+        elevator4Direction.setPreferredSize(new Dimension(280, 50));
+        elevator4Direction.setHorizontalAlignment(JTextField.CENTER);
+        elevator4Direction.setBackground(Color.BLACK);
+        elevator4Direction.setForeground(Color.WHITE);
+        elevator4Direction.setFont(FONT);
+        elevator4Direction.setEditable(false);
+
         errorLog = new JTextArea();
         errorLog.setPreferredSize(new Dimension(700, 900));
         errorLog.setFont(ERROR_FONT);
@@ -142,15 +184,19 @@ public class Console {
 
         panel1.add(label1);
         panel1.add(elevator1Position);
+        panel1.add(elevator1Direction);
 
         panel2.add(label2);
         panel2.add(elevator2Position);
+        panel2.add(elevator2Direction);
 
         panel3.add(label3);
         panel3.add(elevator3Position);
+        panel3.add(elevator3Direction);
 
         panel4.add(label4);
         panel4.add(elevator4Position);
+        panel4.add(elevator4Direction);
 
         errorPanel.add(errorLabel);
         errorPanel.add(errorLog);
@@ -192,6 +238,49 @@ public class Console {
     }
 
     /**
+     * Updates the Direction text box for the specified elevator of the specified Direction.
+     * @param elevator: the elevator whose Direction is being updated
+     * @param direction: the new Direction of the Elevator.
+     */
+    public void updateDirectionField(int elevator, Direction direction) {
+        JTextField selectedField = null;
+        switch (elevator) {
+            case 1:
+                selectedField = elevator1Direction;
+                break;
+            case 2:
+                selectedField = elevator2Direction;
+                break;
+            case 3:
+                selectedField = elevator3Direction;
+                break;
+            case 4:
+                selectedField = elevator4Direction;
+                break;
+        }
+        String directionToString = null;
+        switch (direction) {
+            case UP:
+                directionToString = "Up";
+                break;
+            case DOWN:
+                directionToString = "Down";
+                break;
+            case STATIONARY:
+                directionToString = "Stationary";
+                break;
+            case STUCK:
+                directionToString = "Stuck";
+                break;
+            case DOOR_STUCK:
+                directionToString = "Door Stuck";
+                break;
+        }
+        selectedField.setText(directionToString);
+
+    }
+
+    /**
      * Appends an error to the error log on the GUI.
      *
      * @param elevator: The elevator that experienced an error.
@@ -201,56 +290,161 @@ public class Console {
         errorLog.append("Elevator " + elevator + ": " + msg + "\n");
     }
 
-    //METHODS BELOW ARE FOR TESTING PURPOSES ONLY
-
+    /**
+     * Returns the JFrame for testing purposes.
+     * @return: the JFrame of the GUI.
+     */
     public JFrame getFrame(){return frame;}
 
+    /**
+     * Returns panel1 for testing purposes.
+     * @return: panel1
+     */
     public JPanel getPanel1() {
         return panel1;
     }
+
+    /**
+     * Returns panel2 for testing purposes.
+     * @return: panel2
+     */
     public JPanel getPanel2() {
         return panel2;
     }
+
+    /**
+     * Returns panel3 for testing purposes.
+     * @return: panel3
+     */
     public JPanel getPanel3() {
         return panel3;
     }
+
+    /**
+     * Returns panel4 for testing purposes.
+     * @return: panel4
+     */
     public JPanel getPanel4() {
         return panel4;
     }
+
+    /**
+     * Returns errorPanel for testing purposes.
+     * @return: errorPanel
+     */
     public JPanel getErrorPanel() {
         return errorPanel;
     }
 
+    /**
+     * Returns label1 for testing purposes.
+     * @return: label1
+     */
     public JLabel getLabel1() {
         return label1;
     }
+
+    /**
+     * Returns label2 for testing purposes.
+     * @return: label2
+     */
     public JLabel getLabel2() {
         return label2;
     }
+
+    /**
+     * Returns label3 for testing purposes.
+     * @return: label3
+     */
     public JLabel getLabel3() {
         return label3;
     }
+
+    /**
+     * Returns label4 for testing purposes.
+     * @return label4
+     */
     public JLabel getLabel4() {
         return label4;
     }
 
+    /**
+     * Returns errorLabel for testing purposes.
+     * @return: errorLabel
+     */
     public JLabel getErrorLabel() {
         return errorLabel;
     }
 
+    /**
+     * Sets the elevator1Position text field for testing purposes.
+     * @param elevator1Position
+     */
     public void setElevator1Position(JTextField elevator1Position) {
         this.elevator1Position = elevator1Position;
     }
+
+    /**
+     * Sets the elevator2Position text field for testing purposes.
+     * @param elevator2Position
+     */
     public void setElevator2Position(JTextField elevator2Position) {
         this.elevator2Position = elevator2Position;
     }
+
+    /**
+     * Sets the elevator3Position text field for testing purposes.
+     * @param elevator3Position
+     */
     public void setElevator3Position(JTextField elevator3Position) {
         this.elevator3Position = elevator3Position;
     }
+
+    /**
+     * Sets the elevator4Position text field for testing purposes.
+     * @param elevator4Position
+     */
     public void setElevator4Position(JTextField elevator4Position) {
         this.elevator4Position = elevator4Position;
     }
+
+    /**
+     * Sets the errorLog text area for testing purposes.
+     * @param errorLog
+     */
     public void setErrorLog(JTextArea errorLog) {
         this.errorLog = errorLog;
+    }
+
+    /**
+     * Sets the elevator1Direction field for testing purposes.
+     * @param elevator1Direction
+     */
+    public void setElevator1Direction(JTextField elevator1Direction) {
+        this.elevator1Direction = elevator1Direction;
+    }
+
+    /**
+     * Sets the elevator2Direction field for testing purposes.
+     * @param elevator2Direction
+     */
+    public void setElevator2Direction(JTextField elevator2Direction) {
+        this.elevator2Direction = elevator2Direction;
+    }
+
+    /**
+     * Sets the elevator3Direction field for testing purposes.
+     * @param elevator3Direction
+     */
+    public void setElevator3Direction(JTextField elevator3Direction) {
+        this.elevator3Direction = elevator3Direction;
+    }
+
+    /**
+     * Sets the elevator4Direction field for testing purposes.
+     * @param elevator4Direction
+     */
+    public void setElevator4Direction(JTextField elevator4Direction) {
+        this.elevator4Direction = elevator4Direction;
     }
 }

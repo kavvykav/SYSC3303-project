@@ -1,6 +1,7 @@
 package scheduler;
 
 import common.Direction;
+import common.ElevatorStatus;
 import common.FloorRequest;
 import common.UDPServer;
 
@@ -81,26 +82,29 @@ public class Scheduler extends UDPServer {
      * @return True if the elevator can serve the request, false otherwise
      */
     public boolean canServiceRequest(ElevatorClient elevator, FloorRequest request) {
+
+        ElevatorStatus status = elevator.getStatus();
+
         // If the elevator is stuck between floors, it cannot serve the request
-        if (elevator.getStatus().getDirection() == Direction.STUCK) {
+        if (status.getDirection() == Direction.STUCK) {
             return false;
         }
 
         // If the elevator is not currently serving a request, it can serve the request
-        if (elevator.getStatus().getDirection() == Direction.STATIONARY) {
+        if (status.getDirection() == Direction.STATIONARY) {
             return true;
         }
 
         // If the elevator is going up and the passenger wants to go up, check the floor
-        // number
-        if (elevator.getStatus().isGoingUp() && request.isGoingUp()) {
-            return elevator.getStatus().getFloor() <= request.getFloor();
+        // number of the request and the elevator
+        if (status.getDirection() == Direction.UP && status.isGoingUp() && request.isGoingUp()) {
+            return elevator.getStatus().getFloor() < request.getFloor();
         }
 
         // If the elevator is going down and the passenger wants to go down, check the
-        // floor number
-        if (!elevator.getStatus().isGoingUp() && !request.isGoingUp()) {
-            return elevator.getStatus().getFloor() >= request.getFloor();
+        // floor number of the request and the elevator
+        if (status.getDirection() == Direction.DOWN && !status.isGoingUp() && !request.isGoingUp()) {
+            return elevator.getStatus().getFloor() > request.getFloor();
         }
         return false;
     }
@@ -120,21 +124,19 @@ public class Scheduler extends UDPServer {
         int maxDistance = 22;
 
         for (ElevatorClient elevator : elevators) {
+            if (elevator.getStatus().getId() == request.getElevator()) {
+                chosenElevator = elevator;
+                break;
+            }
             if (elevator.getStatus().getId() == request.getElevator() * -1) {
                 continue;
             }
+            // If the elevator can serve request and is closest, choose that elevator
             boolean canService = canServiceRequest(elevator, request);
             int distance = Math.abs(elevator.getStatus().getFloor() - request.getFloor());
-
-            // If the elevator can serve request and is closest, choose that elevator
-            if (canService) {
-                if (elevator.getStatus().getId() == request.getElevator()) {
-                    chosenElevator = elevator;
-                    break;
-                } else if (distance <= maxDistance) {
+            if (canService && distance <= maxDistance) {
                     maxDistance = distance;
                     chosenElevator = elevator;
-                }
             }
         }
         return chosenElevator;
@@ -173,5 +175,4 @@ public class Scheduler extends UDPServer {
         Scheduler scheduler = new Scheduler();
         scheduler.serveRequests();
     }
-
 }
