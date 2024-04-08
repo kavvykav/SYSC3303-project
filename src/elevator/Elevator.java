@@ -127,9 +127,8 @@ public class Elevator extends UDPClient implements Runnable {
     /**
      * Close the door. If the elevator door is stuck throw an exception.
      */
-    public void closeDoor() throws Exception {
-        Random rand = new Random();
-        if (rand.nextInt(3) == 2) {
+    public void closeDoor(int prob, Random rand) throws Exception {
+        if (rand.nextInt(prob) == 1) {
             throw new Exception();
         }
         door = false;
@@ -144,7 +143,7 @@ public class Elevator extends UDPClient implements Runnable {
 
     /**
      * Setter for elevator's current state
-     * 
+     *
      * @param state the state that the elevator will be set to
      */
     public void setCurrentState(ElevatorState state) {
@@ -153,11 +152,20 @@ public class Elevator extends UDPClient implements Runnable {
 
     /**
      * Getter for elevator's current state
-     * 
+     *
      * @return the current state of the elevator
      */
     public ElevatorState getCurrentState() {
         return currentState;
+    }
+
+    /**
+     * Getter method for number of floors
+     *
+     * @return The number of floors in the elevator
+     */
+    public int getNumFloors() {
+        return numFloors;
     }
 
     /**

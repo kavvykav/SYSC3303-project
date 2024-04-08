@@ -18,7 +18,7 @@ public class FloorRequest implements Serializable {
     private final boolean goingUp;
 
     public FloorRequest(int floor, int elevator, boolean goingUp) {
-        this.floor = floor;
+        this.floor = Math.abs(floor);
         this.elevator = elevator;
         this.goingUp = goingUp;
     }

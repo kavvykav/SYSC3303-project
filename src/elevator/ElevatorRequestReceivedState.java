@@ -27,15 +27,17 @@ public class ElevatorRequestReceivedState implements ElevatorState {
         // Add the floor
         elevator.add(request.getFloor());
 
-        // Determine the direction the elevator needs to go
-        if (request.getFloor() > elevator.getStatus().getFloor()) {
-            elevator.getStatus().setDirection(Direction.UP);
-        } else {
-            elevator.getStatus().setDirection(Direction.DOWN);
-        }
-
         // If not currently running, start the motor
         if (currentDirection == Direction.STATIONARY) {
+            // Determine the direction the elevator needs to go
+            if (request.getFloor() > elevator.getStatus().getFloor()) {
+                elevator.getStatus().setDirection(Direction.UP);
+            } else if (request.getFloor() < elevator.getStatus().getFloor()){
+                elevator.getStatus().setDirection(Direction.DOWN);
+            } else {
+                Direction direction = request.isGoingUp() ? Direction.UP: Direction.DOWN;
+                elevator.getStatus().setDirection(direction);
+            }
             elevator.startMotor();
         }
         return null;

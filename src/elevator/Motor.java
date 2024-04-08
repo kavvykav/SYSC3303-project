@@ -19,6 +19,15 @@ public class Motor extends UDPClient implements Runnable {
     // For injecting faults
     private final Random rand;
 
+    // Hard fault rate (1 in HARD_FAULT_RATE)
+    private static final int HARD_FAULT_RATE = 100;
+
+    // Soft fault rate (1 in SOFT_FAULT_RATE)
+    private static final int SOFT_FAULT_RATE = 5;
+
+    // Time to hold the elevator door open for
+    private static final int OPEN_TIME = 5;
+
     /**
      * Creates a Motor instance
      *
@@ -27,7 +36,6 @@ public class Motor extends UDPClient implements Runnable {
      * @param port     The port the Scheduler is listening on
      */
     public Motor(Elevator elevator, InetAddress address, int port) {
-
         super(address, port);
         this.elevator = elevator;
         rand = new Random();
@@ -71,7 +79,7 @@ public class Motor extends UDPClient implements Runnable {
                 // Simulate opening and closing the door
                 elevator.openDoor();
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(OPEN_TIME * 1000L);
                 } catch (InterruptedException e) {
                     return;
                 }
@@ -91,7 +99,7 @@ public class Motor extends UDPClient implements Runnable {
 
                 elevator.elevatorPrint("Next Stop is floor " + elevator.getCurrentRequest());
                 try {
-                    elevator.closeDoor();
+                    elevator.closeDoor(SOFT_FAULT_RATE, rand);
                     elevator.elevatorPrint("Elevator door successfully closed");
                 } catch (Exception e) {
                     Direction previousDirection = elevator.getStatus().getDirection();
@@ -116,7 +124,7 @@ public class Motor extends UDPClient implements Runnable {
                 }
             }
             // Simulate going from one floor to another
-            int sleepTime = (rand.nextInt(100) == 15) ? 10 : 5;
+            int sleepTime = (rand.nextInt(HARD_FAULT_RATE) == 1) ? 10 : 5;
             elevator.startTimer(8);
             try {
                 Thread.sleep(sleepTime * 1000L);
@@ -130,11 +138,13 @@ public class Motor extends UDPClient implements Runnable {
 
             // Update fields
             int currentFloor = elevator.getStatus().getFloor();
+            int nextFloor;
             if (elevator.getStatus().getDirection() == Direction.UP) {
-                elevator.getStatus().setFloor(currentFloor + 1);
+                nextFloor = Math.min(currentFloor + 1, elevator.getNumFloors());
             } else {
-                elevator.getStatus().setFloor(currentFloor - 1);
+                nextFloor = Math.max(currentFloor - 1, 1);
             }
+            elevator.getStatus().setFloor(nextFloor);
             send(elevator.getStatus());
         }
     }

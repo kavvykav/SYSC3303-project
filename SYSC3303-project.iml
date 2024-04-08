@@ -42,5 +42,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="mockito.junit.jupiter" level="project" />
+    <orderEntry type="library" name="mockito-core-5.10.0" level="project" />
+    <orderEntry type="library" name="assertj-core-3.17.2" level="project" />
   </component>
 </module>

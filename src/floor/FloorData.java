@@ -33,11 +33,19 @@ public class FloorData implements Serializable {
      * @param carButton The floor to which the passenger wants to go
      */
     public FloorData(String timestamp, int floorNumber,
-            boolean direction, int carButton) {
+                     boolean direction, int carButton) throws IllegalArgumentException{
+
         this.timestamp = timestamp;
-        this.floorNumber = floorNumber;
+        this.floorNumber = Math.abs(floorNumber);
         this.direction = direction;
-        this.carButton = carButton;
+        this.carButton = Math.abs(carButton);
+
+        if (direction && this.floorNumber > this.carButton) {
+            throw new IllegalArgumentException("Request is to go up, yet destination is below current floor");
+        }
+        else if (!direction && this.floorNumber < this.carButton) {
+            throw new IllegalArgumentException("Request is to go down, yet destination is above current floor");
+        }
         elevator = 0;
     }
 
@@ -70,6 +78,7 @@ public class FloorData implements Serializable {
                 && elevator == data.elevator;
     }
 
+    /* Getter and setter methods*/
     public int getFloorNumber(){
         return floorNumber;
     }
