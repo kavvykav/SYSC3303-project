@@ -1,13 +1,13 @@
-# Elevator Control System - Iteration 4
+# Elevator Control System - Iteration 5
 
 Authors + Student ID:  
-Matthew Huybregts 101185221<br>
-Sean Pruss 101189970<br>
-William Kavanagh 101182915<br>
-Joshua Robson 101195802<br>
-Abed Qubbaj 101205030<br>
+Matthew Huybregts 101185221  
+Sean Pruss 101189970  
+William Kavanagh 101182915  
+Joshua Robson 101195802  
+Abed Qubbaj 101205030
 
-Date: March 23rd, 2024
+Date: April 10th, 2024
 
 ## Overview
 
@@ -46,8 +46,13 @@ Java `SDK 21`, and Language Level set to `Default SDK` in Intellij.
 - **scheduler.SchedulerIdleState.java:** The state that represents the scheduler.Scheduler's Idle state
 - **scheduler.SchedulerRequestReceivedState.java:** The state that represents the scheduler.Scheduler receiving a
   request from the floor.Floor
-- **scheduler.SchedulerResponseReceivedState.java:** The state that represents the scheduler.Scheduler receiving a
+- **scheduler.SchedulerResponseReceivedState.java:** The state that represents the scheduler.Scheduler receivinag a
   response from the elevator.Elevator
+
+### gui
+
+- **gui.Console.java:** Includes the code that initializes and updates the visual aspects of the GUI
+- **gui.GUI.java:** Receives updates from the Scheduler and updates the Console accordingly. This is the runnable component of the GUI subsystem.
 
 ### test
 
@@ -65,9 +70,13 @@ There are seven (7) test files that are included to ensure the system states and
 
 ## Usage
 
+> [!IMPORTANT]
+> Run the files in this order for the system to initialize properly
+
 1. Run `scheduler.Scheduler.java`
-2. Run `elevator.Elevator.java`
-3. Run `floor.Floor.java`
+2. Run `gui.GUI.java`
+3. Run `elevator.Elevator.java`
+4. Run `floor.Floor.java`
 
 ## Input File Format
 
@@ -82,13 +91,13 @@ The format is as follows:
   elevator.Elevator -> scheduler.Scheduler -> floor.Floor
 - The code includes error handling for invalid data and communication failures
 
-Feel free to explore and modify the code to suit your specific requirements. If you encounter any issues or have
+Feel free to explore and modify the code to suit your specific requirements. If you encounter any issues or have  
 questions, please contact one of the authors.
 
 ## Delegation of Responsibilities
 
-- Liam Kavanagh -> Implementing Door Faults and coding
-- Matthew Huybregts -> Implementing Timer Class
-- Sean Pruss -> Timing Diagrams
-- Joshua Robson -> JUnit tests, Debugging, Coding
-- Abed Qubbaj -> Updated diagrams and README.md
+- Liam Kavanagh -> Implementing and integrating GUI
+- Matthew Huybregts -> Implementing capacity limits and back end
+- Sean Pruss -> Update README.md
+- Joshua Robson -> JUnit tests, Debugging
+- Abed Qubbaj -> Update diagrams
