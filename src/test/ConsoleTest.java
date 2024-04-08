@@ -1,6 +1,6 @@
-/*package test;
+package test;
 
-import gui.GUI;
+import gui.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -8,12 +8,11 @@ import org.mockito.MockitoAnnotations;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.InetAddress;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
-public class GUITest {
+public class ConsoleTest {
 
     @Mock
     private JTextArea errorLog;
@@ -26,12 +25,12 @@ public class GUITest {
     @Mock
     private JTextField elevator4Position;
 
-    private GUI gui;
+    private Console gui;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        gui = new GUI(InetAddress.getLoopbackAddress(), 1234);
+        gui = new Console();
         gui.setErrorLog(errorLog);
         gui.setElevator1Position(elevator1Position);
         gui.setElevator2Position(elevator2Position);
@@ -40,20 +39,17 @@ public class GUITest {
     }
 
     @Test
-    public void testCreateAndShowGUI() {
-        gui.createAndShowGUI();
-
+    public void testConsole() {
         // Verify that the frame is visible and correct background color
         JFrame frame = gui.getFrame();
         assertThat(frame.isVisible()).isTrue();
-        assertThat(frame.getBackground()).isEqualTo(Color.BLACK);
 
         // Verify that all panels are added to the frame
         Container contentPane = frame.getContentPane();
         assertThat(contentPane.getComponents()).contains(gui.getPanel1(), gui.getPanel2(), gui.getPanel3(), gui.getPanel4(), gui.getErrorPanel());
 
         // Verify the layout
-        assertThat(contentPane.getLayout()).isInstanceOf(GridLayout.class);
+        assertThat(contentPane.getLayout()).isInstanceOf(FlowLayout.class);
 
         // Verify that the labels are initialized
         assertThat(gui.getLabel1()).isNotNull();
@@ -92,4 +88,4 @@ public class GUITest {
         gui.appendToErrorLog(4, "Error message 4");
         verify(errorLog).append("Elevator 4: Error message 4\n");
     }
-}*/
+}

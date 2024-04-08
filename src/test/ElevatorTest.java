@@ -75,9 +75,9 @@ class ElevatorTest {
     }
     @Test
     void getDoorStatusTest(){
-        assertEquals(false, elevator.getDoorStatus());
+        assertFalse(elevator.getDoorStatus());
         elevator.openDoor();
-        assertEquals(true, elevator.getDoorStatus());
+        assertTrue(elevator.getDoorStatus());
     }
     @Test
     void openDoorTest () {
@@ -176,6 +176,31 @@ class ElevatorTest {
         assertFalse(elevator.getStatus().isEmpty());
         elevator.removePassenger();
         assertTrue(elevator.getStatus().isEmpty());
+    }
+
+    @Test
+    void addTest(){
+        //ensure floor doesnt get added when > numFloors
+        try {
+            elevator.add(40);
+        }
+        catch(IndexOutOfBoundsException ignored){}
+        //ensure floor doesnt get added when < 0
+        try {
+            elevator.add(-5);
+        }
+        catch(IndexOutOfBoundsException ignored){}
+        //ensure floor doesnt get added when == 0
+        try {
+            elevator.add(0);
+        }
+        catch(IndexOutOfBoundsException ignored){}
+        // Regular cases
+        elevator.add(16);
+        elevator.add(8);
+        elevator.add(3);
+        assertEquals(16, elevator.getCurrentRequest());
+        assertEquals(3, elevator.getNumRequests());
     }
 
     // None of the following methods have been implemented thus these can not be tested

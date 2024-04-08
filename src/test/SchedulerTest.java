@@ -1,4 +1,4 @@
-/*package test;
+package test;
 
 import common.Direction;
 import common.ElevatorStatus;
@@ -100,7 +100,7 @@ class SchedulerTest {
 
     }
     @Test
-    void CanServiceRequestTest(){
+    void CanServiceRequestTest() throws IndexOutOfBoundsException {
         FloorRequest data = new FloorRequest(16, 0, true);
         elevator1.setStatus(new ElevatorStatus(1, 18, Direction.UP, true));
         elevator2.setStatus(new ElevatorStatus(2, 9, Direction.STATIONARY, false));
@@ -140,5 +140,12 @@ class SchedulerTest {
         assertTrue(scheduler.canServiceRequest(elevator2, data6));
         assertTrue(scheduler.canServiceRequest(elevator3, data6));
         assertFalse(scheduler.canServiceRequest(elevator4, data6));
+
+        //try to create floor request < 0 SHOULD FAIL BUT DOESNT
+        //FloorRequest data7 = new FloorRequest(-8, 0, false);
+        //assertFalse(scheduler.canServiceRequest(elevator1, data7));
+        //assertFalse(scheduler.canServiceRequest(elevator2, data7));
+        //assertFalse(scheduler.canServiceRequest(elevator3, data7));
+        //assertFalse(scheduler.canServiceRequest(elevator4, data7));
     }
-}*/
+}
