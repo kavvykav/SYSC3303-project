@@ -31,11 +31,16 @@ public class Floor {
     // The common format used to validate the timestamps
     private static final DateTimeFormatter timePattern = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
+    // To keep track or pending requests
     private final ArrayList<FloorData> passengers;
 
+    // For sending requests
     private final UDPClient sender;
 
+    // For receiving elevator arrival updates from the scheduler
     private final UDPClient receiver;
+
+    private final Random rand;
 
     /**
      * Constructor for the floor.Floor class
@@ -49,8 +54,12 @@ public class Floor {
         receiver = new UDPClient(address, port, FLOOR_PORT);
         filename = file;
         passengers = new ArrayList<>();
+        rand = new Random();
     }
 
+    /**
+     * This function is called by the Sender. It reads through the input file and sends requests to the Scheduler.
+     */
     public void sendRequests() {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -83,9 +92,13 @@ public class Floor {
                         "\n\tDestination Floor: " + carButton);
 
                 // Send data to scheduler.Scheduler via UDP
-                FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);
-                synchronized (passengers) {
-                    passengers.add(data);
+                try {
+                    FloorData data = new FloorData(timestamp, floorNumber, direction, carButton);
+                    synchronized (passengers) {
+                        passengers.add(data);
+                    }
+                } catch(IllegalArgumentException e) {
+                    System.err.println(e.getMessage());
                 }
 
                 FloorRequest request = new FloorRequest(floorNumber, 0, direction);
@@ -96,8 +109,7 @@ public class Floor {
 
                 // Wait a random amount of time between 5 and 15 seconds
                 try {
-                    Random random = new Random();
-                    int randomMillis = random.nextInt(15000 - 5000 + 1) + 5000;
+                    int randomMillis = rand.nextInt(15000 - 5000 + 1) + 5000;
                     Thread.sleep(randomMillis);
                 } catch (InterruptedException e) {
                     return;
@@ -110,6 +122,10 @@ public class Floor {
         System.out.println("Floor: Finished reading input");
     }
 
+    /**
+     * This function is called by the Receiver. It waits for elevator arrivals, and simulates a passenger boarding
+     * by sending a request to the Scheduler.
+     */
     public void receiveResponses(){
 
         while (true) {
@@ -182,8 +198,12 @@ public class Floor {
     }
 }
 
+/**
+ * The Sender thread
+ */
 class Sender implements Runnable {
 
+    // Floor reference
     private final Floor floor;
 
     public Sender(Floor floor) {
@@ -195,8 +215,12 @@ class Sender implements Runnable {
     }
 }
 
+/**
+ * The Receiver thread
+ */
 class Receiver implements Runnable {
 
+    // Floor reference
     private final Floor floor;
 
     public Receiver(Floor floor) {
