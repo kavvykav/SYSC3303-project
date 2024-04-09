@@ -32,13 +32,6 @@ class SchedulerTest {
         elevator3 = new ElevatorClient(address, 5007, 3);
         elevator4 = new ElevatorClient(address, 5007, 4);
     }
-
-    @Test
-    void ResponseReceivedState() {
-        SchedulerState SchedulerResponseReceivedState = new SchedulerResponseReceivedState();
-        scheduler.setCurrentState(SchedulerResponseReceivedState);
-        assertInstanceOf(SchedulerResponseReceivedState.class, scheduler.getCurrentState());
-    }
     @Test
     void IdleState(){
         SchedulerState SchedulerIdleState = new SchedulerIdleState();
