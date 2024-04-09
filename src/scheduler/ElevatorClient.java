@@ -5,9 +5,8 @@ import common.ElevatorStatus;
 import java.net.*;
 
 /**
- * This class simply stores where a received packet is from (ie floor or
- * elevator),the address of whoever sent the packet, and the port number the
- * packet was sent through
+ * This class stores information about an Elevator to help the Scheduler keep track of all the connected elevators.
+ * It contains the IP address and port of the elevator, as well as the status information of it.
  */
 public class ElevatorClient {
 
@@ -51,10 +50,18 @@ public class ElevatorClient {
         return port;
     }
 
+    /**
+     * Getter method for the status of the Elevator
+     * @return the status of the elevator
+     */
     public ElevatorStatus getStatus() {
         return status;
     }
 
+    /**
+     * Setter method for the status of the Elevator
+     * @param newStatus the new status of the Elevator
+     */
     public void setStatus(ElevatorStatus newStatus) {
         status = newStatus;
     }
@@ -62,9 +69,9 @@ public class ElevatorClient {
     /**
      * The equals method for the scheduler.ClientPacketData class.
      *
-     * @param o The scheduler.ClientPacketData object we are comparing
+     * @param o the ElevatorClient object we are comparing
      *
-     * @return true if scheduler.ClientPacketData objects are equal, false otherwise
+     * @return true if the objects are equal, false otherwise
      */
     @Override
     public boolean equals(Object o) {

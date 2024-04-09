@@ -16,13 +16,14 @@ public class SchedulerIdleState implements SchedulerState {
      */
     public FloorRequest doAction(Scheduler scheduler, FloorRequest request) {
 
+        // Wait to received data
         Object receivedObject = scheduler.receive();
 
         if (receivedObject instanceof FloorRequest) {
             return (FloorRequest) receivedObject;
 
         } else if (receivedObject instanceof PassengerRequest) {
-
+            // Received a request to board or get off an elevator
             PassengerRequest request1 = (PassengerRequest) receivedObject;
             ElevatorClient client = scheduler.getClient(request1.getElevator());
             if (client != null) {
@@ -37,22 +38,17 @@ public class SchedulerIdleState implements SchedulerState {
                 client.setStatus(status);
                 if (status.getDirection() == Direction.STUCK) {
                     scheduler.schedulerPrint("Elevator " + status.getId() + " is stuck between floors");
-                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
                 } else if (status.getDirection() == Direction.DOOR_STUCK) {
                     scheduler.schedulerPrint("Elevator " + status.getId() + " has a stuck door");
-                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT );
                 } else if (status.isStopped()) {
                     scheduler.send(status, NetworkConstants.localHost(), FLOOR_PORT);
-                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
-                } else {
-                    scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
                 }
             } else {
                 ElevatorClient newClient = new ElevatorClient(scheduler.getReceivePacket().getAddress(),
                         scheduler.getReceivePacket().getPort(), status.getId());
                 scheduler.addClient(newClient);
-                scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
             }
+            scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
         }
         return null;
     }

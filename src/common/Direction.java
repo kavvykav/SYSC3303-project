@@ -1,8 +1,8 @@
 package common;
 
 /**
- * For representing the direction of the Elevator.
- * Moving up, moving down, stationary, or stuck
+ * For representing the direction of the Elevator:
+ * Moving up, moving down, stationary, stuck, or door stuck
  */
 public enum Direction {
     STATIONARY, // Indicates that the elevator is not currently serving any requests
