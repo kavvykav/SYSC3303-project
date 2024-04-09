@@ -4,10 +4,7 @@ import java.net.InetAddress;
 
 import java.util.ArrayList;
 
-import common.Direction;
-import common.ElevatorStatus;
-import common.UDPClient;
-import common.NetworkConstants;
+import common.*;
 
 import static common.NetworkConstants.GUI_PORT;
 import static common.NetworkConstants.SCHEDULER_PORT;
