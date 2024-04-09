@@ -447,4 +447,50 @@ public class Console {
     public void setElevator4Direction(JTextField elevator4Direction) {
         this.elevator4Direction = elevator4Direction;
     }
+
+    /**
+     * Gets the elevator1Position field for testing purposes.
+     */
+    public JTextField getElevator1Position() {return elevator1Position;}
+
+    /**
+     * Gets the elevator2Position field for testing purposes.
+     */
+    public JTextField getElevator2Position() {return elevator2Position;}
+
+    /**
+     * Gets the elevator3Position field for testing purposes.
+     */
+    public JTextField getElevator3Position() {return elevator3Position;}
+
+    /**
+     * Gets the elevator4Position field for testing purposes.
+     */
+    public JTextField getElevator4Position() {return elevator4Position;}
+
+    /**
+     * Gets the elevator1Direction field for testing purposes.
+     */
+    public JTextField getElevator1Direction() {return elevator1Direction;}
+
+    /**
+     * Gets the elevator2Direction field for testing purposes.
+     */
+    public JTextField getElevator2Direction() {return elevator2Direction;}
+
+    /**
+     * Gets the elevator3Direction field for testing purposes.
+     */
+    public JTextField getElevator3Direction() {return elevator3Direction;}
+
+    /**
+     * Gets the elevator4Direction field for testing purposes.
+     */
+    public JTextField getElevator4Direction() {return elevator4Direction;}
+
+    /**
+     * Gets the errorLog field for testing purposes.
+     */
+    public JTextArea getErrorLog() {return errorLog;}
+
 }

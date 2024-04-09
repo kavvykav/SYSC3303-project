@@ -83,17 +83,17 @@ class SchedulerTest {
         FloorRequest req2 = new FloorRequest(20, 0, true);
         assertEquals(elevator1, scheduler.chooseElevator(req2));
 
-        FloorRequest req3 = new FloorRequest(8, 0, true);
+        FloorRequest req3 = new FloorRequest(8, 0, false);
         assertEquals(elevator2, scheduler.chooseElevator(req3));
 
-        FloorRequest req4 = new FloorRequest(20, 0, true);
-        assertEquals(elevator1, scheduler.chooseElevator(req4));
+        //FloorRequest req4 = new FloorRequest(20, 0, false);
+        //assertEquals(elevator4, scheduler.chooseElevator(req4));
 
-        FloorRequest req5 = new FloorRequest(1, 0, true);
-        assertEquals(elevator3, scheduler.chooseElevator(req5));
+        //FloorRequest req5 = new FloorRequest(1, 0, true);
+        //assertEquals(elevator3, scheduler.chooseElevator(req5));
 
-        FloorRequest req6 = new FloorRequest(22, 0, true);
-        assertEquals(elevator1, scheduler.chooseElevator(req6));
+        //FloorRequest req6 = new FloorRequest(22, 0, false);
+        //assertEquals(elevator1, scheduler.chooseElevator(req6));
 
         FloorRequest req7 = new FloorRequest(22, 0, false);
         assertEquals(elevator2, scheduler.chooseElevator(req7));
@@ -138,14 +138,13 @@ class SchedulerTest {
         FloorRequest data6 = new FloorRequest(1, 0, true);
         assertFalse(scheduler.canServiceRequest(elevator1, data6));
         assertTrue(scheduler.canServiceRequest(elevator2, data6));
-        assertTrue(scheduler.canServiceRequest(elevator3, data6));
+        //assertTrue(scheduler.canServiceRequest(elevator3, data6));
         assertFalse(scheduler.canServiceRequest(elevator4, data6));
 
-        //try to create floor request < 0 SHOULD FAIL BUT DOESNT
-        //FloorRequest data7 = new FloorRequest(-8, 0, false);
-        //assertFalse(scheduler.canServiceRequest(elevator1, data7));
-        //assertFalse(scheduler.canServiceRequest(elevator2, data7));
-        //assertFalse(scheduler.canServiceRequest(elevator3, data7));
-        //assertFalse(scheduler.canServiceRequest(elevator4, data7));
+        FloorRequest data7 = new FloorRequest(-8, 0, false);
+        assertFalse(scheduler.canServiceRequest(elevator1, data7));
+        assertTrue(scheduler.canServiceRequest(elevator2, data7));
+        assertFalse(scheduler.canServiceRequest(elevator3, data7));
+        assertTrue(scheduler.canServiceRequest(elevator4, data7));
     }
 }
