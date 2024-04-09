@@ -16,6 +16,8 @@ public class Console {
     private JPanel panel4;
     private JPanel errorPanel;
 
+    private JPanel statsPanel;
+
     // Labels indicationg where Elevator 1 - 4 Positions are, as well as the
     // error log.
     private JLabel label1;
@@ -23,6 +25,12 @@ public class Console {
     private JLabel label3;
     private JLabel label4;
     private JLabel errorLabel;
+
+    // Labels showing the statistics of the control system
+    private JLabel tripsRequestedLabel;
+    private JLabel tripsCompletedLabel;
+    private JLabel faultsLabel;
+    private JLabel timeLabel;
 
     // Text fields showing the current position of each elevator.
     private JTextField elevator1Position;
@@ -36,6 +44,11 @@ public class Console {
     private JTextField elevator3Direction;
     private JTextField elevator4Direction;
 
+    // Text fields showing the number of requested trips, completed trips and faults
+    private JTextField tripsRequestedField;
+    private JTextField tripsCompletedField;
+    private JTextField faultsField;
+    private JTextField timeField;
     // Text box showing the errors
     private JTextArea errorLog;
 
@@ -79,6 +92,10 @@ public class Console {
         errorPanel.setSize(new Dimension(900, 1000));
         errorPanel.setBackground(Color.DARK_GRAY);
 
+        statsPanel = new JPanel();
+        statsPanel.setSize(new Dimension(500, 1000));
+        statsPanel.setBackground(Color.DARK_GRAY);
+
         // Set up labels
         label1 = new JLabel();
         label1.setText("Elevator 1");
@@ -104,6 +121,26 @@ public class Console {
         errorLabel.setText("Errors");
         errorLabel.setFont(FONT);
         errorLabel.setForeground(Color.WHITE);
+
+        tripsRequestedLabel = new JLabel();
+        tripsRequestedLabel.setText("Requests Received");
+        tripsRequestedLabel.setFont(FONT);
+        tripsRequestedLabel.setForeground(Color.WHITE);
+
+        tripsCompletedLabel = new JLabel();
+        tripsCompletedLabel.setText("Requests Serviced");
+        tripsCompletedLabel.setFont(FONT);
+        tripsCompletedLabel.setForeground(Color.WHITE);
+
+        faultsLabel = new JLabel();
+        faultsLabel.setText("Failed Requests");
+        faultsLabel.setFont(FONT);
+        faultsLabel.setForeground(Color.WHITE);
+
+        timeLabel = new JLabel();
+        timeLabel.setText("Elapsed Time");
+        timeLabel.setFont(FONT);
+        timeLabel.setForeground(Color.WHITE);
 
         // Set up JTextFields to show the current position of each elevator
         elevator1Position = new JTextField();
@@ -177,6 +214,38 @@ public class Console {
         errorLog.setEditable(false);
         errorLog.setForeground(Color.RED);
 
+        tripsRequestedField = new JTextField();
+        tripsRequestedField.setPreferredSize(new Dimension(100, 50));
+        tripsRequestedField.setFont(FONT);
+        tripsRequestedField.setHorizontalAlignment(JTextField.CENTER);
+        tripsRequestedField.setBackground(Color.BLACK);
+        tripsRequestedField.setForeground(Color.WHITE);
+        tripsRequestedField.setEditable(false);
+
+        tripsCompletedField = new JTextField();
+        tripsCompletedField.setPreferredSize(new Dimension(100, 50));
+        tripsCompletedField.setFont(FONT);
+        tripsCompletedField.setHorizontalAlignment(JTextField.CENTER);
+        tripsCompletedField.setBackground(Color.BLACK);
+        tripsCompletedField.setForeground(Color.WHITE);
+        tripsCompletedField.setEditable(false);
+
+        faultsField = new JTextField();
+        faultsField.setPreferredSize(new Dimension(100, 50));
+        faultsField.setFont(FONT);
+        faultsField.setHorizontalAlignment(JTextField.CENTER);
+        faultsField.setBackground(Color.BLACK);
+        faultsField.setForeground(Color.WHITE);
+        faultsField.setEditable(false);
+
+        timeField = new JTextField();
+        timeField.setPreferredSize(new Dimension(300, 50));
+        timeField.setFont(FONT);
+        timeField.setHorizontalAlignment(JTextField.CENTER);
+        timeField.setBackground(Color.BLACK);
+        timeField.setForeground(Color.WHITE);
+        timeField.setEditable(false);
+
         JScrollPane scroll = new JScrollPane();
         scroll.add(errorLog);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -201,11 +270,21 @@ public class Console {
         errorPanel.add(errorLabel);
         errorPanel.add(errorLog);
 
+        statsPanel.add(tripsRequestedLabel);
+        statsPanel.add(tripsRequestedField);
+        statsPanel.add(tripsCompletedLabel);
+        statsPanel.add(tripsCompletedField);
+        statsPanel.add(faultsLabel);
+        statsPanel.add(faultsField);
+        statsPanel.add(timeLabel);
+        statsPanel.add(timeField);
+
         frame.add(panel1);
         frame.add(panel2);
         frame.add(panel3);
         frame.add(panel4);
         frame.add(errorPanel);
+        frame.add(statsPanel);
 
         frame.setVisible(true);
     }
@@ -278,6 +357,41 @@ public class Console {
         }
         selectedField.setText(directionToString);
 
+    }
+
+    /**
+     * Updates the trips requests text field.
+     * @param numRequests: the number of requests.
+     */
+    public void updateRequestsReceivedField(int numRequests) {
+        Integer requests = Integer.valueOf(numRequests);
+        tripsRequestedField.setText(requests.toString());
+    }
+
+    /**
+     * Updates the trips completed text field.
+     * @param numServed: the number of requests completed.
+     */
+    public void updateRequestsServedField(int numServed) {
+        Integer requests = Integer.valueOf(numServed);
+        tripsCompletedField.setText(requests.toString());
+    }
+
+    /**
+     * Updates the trips failed text field.
+     * @param numFailed: the number of requests failed.
+     */
+    public void updateRequestsFailedField(int numFailed) {
+        Integer requests = Integer.valueOf(numFailed);
+        faultsField.setText(requests.toString());
+    }
+
+    /**
+     * Updates the elapsed time field.
+     * @param time: the total elapsed time.
+     */
+    public void updateTimeField(String time) {
+        timeField.setText(time + " sec");
     }
 
     /**
@@ -450,46 +564,55 @@ public class Console {
 
     /**
      * Gets the elevator1Position field for testing purposes.
+     * @return elevator1Position
      */
     public JTextField getElevator1Position() {return elevator1Position;}
 
     /**
      * Gets the elevator2Position field for testing purposes.
+     * @return elevator2Position
      */
     public JTextField getElevator2Position() {return elevator2Position;}
 
     /**
      * Gets the elevator3Position field for testing purposes.
+     * @return elevator3Position
      */
     public JTextField getElevator3Position() {return elevator3Position;}
 
     /**
      * Gets the elevator4Position field for testing purposes.
+     * @return elevator4Position
      */
     public JTextField getElevator4Position() {return elevator4Position;}
 
     /**
      * Gets the elevator1Direction field for testing purposes.
+     * @return elevator1Direction
      */
     public JTextField getElevator1Direction() {return elevator1Direction;}
 
     /**
      * Gets the elevator2Direction field for testing purposes.
+     * @return elevator2Direction
      */
     public JTextField getElevator2Direction() {return elevator2Direction;}
 
     /**
      * Gets the elevator3Direction field for testing purposes.
+     * @return elevator3Direction
      */
     public JTextField getElevator3Direction() {return elevator3Direction;}
 
     /**
      * Gets the elevator4Direction field for testing purposes.
+     * @return elevator4Direction
      */
     public JTextField getElevator4Direction() {return elevator4Direction;}
 
     /**
      * Gets the errorLog field for testing purposes.
+     * @return elevator4Direction
      */
     public JTextArea getErrorLog() {return errorLog;}
 

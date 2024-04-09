@@ -11,6 +11,10 @@ import static common.NetworkConstants.SCHEDULER_PORT;
 
 public class GUI extends UDPClient {
     private static Console console;
+    private int tripsRequested;
+    private int tripsServiced;
+    private int tripsFailed;
+    private String elapsedTime;
 
     /**
      * The constructor for the GUIHandler class.
@@ -56,7 +60,17 @@ public class GUI extends UDPClient {
                     }
                 }
                 console.updateDirectionField(elevator, status.getDirection());
-            } else {
+            } else if (receivedData instanceof ElevatorStatistics) {
+                ElevatorStatistics stats = (ElevatorStatistics) receivedData;
+                int numRequests = stats.getNumRequests();
+                int numServed = stats.getNumServed();
+                int numFailed = stats.getNumFailed();
+                double timestamp = stats.getTimestamp();
+                console.updateRequestsReceivedField(numRequests);
+                console.updateRequestsServedField(numServed);
+                console.updateRequestsFailedField(numFailed);
+                console.updateTimeField(Double.valueOf(timestamp).toString());
+            }else {
                 System.err.println("Did not receive the correct type of information");
             }
         }
