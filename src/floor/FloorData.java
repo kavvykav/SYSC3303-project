@@ -3,8 +3,7 @@ package floor;
 import java.io.Serializable;
 
 /**
- * The common.FloorData class represents the necessary information to be shared between the three main subsystems (floor.Floor,
- * scheduler.Scheduler, and elevator.Elevator). It represents a data structure to be sent over UDP.
+ * FloorData represents a sequence of events performed by a passenger.
  */
 public class FloorData implements Serializable {
 
@@ -24,8 +23,7 @@ public class FloorData implements Serializable {
     private int elevator;
 
     /**
-     * Basic constructor for common.FloorData class
-     * NOTE: The status field is set to false by default
+     * Basic constructor for FloorData class
      *
      * @param timestamp The time the request was made
      * @param floorNumber The floor at which the request was made
@@ -98,5 +96,7 @@ public class FloorData implements Serializable {
     public void setElevator(int elevator) {
         this.elevator = elevator;
     }
-    public String getTimeStamp(){return timestamp;}
+    public String getTimeStamp(){
+        return timestamp;
+    }
 }

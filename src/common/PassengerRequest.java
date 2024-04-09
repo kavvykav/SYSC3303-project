@@ -2,6 +2,10 @@ package common;
 
 import java.io.Serializable;
 
+/**
+ * This class represents a request by the Floor system to board/leave an elevator. These requests are routed through
+ * the Scheduler and sent to the Elevator.
+ */
 public class PassengerRequest implements Serializable {
 
     // true: Passenger is boarding elevator
@@ -22,6 +26,7 @@ public class PassengerRequest implements Serializable {
         this.elevator = elevator;
     }
 
+    /* Getter methods */
     public boolean isBoarding() {
         return boarding;
     }

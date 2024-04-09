@@ -3,7 +3,8 @@ package common;
 import java.io.Serializable;
 
 /**
- * Represents the Status of an Elevator, used by the Scheduler to keep track of the positions of the elevators
+ * Represents the Status of an Elevator, used by the Elevator Scheduler systems to keep track of the position and
+ * direction of the elevators.
  */
 public class ElevatorStatus implements Serializable {
 
@@ -16,10 +17,14 @@ public class ElevatorStatus implements Serializable {
     // The direction of the elevator
     private Direction direction;
 
+    // Flag indicating if the elevator has stopped at a floor (to drop off or pick up a passenger)
     private boolean stopped;
 
+    // The direction in which the elevator is serving passengers
+    // true: up, false: down
     private boolean goingUp;
 
+    // For capacity limits
     private boolean empty;
 
     /**
@@ -38,7 +43,8 @@ public class ElevatorStatus implements Serializable {
         empty = true;
     }
 
-    public synchronized int getId() {
+    /* Getter and setter methods */
+    public int getId() {
         return id;
     }
 
@@ -58,30 +64,36 @@ public class ElevatorStatus implements Serializable {
         this.direction = direction;
     }
 
-    public synchronized boolean isStopped() {
+    public boolean isStopped() {
         return stopped;
     }
 
-    public synchronized void setStopped(boolean stopped) {
+    public void setStopped(boolean stopped) {
         this.stopped = stopped;
     }
 
-    public synchronized boolean isGoingUp() {
+    public boolean isGoingUp() {
         return goingUp;
     }
 
-    public synchronized void setGoingUp(boolean goingUp) {
+    public void setGoingUp(boolean goingUp) {
         this.goingUp = goingUp;
     }
 
-    public synchronized boolean isEmpty() {
+    public boolean isEmpty() {
         return empty;
     }
 
-    public synchronized void setEmpty(boolean empty) {
+    public void setEmpty(boolean empty) {
         this.empty = empty;
     }
 
+    /**
+     * Equals method for ElevatorStatus
+     *
+     * @param o the status object we are comparing
+     * @return true if the statuses are equivalent, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
 
@@ -94,12 +106,13 @@ public class ElevatorStatus implements Serializable {
             return false;
         }
 
-        // typecast o to common.FloorData so that we can compare data members
+        // typecast o to ElevatorStatus so that we can compare data members
         ElevatorStatus data = (ElevatorStatus) o;
         return floor == data.floor
                 && id == data.id
                 && direction == data.direction
                 && stopped == data.stopped
-                && goingUp == data.goingUp;
+                && goingUp == data.goingUp
+                && empty == data.empty;
     }
 }

@@ -22,7 +22,6 @@ public class NetworkConstants {
      *
      * @return localhost address
      */
-
     public static InetAddress localHost() {
         try {
             return InetAddress.getLocalHost();

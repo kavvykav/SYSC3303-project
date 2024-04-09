@@ -215,11 +215,17 @@ public class Elevator extends UDPClient implements Runnable {
         motor.interrupt();
     }
 
+    /**
+     * Add a passenger to the elevator
+     */
     public void addPassenger() {
         elevatorPrint("Boarding a passenger on floor " + status.getFloor());
         status.setEmpty(false);
     }
 
+    /**
+     * Remove a passenger from the elevator
+     */
     public void removePassenger() {
         elevatorPrint("Passenger getting off on floor " + status.getFloor());
         status.setEmpty(true);

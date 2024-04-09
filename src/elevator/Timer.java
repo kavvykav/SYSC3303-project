@@ -6,7 +6,7 @@ package elevator;
  */
 public class Timer implements Runnable {
 
-    // Motor instance to interrupt
+    // Elevator instance to interrupt
     private final Elevator elevator;
 
     // The time (in seconds)
