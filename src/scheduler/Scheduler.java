@@ -1,14 +1,13 @@
 package scheduler;
 
-import common.Direction;
-import common.ElevatorStatus;
-import common.FloorRequest;
-import common.UDPServer;
-
-import static common.NetworkConstants.SCHEDULER_PORT;
+import common.*;
+import gui.GUI;
 
 import java.lang.Math;
+
 import java.util.ArrayList;
+
+import static common.NetworkConstants.GUI_PORT;
 
 /**
  * This is the main component of the scheduler.Scheduler Subsystem
@@ -24,11 +23,20 @@ public class Scheduler extends UDPServer {
     // State of the Scheduler
     private SchedulerState currentState;
 
+    //Elevator statistics
+    private ElevatorStatistics stats;
+
+    // Start and end times
+    private long startTime;
+
+    private long endTime;
+
     /**
      * The constructor for the scheduler.Scheduler object.
      */
     public Scheduler() {
         super();
+        stats = new ElevatorStatistics();
         elevators = new ArrayList<>(NUM_ELEVATORS);
         setCurrentState(new SchedulerIdleState());
     }
@@ -146,6 +154,7 @@ public class Scheduler extends UDPServer {
      * The main routine for the scheduler
      */
     public void serveRequests() { // Repeat indefinitely
+        setStartTime(System.nanoTime());
         while (true) {
             // Idle state : wait for request from floor
             FloorRequest request = currentState.doAction(this, null);
@@ -169,6 +178,47 @@ public class Scheduler extends UDPServer {
      */
     public void schedulerPrint(String output) {
         System.out.println("Scheduler: " + output);
+    }
+
+    /**
+     * Gets the statistics for the Elevator.
+     *
+     * @return stats: the data structure storing the statistics
+     */
+    public ElevatorStatistics getStats() {
+        return stats;
+    }
+
+    /**
+     * Sets the start time for the Scheduler.
+     * @param startTime: the start time
+     */
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * Sets the end time for the Scheduler.
+     * @param endTime: the end time
+     */
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    /**
+     * Gets the start time for the Scheduler.
+     * @return startTime
+     */
+    public long getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * Gets the end time for the Scheduler.
+     * @return endTime
+     */
+    public long getEndTime() {
+        return endTime;
     }
 
     public static void main(String[] args) {

@@ -38,9 +38,11 @@ public class SchedulerIdleState implements SchedulerState {
                 client.setStatus(status);
                 if (status.getDirection() == Direction.STUCK) {
                     scheduler.schedulerPrint("Elevator " + status.getId() + " is stuck between floors");
+                    scheduler.getStats().incrementNumFailed();
                 } else if (status.getDirection() == Direction.DOOR_STUCK) {
                     scheduler.schedulerPrint("Elevator " + status.getId() + " has a stuck door");
                 } else if (status.isStopped()) {
+                    scheduler.getStats().incrementNumServed();
                     scheduler.send(status, NetworkConstants.localHost(), FLOOR_PORT);
                 }
             } else {
@@ -48,8 +50,15 @@ public class SchedulerIdleState implements SchedulerState {
                         scheduler.getReceivePacket().getPort(), status.getId());
                 scheduler.addClient(newClient);
             }
+            scheduler.setEndTime(System.nanoTime());
+            double elapsedTime = ((double)scheduler.getEndTime() - scheduler.getStartTime()) / 1000000000;
+            scheduler.getStats().setTimestamp(elapsedTime);
+            scheduler.send(scheduler.getStats(), NetworkConstants.localHost(), GUI_PORT);
             scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
         }
+
+
+        scheduler.send(scheduler.getStats(), NetworkConstants.localHost(), GUI_PORT);
         return null;
     }
 
