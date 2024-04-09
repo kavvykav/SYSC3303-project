@@ -5,6 +5,7 @@ import common.FloorRequest;
 /**
  * This is the state where the scheduler.Scheduler receives a response from the elevator.Elevator.
  * It will send it back to the floor.
+ * This class is currently deprecated
  */
 public class SchedulerResponseReceivedState implements SchedulerState {
 
@@ -12,12 +13,6 @@ public class SchedulerResponseReceivedState implements SchedulerState {
      * The action the scheduler.Scheduler performs when in the Response Received state
      */
     public FloorRequest doAction(Scheduler scheduler, FloorRequest request) {
-
-//        if (data.getBoarded()) {
-//            scheduler.schedulerPrint("Elevator request served successfully");
-//        } else {
-//            System.err.println("Scheduler: Elevator request was not served");
-//        }
         return null;
     }
 
