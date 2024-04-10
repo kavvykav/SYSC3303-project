@@ -56,8 +56,6 @@ Java `SDK 21`, and Language Level set to `Default SDK` in IntelliJ.
 
 ### test
 
-There are seven (7) test files that are included to ensure the system states and data is correct.
-
 - **test.ElevatorTest.java**: The tests included in this file are used to ensure that each state that is called is the
   correct state that is required in the elevator subsystem and to ensure elevator.Elevator data correction. States tested include: EstablishingConnection, Idle and MotorRunning. Data tests include: GetNumRequests, GetCurrentRequest, updateRequestsTest, ShouldStop, GetStatus, GetDoorStatus, OpenDoor, ForceCloseDoor, CloseDoor, GetTimerStatus, StartTimer, StopTimer, GetMotorStatus, StartMotor, and Timeout.
 - **test.SchedulerTest.java**: The tests included in this file are used to ensure that each state that is called is the correct state that is required in the scheduler subsystem and to ensure scheduler.Scheduler data correction. States tested include: ResponseReceived, Idle and RequestReceived. Data tests include: GetClient, ChooseElevator, and CanServiceRequest.
@@ -72,18 +70,21 @@ There are seven (7) test files that are included to ensure the system states and
 
 ```bash
 SYSC3303-project
-├── .gitignore
 ├── docs
 │  ├── CommonClasses.png
+│  ├── DoorFaultSequenceDiagram.png
 │  ├── ElevatorStateDiagram.png
+│  ├── ElevatorStuckFaultSequenceDiagram.png
 │  ├── ElevatorStuckTimingDiagram.png
 │  ├── ElevatorSubsystemClassDiagram.png
 │  ├── ElevatorTooSlowTimingDiagram.png
 │  ├── FloorSubsystemClassDiagram.png
+│  ├── GUIClassDiagram.png
 │  ├── README.md
 │  ├── SchedulerStateDiagram.png
 │  ├── SchedulerSubsystemClassDiagram.png
-│  └── SequenceDiagram.png
+│  ├── SequenceDiagram.png
+│  └── SYSC 3303 B1G1 FINAL PROJECT REPORT.pdf
 ├── lib
 │  ├── apiguardian-api-1.1.2.jar
 │  ├── assertj-core-3.17.2.jar
@@ -111,6 +112,7 @@ SYSC3303-project
 ├── src
 │  ├── common
 │  │  ├── Direction.java
+│  │  ├── ElevatorStatistics.java
 │  │  ├── ElevatorStatus.java
 │  │  ├── FloorRequest.java
 │  │  ├── NetworkConstants.java
@@ -126,8 +128,10 @@ SYSC3303-project
 │  │  ├── Motor.java
 │  │  └── Timer.java
 │  ├── floor
+│  │  ├── AcceptanceTest.java
 │  │  ├── Floor.java
-│  │  └── FloorData.java
+│  │  ├── FloorData.java
+│  │  └── IntegrationTest.java
 │  ├── gui
 │  │  ├── Console.java
 │  │  └── GUI.java
@@ -136,11 +140,11 @@ SYSC3303-project
 │  │  ├── Scheduler.java
 │  │  ├── SchedulerIdleState.java
 │  │  ├── SchedulerRequestReceivedState.java
-│  │  ├── SchedulerResponseReceivedState.java
 │  │  └── SchedulerState.java
 │  └── test
 │     ├── ConsoleTest.java
 │     ├── ElevatorClientTest.java
+│     ├── ElevatorStatisticsTest.java
 │     ├── ElevatorStatusTest.java
 │     ├── ElevatorTest.java
 │     ├── FloorDataTest.java
@@ -188,5 +192,5 @@ questions, please contact one of the authors.
 - Liam Kavanagh -> Implementing and integrating GUI
 - Matthew Huybregts -> Implementing capacity limits and back end
 - Sean Pruss -> Update README.md
-- Joshua Robson -> JUnit tests, Debugging
+- Joshua Robson -> JUnit tests, Debugging, Helped with GUI, update README.md
 - Abed Qubbaj -> Update diagrams
