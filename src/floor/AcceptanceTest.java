@@ -110,7 +110,7 @@ public class AcceptanceTest implements Runnable{
                                         scheduler.getClient(4).getStatus().getDirection() == Direction.STATIONARY)) &&
                                 floor.isFileRead()
                 ){
-                    System.out.println("Efficiency of the elevator system: " + scheduler.getStats().getNumServed() / scheduler.getStats().getNumRequests() + "%");
+                    System.out.println("Efficiency of the elevator system: " + Math.round(((double)scheduler.getStats().getNumServed() / (double)scheduler.getStats().getNumRequests())) * 100 + "%");
                 }
             }
         }
