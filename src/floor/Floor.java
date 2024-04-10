@@ -43,6 +43,9 @@ public class Floor {
     // For adding time in between requests
     private final Random rand;
 
+    // To check if the entire file has been read
+    private boolean fileRead;
+
     /**
      * Constructor for the floor.Floor class
      * 
@@ -56,6 +59,7 @@ public class Floor {
         filename = file;
         passengers = new ArrayList<>();
         rand = new Random();
+        fileRead = false;
     }
 
     /**
@@ -120,6 +124,7 @@ public class Floor {
             e.printStackTrace();
             System.err.println("Floor: Invalid data, discarding line");
         }
+        fileRead = true;
         System.out.println("Floor: Finished reading input");
     }
 
@@ -184,6 +189,14 @@ public class Floor {
                 }
             }
         }
+    }
+
+    /**
+     * Check if the input file has been read
+     * @return true if the input file has been read, false otherwise
+     */
+    public boolean isFileRead() {
+        return fileRead;
     }
 
     /**

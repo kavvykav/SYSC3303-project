@@ -27,9 +27,15 @@ class TimerTest {
         timer = new Timer(elevator, time);
     }
 
+    /**
+     * Test getElevator method
+     */
     @Test
     void getElevatorTest() { assertEquals(elevator, timer.getElevator()); }
 
+    /**
+     * Test getTime method
+     */
     @Test
     void getTimeTest() {
         assertEquals(time, timer.getTime());

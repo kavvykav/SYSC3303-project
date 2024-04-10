@@ -32,18 +32,30 @@ class SchedulerTest {
         elevator3 = new ElevatorClient(address, 5007, 3);
         elevator4 = new ElevatorClient(address, 5007, 4);
     }
+
+    /**
+     * Test if the scheduler is in IdleState when called
+     */
     @Test
     void IdleState(){
         SchedulerState SchedulerIdleState = new SchedulerIdleState();
         scheduler.setCurrentState(SchedulerIdleState);
         assertInstanceOf(scheduler.SchedulerIdleState.class, scheduler.getCurrentState());
     }
+
+    /**
+     * Test if the scheduler is in RequestReceivedState when called
+     */
     @Test
     void RequestReceivedState(){
         SchedulerState SchedulerRequestReceivedState = new SchedulerRequestReceivedState();
         scheduler.setCurrentState(SchedulerRequestReceivedState);
         assertInstanceOf(scheduler.SchedulerRequestReceivedState.class, scheduler.getCurrentState());
     }
+
+    /**
+     * Test the getClient method
+     */
     @Test
     void GetClientTest(){
         ArrayList<ElevatorClient> elevators = new ArrayList<>();
@@ -60,6 +72,10 @@ class SchedulerTest {
         assertEquals(3,elevators.get(2).getStatus().getId());
         assertEquals(4,elevators.get(3).getStatus().getId());
     }
+
+    /**
+     * Test the chooseElevator method
+     */
     @Test
     void ChooseElevatorTest(){
         FloorRequest req1 = new FloorRequest( 16, 0, false);
@@ -92,6 +108,10 @@ class SchedulerTest {
         assertEquals(elevator2, scheduler.chooseElevator(req7));
 
     }
+
+    /**
+     * Test the canServiceRequest method
+     */
     @Test
     void CanServiceRequestTest() throws IndexOutOfBoundsException {
         FloorRequest data = new FloorRequest(16, 0, true);

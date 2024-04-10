@@ -26,40 +26,66 @@ class ElevatorTest {
         elevator.getStatus().setDirection(Direction.STATIONARY);
     }
 
+    /**
+     * Test if the elevator is in motorRunningState when called
+     */
     @Test
     void motorRunningState(){
         ElevatorState ElevatorMotorRunningState = new ElevatorRequestReceivedState();
         elevator.setCurrentState(ElevatorMotorRunningState);
         assertInstanceOf(ElevatorRequestReceivedState.class, elevator.getCurrentState());
     }
+
+    /**
+     * Test if the elevator is in EstablishConnectionState when called
+     */
     @Test
     void EstablishConnectionState(){
         ElevatorState ElevatorEstablishingConnectionState = new ElevatorEstablishingConnectionState();
         elevator.setCurrentState(ElevatorEstablishingConnectionState);
         assertInstanceOf(ElevatorEstablishingConnectionState.class, elevator.getCurrentState());
     }
+
+    /**
+     * Test if the elevator is in IdleState when called
+     */
     @Test
     void IdleState(){
         ElevatorState ElevatorIdleState = new ElevatorIdleState();
         elevator.setCurrentState(ElevatorIdleState);
         assertInstanceOf(elevator.ElevatorIdleState.class, elevator.getCurrentState());
     }
+
+    /**
+     * Test getStatus method
+     */
     @Test
     void GetStatusTest(){
         ElevatorStatus status = new ElevatorStatus(1, 1, Direction.STATIONARY, false);
         assertEquals(status, elevator.getStatus());
     }
+
+    /**
+     * Test shouldStop method
+     */
     @Test
     void ShouldStopTest(){
         elevator.add(16);
         assertFalse(elevator.shouldStop());
-
     }
+
+    /**
+     * Test updateRequests method
+     */
     @Test
     void updateRequestsTest(){
         elevator.add(16);
         assertEquals(16, elevator.updateRequests());
     }
+
+    /**
+     * Test getCurrentRequest method
+     */
     @Test
     void GetCurrentRequestTest(){
         elevator.add(16);
@@ -67,6 +93,10 @@ class ElevatorTest {
         elevator.add(3);
         assertEquals(16, elevator.getCurrentRequest());
     }
+
+    /**
+     * Test getNumRequests method
+     */
     @Test
     void GetNumRequestsTest(){
         elevator.add(16);
@@ -74,18 +104,30 @@ class ElevatorTest {
         elevator.add(3);
         assertEquals(3, elevator.getNumRequests());
     }
+
+    /**
+     * Test getDoorStatus method
+     */
     @Test
     void getDoorStatusTest(){
         assertFalse(elevator.getDoorStatus());
         elevator.openDoor();
         assertTrue(elevator.getDoorStatus());
     }
+
+    /**
+     * Test openDoor method
+     */
     @Test
     void openDoorTest () {
         assertFalse(elevator.getDoorStatus());
         elevator.openDoor();
         assertTrue(elevator.getDoorStatus());
     }
+
+    /**
+     * Test forceDoorClose method
+     */
     @Test
     void forceCloseDoorTest(){
         assertFalse(elevator.getDoorStatus());
@@ -94,6 +136,10 @@ class ElevatorTest {
         elevator.forceCloseDoor();
         assertFalse(elevator.getDoorStatus());
     }
+
+    /**
+     * Test closeDoor method
+     */
     @Test
     void closeDoorTest(){
         assertFalse(elevator.getDoorStatus());
@@ -110,11 +156,20 @@ class ElevatorTest {
         }
         assertFalse(elevator.getDoorStatus());
     }
+
     //Beyond here, Testing code gets kind of weird, due to threads, testing may or may not pass.
+
+    /**
+     * Test getTimerStatus method
+     */
     @Test
     void getTimerStatusTest(){
         assertNull(elevator.getTimerStatus());
     }
+
+    /**
+     * Test startTimer method
+     */
     @Test
     void startTimerTest(){
         elevator.startTimer(3);
@@ -123,6 +178,10 @@ class ElevatorTest {
         assertFalse(elevator.getTimerStatus().isInterrupted());
         assertEquals("Timer: " + 3 + " seconds", elevator.getTimerStatus().getName());
     }
+
+    /**
+     * Test stopTimer method
+     */
     @Test
     void stopTimerTest(){
         elevator.startTimer(3);
@@ -134,10 +193,18 @@ class ElevatorTest {
         assertTrue(elevator.getTimerStatus().isAlive());
         assertTrue(elevator.getTimerStatus().isInterrupted());
     }
+
+    /**
+     * Test getMotorStatus method
+     */
     @Test
     void getMotorStatusTest(){
         assertNull(elevator.getMotorStatus());
     }
+
+    /**
+     * Test startMotor method
+     */
     @Test
     void startMotorTest(){
         elevator.add(22);
@@ -149,6 +216,9 @@ class ElevatorTest {
         assertEquals("Motor", elevator.getMotorStatus().getName());
     }
 
+    /**
+     * Test timeout method
+     */
     @Test
     void timeoutTest(){
         elevator.add(22);
@@ -163,6 +233,9 @@ class ElevatorTest {
         assertTrue(elevator.getMotorStatus().isInterrupted());
     }
 
+    /**
+     * Test addPassenger method
+     */
     @Test
     void addPassengerTest(){
         assertTrue(elevator.getStatus().isEmpty());
@@ -170,6 +243,9 @@ class ElevatorTest {
         assertFalse(elevator.getStatus().isEmpty());
     }
 
+    /**
+     * Test removePassenger method
+     */
     @Test
     void removePassengerTest(){
         assertTrue(elevator.getStatus().isEmpty());
@@ -179,6 +255,9 @@ class ElevatorTest {
         assertTrue(elevator.getStatus().isEmpty());
     }
 
+    /**
+     * Test add method
+     */
     @Test
     void addTest(){
         //ensure floor doesnt get added when > numFloors
@@ -203,16 +282,4 @@ class ElevatorTest {
         assertEquals(16, elevator.getCurrentRequest());
         assertEquals(3, elevator.getNumRequests());
     }
-
-    // None of the following methods have been implemented thus these can not be tested
-    /*
-    @Test
-    void testNumButtons () {
-
-    }
-    @Test
-    void testNumLamps () {
-
-    }
-    */
 }

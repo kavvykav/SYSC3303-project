@@ -13,18 +13,27 @@ class FloorRequestTest {
         floor_request = new FloorRequest(17, 3, false);
     }
 
+    /**
+     * Test getFloor method
+     */
     @Test
     void getFloorTest() {
         assertEquals(floor_request.getFloor(), 17);
         floor_request = new FloorRequest(-8, 0, false);
-        assertEquals(floor_request.getFloor(), -8); // SHOULD FAIL
+        assertEquals(floor_request.getFloor(), 8);
     }
 
+    /**
+     * Test getElevator method
+     */
     @Test
     void getElevatorTest() {
         assertEquals(floor_request.getElevator(), 3);
     }
 
+    /**
+     * Test isGoingUp method
+     */
     @Test
     void isGoingUpTest() {
         assertFalse(floor_request.isGoingUp());

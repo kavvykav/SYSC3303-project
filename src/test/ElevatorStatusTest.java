@@ -21,6 +21,9 @@ class ElevatorStatusTest {
         status4 = new ElevatorStatus(4,9, Direction.UP, false);
     }
 
+    /**
+     * Test the getId method
+     */
     @Test
     void GetIdTest() {
         assertEquals(1, status1.getId());
@@ -29,6 +32,9 @@ class ElevatorStatusTest {
         assertEquals(4, status4.getId());
     }
 
+    /**
+     * Test the getFloor method
+     */
     @Test
     void GetFloorTest() {
         assertEquals(12, status1.getFloor());
@@ -37,6 +43,9 @@ class ElevatorStatusTest {
         assertEquals(9, status4.getFloor());
     }
 
+    /**
+     * Test the setFloor method
+     */
     @Test
     void SetFloorTest() {
         status1.setFloor(17);
@@ -49,6 +58,9 @@ class ElevatorStatusTest {
         assertEquals(56, status4.getFloor());
     }
 
+    /**
+     * Test the getDirection method
+     */
     @Test
     void GetDirectionTest() {
         assertEquals(Direction.STATIONARY, status1.getDirection());
@@ -57,6 +69,9 @@ class ElevatorStatusTest {
         assertEquals(Direction.UP, status4.getDirection());
     }
 
+    /**
+     * Test the setDirection method
+     */
     @Test
     void SetDirectionTest() {
         status1.setDirection(Direction.UP);
@@ -69,6 +84,9 @@ class ElevatorStatusTest {
         assertEquals(Direction.DOWN, status4.getDirection());
     }
 
+    /**
+     * Test the isStopped method
+     */
     @Test
     void isStoppedTest(){
         assertFalse(status1.isStopped());
@@ -77,6 +95,9 @@ class ElevatorStatusTest {
         assertFalse(status4.isStopped());
     }
 
+    /**
+     * Test the setStopped method
+     */
     @Test
     void setStoppedTest(){
         status1.setStopped(true);
@@ -89,6 +110,9 @@ class ElevatorStatusTest {
         assertTrue(status4.isStopped());
     }
 
+    /**
+     * Test the isGoingUp method
+     */
     @Test
     void isGoingUpTest(){
         assertTrue(status1.isGoingUp());
@@ -97,6 +121,9 @@ class ElevatorStatusTest {
         assertFalse(status4.isGoingUp());
     }
 
+    /**
+     * Test the setGoingUp method
+     */
     @Test
     void setGoingUpTest(){
         status1.setGoingUp(false);
@@ -109,6 +136,9 @@ class ElevatorStatusTest {
         assertTrue(status4.isGoingUp());
     }
 
+    /**
+     * Test the isEmpty method
+     */
     @Test
     void isEmptyTest(){
         assertTrue(status1.isEmpty());
@@ -117,6 +147,9 @@ class ElevatorStatusTest {
         assertTrue(status4.isEmpty());
     }
 
+    /**
+     * Test the setEmpty method
+     */
     @Test
     void setEmptyTest(){
         status1.setEmpty(false);

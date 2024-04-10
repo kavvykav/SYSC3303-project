@@ -13,13 +13,19 @@ class PassengerRequestTest {
         req = new PassengerRequest(true, 2);
     }
 
+    /**
+     * Test isBoarding method
+     */
     @Test
-    void isBoarding() {
+    void isBoardingTest() {
         assertTrue(req.isBoarding());
     }
 
+    /**
+     * Test getElevator method
+     */
     @Test
-    void getElevator() {
+    void getElevatorTest() {
         assertEquals(req.getElevator(), 2);
     }
 }

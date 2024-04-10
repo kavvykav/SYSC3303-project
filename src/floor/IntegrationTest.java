@@ -45,7 +45,7 @@ class IntegrationTest {
         scheduler.addClient(new ElevatorClient(InetAddress.getLoopbackAddress(), 5007, 4));
 
         // Send requests from the floor to the scheduler
-        //floor.sendRequests();
+        floor.sendRequests();
 
         // Wait for a short time to allow scheduler to process requests
         try {
@@ -55,11 +55,10 @@ class IntegrationTest {
         }
 
         // Verify that the scheduler has received the requests and processed them correctly
-        // For example, you could check that the elevators are assigned to the correct requests
         assertEquals(1, scheduler.getClient(1).getStatus().getFloor());
-        assertEquals(1, scheduler.getClient(2).getStatus().getFloor());
-        assertEquals(1, scheduler.getClient(3).getStatus().getFloor());
-        assertEquals(1, scheduler.getClient(4).getStatus().getFloor());
+        assertEquals(2, scheduler.getClient(2).getStatus().getFloor());
+        assertEquals(3, scheduler.getClient(3).getStatus().getFloor());
+        assertEquals(4, scheduler.getClient(4).getStatus().getFloor());
     }
 
     @Test
