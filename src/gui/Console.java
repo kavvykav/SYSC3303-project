@@ -693,4 +693,5 @@ public class Console {
      * @return tripsCompleted field
      */
     public JLabel getTripsCompletedLabel(){return tripsCompletedLabel;}
+
 }
