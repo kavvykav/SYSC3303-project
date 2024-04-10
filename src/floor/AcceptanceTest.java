@@ -1,5 +1,6 @@
 package floor;
 
+import common.Direction;
 import elevator.Elevator;
 import gui.Console;
 import gui.GUI;
@@ -31,6 +32,8 @@ public class AcceptanceTest implements Runnable{
     public void run() {
         if (threadNumber == 1) {
             scheduler = new Scheduler();
+            Thread efficiencyThread = new Thread(new EfficiencyPrinter(scheduler), "EfficiencyThread");
+            efficiencyThread.start();
             scheduler.serveRequests();
         } else if (threadNumber == 2) {
             Console console = new Console();
@@ -78,5 +81,38 @@ public class AcceptanceTest implements Runnable{
 
         Thread floor = new Thread(new AcceptanceTest(3), "Floor");
         floor.start();
+    }
+
+    private static class EfficiencyPrinter implements Runnable {
+
+        private Scheduler scheduler;
+
+        public EfficiencyPrinter(Scheduler scheduler) {
+            this.scheduler = scheduler;
+        }
+
+        public void run() {
+            while (true) {
+                try {
+                    Thread.sleep(5000); // Print efficiency every 5 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+                if (
+                        ((scheduler.getClient(1).getStatus().getDirection() == Direction.STUCK ||
+                                scheduler.getClient(1).getStatus().getDirection() == Direction.STATIONARY) &&
+                                (scheduler.getClient(2).getStatus().getDirection() == Direction.STUCK ||
+                                        scheduler.getClient(2).getStatus().getDirection() == Direction.STATIONARY) &&
+                                (scheduler.getClient(3).getStatus().getDirection() == Direction.STUCK ||
+                                        scheduler.getClient(3).getStatus().getDirection() == Direction.STATIONARY) &&
+                                (scheduler.getClient(4).getStatus().getDirection() == Direction.STUCK ||
+                                        scheduler.getClient(4).getStatus().getDirection() == Direction.STATIONARY)) &&
+                                floor.isFileRead()
+                ){
+                    System.out.println("Efficiency of the elevator system: " + scheduler.getStats().getNumServed() / scheduler.getStats().getNumRequests() + "%");
+                }
+            }
+        }
     }
 }

@@ -120,11 +120,11 @@ public class Floor {
                     return;
                 }
             }
-            fileRead = true;
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Floor: Invalid data, discarding line");
         }
+        fileRead = true;
         System.out.println("Floor: Finished reading input");
     }
 
