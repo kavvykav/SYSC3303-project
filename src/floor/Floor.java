@@ -43,6 +43,8 @@ public class Floor {
     // For adding time in between requests
     private final Random rand;
 
+    private boolean fileRead;
+
     /**
      * Constructor for the floor.Floor class
      * 
@@ -56,6 +58,7 @@ public class Floor {
         filename = file;
         passengers = new ArrayList<>();
         rand = new Random();
+        fileRead = false;
     }
 
     /**
@@ -116,6 +119,7 @@ public class Floor {
                     return;
                 }
             }
+            fileRead = true;
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Floor: Invalid data, discarding line");
@@ -184,6 +188,14 @@ public class Floor {
                 }
             }
         }
+    }
+
+    /**
+     * Check if the input file has been read
+     * @return true if the input file has been read, false otherwise
+     */
+    public boolean isFileRead() {
+        return fileRead;
     }
 
     /**

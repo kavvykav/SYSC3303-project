@@ -616,4 +616,81 @@ public class Console {
      */
     public JTextArea getErrorLog() {return errorLog;}
 
+    /**
+     * Gets the tripsRequested field for testing purposes.
+     * @return tripsRequestedField
+     */
+    public JTextField getTripsRequestedField() {return tripsRequestedField;}
+
+    /**
+     * Gets the tripsCompleted field for testing purposes.
+     * @return tripsCompletedField
+     */
+    public JTextField getTripsCompletedField() {return tripsCompletedField;}
+
+    /**
+     * Gets the faults field for testing purposes.
+     * @return faultsField
+     */
+    public JTextField getFaultsField() {return faultsField;}
+
+    /**
+     * Gets the time field for testing purposes.
+     * @return timeField
+     */
+    public JTextField getTimeField() {return timeField;}
+
+    /**
+     * Sets the tripsRequested field for testing purposes.
+     * @param tripsRequestedField the tripsRequestedField
+     */
+    public void setTripsRequestedField(JTextField tripsRequestedField){this.tripsRequestedField = tripsRequestedField;}
+
+    /**
+     * Sets the tripsRequested field for testing purposes.
+     * @param tripsCompletedField the tripsCompletedField
+     */
+    public void setTripsCompletedField(JTextField tripsCompletedField){this.tripsCompletedField = tripsCompletedField;}
+
+    /**
+     * Sets the faults field for testing purposes.
+     * @param faultsField the faultsField
+     */
+    public void setFaultsField(JTextField faultsField){this.faultsField = faultsField;}
+
+    /**
+     * Sets the time field for testing purposes.
+     * @param timeField the timeField
+     */
+    public void setTimeField(JTextField timeField){this.timeField = timeField;}
+
+    /**
+     * Gets the Stats Panel for testing purposes.
+     * @return statsPanel field
+     */
+    public JPanel getStatsPanel(){return statsPanel;}
+
+    /**
+     * Gets the faults label for testing purposes.
+     * @return faultsLabel field
+     */
+    public JLabel getFaultsLabel(){return errorLabel;}
+
+    /**
+     * Gets the time label for testing purposes.
+     * @return timeLabel field
+     */
+    public JLabel getTimeLabel(){return timeLabel;}
+
+    /**
+     * Gets the tripsRequested label for testing purposes.
+     * @return tripsRequested field
+     */
+    public JLabel getTripsRequestedLabel(){return tripsRequestedLabel;}
+
+    /**
+     * Gets the tripsCompleted label for testing purposes.
+     * @return tripsCompleted field
+     */
+    public JLabel getTripsCompletedLabel(){return tripsCompletedLabel;}
 }

@@ -23,6 +23,10 @@ class ElevatorClientTest {
         }
         client = new ElevatorClient(address, 5007, 1);
     }
+
+    /**
+     * Test the getAddress method
+     */
     @Test
     void GetAddressTest() {
         InetAddress address;
@@ -34,11 +38,17 @@ class ElevatorClientTest {
         assertEquals(address, client.getAddress());
     }
 
+    /**
+     * Test the getPort method
+     */
     @Test
     void GetPortTest() {
         assertEquals(5007, client.getPort());
     }
 
+    /**
+     * Test the getStatus method
+     */
     @Test
     void GetStatusTest() {
         ElevatorStatus status = new ElevatorStatus(1, 1, Direction.STATIONARY, false);

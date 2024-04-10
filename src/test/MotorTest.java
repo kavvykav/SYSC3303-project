@@ -25,6 +25,10 @@ class MotorTest {
         elevator = new Elevator(22, address, port, 1);
         motor = new Motor(elevator, address, port);
     }
+
+    /**
+     * Test getElevator method
+     */
     @Test
     void getElevatorTest() {
         assertEquals(elevator, motor.getElevator());
