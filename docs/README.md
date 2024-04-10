@@ -56,15 +56,19 @@ Java `SDK 21`, and Language Level set to `Default SDK` in IntelliJ.
 
 ### test
 
-- **test.ElevatorTest.java**: The tests included in this file are used to ensure that each state that is called is the
-  correct state that is required in the elevator subsystem and to ensure elevator.Elevator data correction. States tested include: EstablishingConnection, Idle and MotorRunning. Data tests include: GetNumRequests, GetCurrentRequest, updateRequestsTest, ShouldStop, GetStatus, GetDoorStatus, OpenDoor, ForceCloseDoor, CloseDoor, GetTimerStatus, StartTimer, StopTimer, GetMotorStatus, StartMotor, and Timeout.
-- **test.SchedulerTest.java**: The tests included in this file are used to ensure that each state that is called is the correct state that is required in the scheduler subsystem and to ensure scheduler.Scheduler data correction. States tested include: ResponseReceived, Idle and RequestReceived. Data tests include: GetClient, ChooseElevator, and CanServiceRequest.
-- **test.FloorDataTest.java**: The tests included in this file are used to ensure that the data in a floor.FloorData
-  object is correct. Floor Number, Timestamp, Car Button, and Direction fields are included in the tests.
-- **test.ElevatorStatusTest.java**: The tests included in this file are used to ensure that the common.ElevatorStatus data is correct. Tests include GetId, GetFloor, SetFloor, GetDirection, and SetDirection.
-- **test.ElevatorClientTest.java**: The tests included in this file are used to ensure that the scheduler.ElevatorClient data is correct. Tests include GetAddress, GetPort, and GetStatus.
-- **test.TimerTest.java**: The tests included in this file are used to ensure that the elevator.Timer data is correct. Tests include GetElevator, GetTime.
-- **test.MotorTest.java**: The tests included in this file are used to ensure that the elevator.Motor data is correct. Tests include GetElevator.
+- **test.ElevatorTest.java:** The unit test file for the Elevator subsystem
+- **test.SchedulerTest.java**: The unit test file for the Scheduler subsystem
+- **test.FloorDataTest.java**: The unit test file for the FloorData class
+- **test.FloorRequestTest.java:** The unit test file for the FloorRequest class
+- **test.ElevatorStatusTest.java**: The unit test file for the ElevatorStatus class
+- **test.ElevatorClientTest.java**: The unit test file for the ElevatorClient class
+- **test.ElevatorStatisticsTest.java:** The unit test file for the ElevatorStatistics class
+- **test.TimerTest.java**: The unit test file for the Timer class
+- **test.MotorTest.java**: The unit test file for the Motor class
+- **test.PassengerRequestTest.java:** The unit test file for the PassengerRequestTest class
+- **test.ConsoleTest.java:** The unit test file for the Console class
+- **floor.IntegrationTest.java:** The file for integration testing the system
+- **floor.AcceptanceTest.java:** The file for acceptance testing the system
 
 ### Directory Structure
 
@@ -192,5 +196,5 @@ questions, please contact one of the authors.
 - Liam Kavanagh -> Implementing and integrating GUI
 - Matthew Huybregts -> Implementing capacity limits and back end
 - Sean Pruss -> Update README.md
-- Joshua Robson -> JUnit tests, Debugging, Helped with GUI, update README.md
+- Joshua Robson -> JUnit tests, Debugging, Helped with GUI
 - Abed Qubbaj -> Update diagrams
