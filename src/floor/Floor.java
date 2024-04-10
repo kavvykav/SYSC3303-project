@@ -43,6 +43,7 @@ public class Floor {
     // For adding time in between requests
     private final Random rand;
 
+    // To check if the entire file has been read
     private boolean fileRead;
 
     /**
