@@ -10,11 +10,7 @@ import static common.NetworkConstants.GUI_PORT;
 import static common.NetworkConstants.SCHEDULER_PORT;
 
 public class GUI extends UDPClient {
-    private static Console console;
-    private int tripsRequested;
-    private int tripsServiced;
-    private int tripsFailed;
-    private String elapsedTime;
+    private final Console console;
 
     /**
      * The constructor for the GUIHandler class.
@@ -39,13 +35,13 @@ public class GUI extends UDPClient {
                 int elevator = status.getId();
                 if (status.getDirection() == Direction.STUCK) {
                     console.appendToErrorLog(elevator,
-                                "Stuck between floors. Unavailable.");
+                            "Stuck between floors. Unavailable.");
                 } else if (status.getDirection() == Direction.DOOR_STUCK) {
                     console.appendToErrorLog(elevator, "Door is stuck. Elevator will be temporarily out of service.");
                     elevatorsWithStuckDoors.add(Integer.valueOf(status.getId()));
                 } else {
                     if (elevatorsWithStuckDoors.contains(Integer.valueOf(status.getId()))) {
-                        console.appendToErrorLog(elevator,"Door is no longer stuck. Elevator is back in service.");
+                        console.appendToErrorLog(elevator, "Door is no longer stuck. Elevator is back in service.");
                         elevatorsWithStuckDoors.remove(Integer.valueOf(status.getId()));
                     } else {
                         Integer floor = null;
@@ -70,7 +66,7 @@ public class GUI extends UDPClient {
                 console.updateRequestsServedField(numServed);
                 console.updateRequestsFailedField(numFailed);
                 console.updateTimeField(Double.valueOf(timestamp).toString());
-            }else {
+            } else {
                 System.err.println("Did not receive the correct type of information");
             }
         }
