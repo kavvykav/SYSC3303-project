@@ -51,10 +51,8 @@ public class Motor extends UDPClient implements Runnable {
     }
 
     /**
-     * The main sequence for the Motor thread. Goes to the floors in the Elevator's
-     * list of requests, opening and
-     * closing the door at each stop. Exits when there are no more requests to
-     * serve.
+     * The main sequence for the Motor thread. Goes to the floors in the Elevator's list of requests, opening and
+     * closing the door at each stop. Exits when there are no more requests to serve.
      */
     public void run() {
 
@@ -84,20 +82,6 @@ public class Motor extends UDPClient implements Runnable {
                     return;
                 }
                 elevator.getStatus().setStopped(false);
-
-                // Check if we have any more requests and update the status accordingly
-                if (elevator.getNumRequests() == 0) {
-                    elevator.getStatus().setDirection(Direction.STATIONARY);
-                    send(elevator.getStatus());
-                    return;
-                } else if (elevator.getCurrentRequest() > floor) {
-                    elevator.getStatus().setDirection(Direction.UP);
-                } else {
-                    elevator.getStatus().setDirection(Direction.DOWN);
-                }
-                send(elevator.getStatus());
-
-                elevator.elevatorPrint("Next Stop is floor " + elevator.getCurrentRequest());
                 try {
                     elevator.closeDoor(SOFT_FAULT_RATE, rand);
                     elevator.elevatorPrint("Elevator door successfully closed");
@@ -107,8 +91,7 @@ public class Motor extends UDPClient implements Runnable {
                     elevator.elevatorPrint("Elevator door is stuck open, trying again");
                     send(elevator.getStatus());
 
-                    // Sleep for a random amount of time between 5 and 15 seconds to simulate the
-                    // door being stuck
+                    // Sleep for a random amount of time between 5 and 15 seconds to simulate the door being stuck
                     int stuckTime = rand.nextInt(10000) + 5000;
                     try {
                         Thread.sleep(stuckTime);
@@ -122,6 +105,29 @@ public class Motor extends UDPClient implements Runnable {
                     elevator.getStatus().setDirection(previousDirection);
                     send(elevator.getStatus());
                 }
+
+                synchronized (elevator) {
+                    while (elevator.getNumRequests() == 0) {
+                        try{
+                            elevator.getStatus().setDirection(Direction.STATIONARY);
+                            send(elevator.getStatus());
+                            elevator.wait();
+                        } catch(InterruptedException e) {
+                            return;
+                        }
+                    }
+                }
+                // Check if we have any more requests and update the status accordingly
+                if (elevator.getCurrentRequest() > floor) {
+                    elevator.getStatus().setDirection(Direction.UP);
+                } else if (elevator.getCurrentRequest() < floor) {
+                    elevator.getStatus().setDirection(Direction.DOWN);
+                } else {
+                    continue;
+                }
+                send(elevator.getStatus());
+
+                elevator.elevatorPrint("Next Stop is floor " + elevator.getCurrentRequest());
             }
             // Simulate going from one floor to another
             int sleepTime = (rand.nextInt(HARD_FAULT_RATE) == 1) ? 10 : 5;
