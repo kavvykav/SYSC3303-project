@@ -6,9 +6,6 @@ import gui.Console;
 import gui.GUI;
 import scheduler.Scheduler;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import common.NetworkConstants;
 import static common.NetworkConstants.GUI_PORT;
 import static common.NetworkConstants.SCHEDULER_PORT;
@@ -110,7 +107,7 @@ public class AcceptanceTest implements Runnable{
                                         scheduler.getClient(4).getStatus().getDirection() == Direction.STATIONARY)) &&
                                 floor.isFileRead()
                 ){
-                    System.out.println("Efficiency of the elevator system: " + Math.round(((double)scheduler.getStats().getNumServed() / (double)scheduler.getStats().getNumRequests())) * 100 + "%");
+                    System.out.println("Efficiency of the elevator system: " + Math.round(((double)scheduler.getStats().getNumServed() / (double)scheduler.getStats().getNumRequests()) * 100) + "%");
                 }
             }
         }
