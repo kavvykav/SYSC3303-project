@@ -1,13 +1,10 @@
 package scheduler;
 
 import common.*;
-import gui.GUI;
 
 import java.lang.Math;
 
 import java.util.ArrayList;
-
-import static common.NetworkConstants.GUI_PORT;
 
 /**
  * This is the main component of the scheduler.Scheduler Subsystem
@@ -24,7 +21,7 @@ public class Scheduler extends UDPServer {
     private SchedulerState currentState;
 
     //Elevator statistics
-    private ElevatorStatistics stats;
+    private final ElevatorStatistics stats;
 
     // Start and end times
     private long startTime;
@@ -38,6 +35,7 @@ public class Scheduler extends UDPServer {
         super();
         stats = new ElevatorStatistics();
         elevators = new ArrayList<>(NUM_ELEVATORS);
+        startTime = 0;
         setCurrentState(new SchedulerIdleState());
     }
 
@@ -154,7 +152,7 @@ public class Scheduler extends UDPServer {
      * The main routine for the scheduler
      */
     public void serveRequests() { // Repeat indefinitely
-        setStartTime(System.nanoTime());
+        //setStartTime(System.nanoTime());
         while (true) {
             // Idle state : wait for request from floor
             FloorRequest request = currentState.doAction(this, null);

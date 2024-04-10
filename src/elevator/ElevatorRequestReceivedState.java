@@ -2,7 +2,6 @@ package elevator;
 
 import common.Direction;
 import common.FloorRequest;
-import floor.FloorData;
 
 /**
  * ElevatorMotorRunningState

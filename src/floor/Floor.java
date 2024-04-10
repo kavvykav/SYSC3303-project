@@ -40,6 +40,7 @@ public class Floor {
     // For receiving elevator arrival updates from the scheduler
     private final UDPClient receiver;
 
+    // For adding time in between requests
     private final Random rand;
 
     /**
@@ -134,7 +135,7 @@ public class Floor {
             FloorRequest floorRequest = null;
             PassengerRequest passengerRequest = null;
             FloorData servedPassenger = null;
-
+            boolean resend = false;
             // Iterate over our list of waiting passengers
             synchronized (passengers) {
                 for (FloorData passenger: passengers) {
@@ -147,6 +148,7 @@ public class Floor {
                         if (!update.isEmpty()) {
                             // Send a new request at the passenger floor for a different elevator
                             floorRequest = new FloorRequest(currFloor, update.getId() * -1, direction);
+                            resend = true;
                             break;
                         }
                         // Board the elevator
@@ -170,6 +172,10 @@ public class Floor {
             // Send a request for a floor to the scheduler
             if (floorRequest != null) {
                 receiver.send(floorRequest);
+                if (resend) {
+                    System.out.println("Floor: Elevator not empty, sending another request at " +
+                            floorRequest.getFloor());
+                }
             }
             // If a passenger has been served, remove them from our list
             if (servedPassenger != null) {

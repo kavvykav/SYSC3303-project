@@ -20,6 +20,9 @@ public class SchedulerIdleState implements SchedulerState {
         Object receivedObject = scheduler.receive();
 
         if (receivedObject instanceof FloorRequest) {
+            if (scheduler.getStartTime() == 0) {
+                scheduler.setStartTime(System.nanoTime());
+            }
             return (FloorRequest) receivedObject;
 
         } else if (receivedObject instanceof PassengerRequest) {
@@ -50,14 +53,14 @@ public class SchedulerIdleState implements SchedulerState {
                         scheduler.getReceivePacket().getPort(), status.getId());
                 scheduler.addClient(newClient);
             }
-            scheduler.setEndTime(System.nanoTime());
-            double elapsedTime = ((double)scheduler.getEndTime() - scheduler.getStartTime()) / 1000000000;
-            scheduler.getStats().setTimestamp(elapsedTime);
-            scheduler.send(scheduler.getStats(), NetworkConstants.localHost(), GUI_PORT);
+            if (scheduler.getStartTime() != 0) {
+                scheduler.setEndTime(System.nanoTime());
+                double elapsedTime = ((double)scheduler.getEndTime() - scheduler.getStartTime()) / 1000000000;
+                scheduler.getStats().setTimestamp(elapsedTime);
+                scheduler.send(scheduler.getStats(), NetworkConstants.localHost(), GUI_PORT);
+            }
             scheduler.send(status, NetworkConstants.localHost(), GUI_PORT);
         }
-
-
         scheduler.send(scheduler.getStats(), NetworkConstants.localHost(), GUI_PORT);
         return null;
     }

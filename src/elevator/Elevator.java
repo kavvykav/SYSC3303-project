@@ -236,7 +236,7 @@ public class Elevator extends UDPClient implements Runnable {
      *
      * @param floor the first floor to add to the queue
      */
-    public void add(int floor) {
+    public synchronized void add(int floor) {
 
         elevatorPrint("Adding floor " + floor);
         if (floor > numFloors || floor < 1) {
@@ -273,6 +273,7 @@ public class Elevator extends UDPClient implements Runnable {
                 requests.add(floor);
             }
         }
+        notifyAll();
         elevatorPrint(requests.toString());
     }
 
