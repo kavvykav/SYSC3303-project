@@ -106,24 +106,15 @@ public class Motor extends UDPClient implements Runnable {
                     send(elevator.getStatus());
                 }
 
-                synchronized (elevator) {
-                    while (elevator.getNumRequests() == 0) {
-                        try{
-                            elevator.getStatus().setDirection(Direction.STATIONARY);
-                            send(elevator.getStatus());
-                            elevator.wait();
-                        } catch(InterruptedException e) {
-                            return;
-                        }
-                    }
-                }
                 // Check if we have any more requests and update the status accordingly
-                if (elevator.getCurrentRequest() > floor) {
+                if (elevator.getNumRequests() == 0) {
+                    elevator.getStatus().setDirection(Direction.STATIONARY);
+                    send(elevator.getStatus());
+                    return;
+                } else if (elevator.getCurrentRequest() > floor) {
                     elevator.getStatus().setDirection(Direction.UP);
                 } else if (elevator.getCurrentRequest() < floor) {
                     elevator.getStatus().setDirection(Direction.DOWN);
-                } else {
-                    continue;
                 }
                 send(elevator.getStatus());
 
